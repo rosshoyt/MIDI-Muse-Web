@@ -21,6 +21,10 @@ class Initializer implements CommandLineRunner {
 
    @Override
    public void run(String... strings) {
+      fillMFAR();
+   }
+
+   private void fillMFAR() {
       Stream.of("coolsong.mid", "beethoven420.midi", "hoegardensucks.mid",
             "howdym8.midi").forEach(name ->
             repository.save(new MidiFileAnalysis(name))
