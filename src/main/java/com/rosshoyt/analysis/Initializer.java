@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 @Component
 class Initializer implements CommandLineRunner {
@@ -31,12 +33,14 @@ class Initializer implements CommandLineRunner {
       );
 
       MidiFileAnalysis mfa = repository.findByFileName("coolsong.mid");
-      Chord c = Chord.builder().chordName("C major")
-            .realTimelength(Duration.ofSeconds(20))
-            //.description("Reactive with Spring Boot + React")
-            //.date(Instant.parse("2018-12-12T18:00:00.000Z"))
-            .build();
-      mfa.setChords(Collections.singleton(c));
+      Set<Chord> chords = new HashSet<>();
+
+
+      chords.add(Chord.builder().chordName("C major").realTimelength(Duration.ofSeconds(20)).build());
+      chords.add(Chord.builder().chordName("F major").realTimelength(Duration.ofSeconds(10)).build());
+      chords.add(Chord.builder().chordName("Ab minor").realTimelength(Duration.ofSeconds(10)).build());
+      mfa.setChords(chords);
+
       repository.save(mfa);
 
       repository.findAll().forEach(System.out::println);

@@ -25,7 +25,4 @@ public class MidiFileAnalysis {
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    private Set<Chord> chords;
 
-   // Extra example
-   //@ManyToOne(cascade=CascadeType.PERSIST)
-   //private User user;
 }
