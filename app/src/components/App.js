@@ -16,6 +16,7 @@ class App extends Component {
     const body = await response.json();
     this.setState({ groups: body, isLoading: false });
   }
+
   render() {
     const {groups, isLoading} = this.state;
 
@@ -32,23 +33,12 @@ class App extends Component {
             </div>
           </div>
         </header>
-          <div>
-            <form method="POST" encType="multipart/form-data" action="/">
-              <table>
-                <tbody>
-                  <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-                  <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-                </tbody>
-              </table>
-            </form>
+
+          <div id="wrapper">
+            <div id="left">Left side div</div>
+            <div id="right">Right side div</div>
           </div>
-          <div>
-            <ul>
-              <li each="file : ${files}">
-                  <a href="${file}" text="${file}" />
-              </li>
-            </ul>
-          </div>
+
 
           <div className="App-intro">
             <h2>Midi File Analysis List</h2>
