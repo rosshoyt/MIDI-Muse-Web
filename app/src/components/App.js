@@ -39,15 +39,26 @@ class App extends Component {
             <div id="right">Right side div</div>
           </div>
 
+            <div class="row">
 
-          <div className="App-intro">
-            <h2>Midi File Analysis List</h2>
-            {groups.map(group =>
-              <div key={group.id}>
-                {group.fileName}
+              <div class="col-4">
+                <h2>Midi File Analysis List</h2>
+                <div class="list-group" id="list-tab" role="tablist">
+                  {groups.map(group =>
+                    <a class = "list-group-item list-group-item-action" id={group.id} data-toggle="list" href={group.fileName} role="tab" aria-controls="home">{group.fileName}</a>
+                  )}
+
+                </div>
               </div>
-            )}
-          </div>
+              <div class="col-8">
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
+                  <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+                  <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
+                  <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+                </div>
+              </div>
+            </div>
 
       </div>
 
