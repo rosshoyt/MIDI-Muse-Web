@@ -3,7 +3,9 @@
   text-align: center;
   color: white;
 }
-
+html, body, #app, #app>div {
+  height: 100%
+}
 .App-link {
   color: #61dafb;
 }
@@ -18,4 +20,8 @@
 
 #right {
   flex: 1;
+}
+
+a {
+  color: #00aaff;
 }

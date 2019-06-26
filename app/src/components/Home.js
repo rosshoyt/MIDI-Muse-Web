@@ -4,7 +4,7 @@ export class Home extends Component {
     render() {
         return (
             <div>
-                <p>In a new Component!</p>
+                <p>Home Component!</p>
             </div>
         );
 

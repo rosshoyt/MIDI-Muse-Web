@@ -4,6 +4,7 @@ import './App.css';
 
 import { Header } from './Header';
 import { Home } from './Home';
+import { Footer } from './Footer'
 
 class App extends Component {
   state = {
@@ -35,8 +36,8 @@ class App extends Component {
         </header>
 
           <div id="wrapper">
-            <div id="left">Left side div</div>
-            <div id="right">Right side div</div>
+            <div id="left"></div>
+            <div id="right"></div>
           </div>
 
             <div class="row">
@@ -47,7 +48,6 @@ class App extends Component {
                   {groups.map(group =>
                     <a class = "list-group-item list-group-item-action" id={group.id} data-toggle="list" href={group.fileName} role="tab" aria-controls="home">{group.fileName}</a>
                   )}
-
                 </div>
               </div>
               <div class="col-8">
@@ -59,7 +59,21 @@ class App extends Component {
                 </div>
               </div>
             </div>
-
+            <div class="col-8">
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
+                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+                <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
+                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+              </div>
+            </div>
+            <footer className="App-header">
+              <div className="row">
+                <div className="col-xs-10 col-xs-offset-1">
+                  <Footer/>
+                </div>
+              </div>
+            </footer>
       </div>
 
 
