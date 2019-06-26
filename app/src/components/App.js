@@ -35,15 +35,10 @@ class App extends Component {
           </div>
         </header>
 
-          <div id="wrapper">
-            <div id="left"></div>
-            <div id="right"></div>
-          </div>
-
             <div class="row">
 
               <div class="col-4">
-                <h2>Midi File Analysis List</h2>
+                <h3>Midi File Analysis List</h3>
                 <div class="list-group" id="list-tab" role="tablist">
                   {groups.map(group =>
                     <a class = "list-group-item list-group-item-action" id={group.id} data-toggle="list" href={group.fileName} role="tab" aria-controls="home">{group.fileName}</a>

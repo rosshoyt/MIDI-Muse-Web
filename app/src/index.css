@@ -8,9 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin-bottom: 60px;
 }
-html, body, #app, #app>div {
-  height: 100%
-}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
