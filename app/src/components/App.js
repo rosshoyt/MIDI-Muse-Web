@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Header from './Header';
-import Home from './Home';
+import { Header } from './Header';
+import { Home } from './Home';
 
 class App extends Component {
   state = {
@@ -16,7 +16,6 @@ class App extends Component {
     const body = await response.json();
     this.setState({ groups: body, isLoading: false });
   }
-
   render() {
     const {groups, isLoading} = this.state;
 
@@ -27,7 +26,12 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <div className="row">
+            <div className="col-xs-10 col-xs-offset-1">
+              <Header/>
+            </div>
+          </div>
+        </header>
           <div>
             <form method="POST" encType="multipart/form-data" action="/">
               <table>
@@ -54,9 +58,10 @@ class App extends Component {
               </div>
             )}
           </div>
-        </header>
 
       </div>
+
+
     );
   }
 }
