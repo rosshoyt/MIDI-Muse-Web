@@ -57,4 +57,9 @@ class MidiFileAnalysisController {
       return ResponseEntity.ok().build();
    }
 
+   @RequestMapping(method={RequestMethod.GET})
+   public String index() {
+      return "index";
+   }
+
 }

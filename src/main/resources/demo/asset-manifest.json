@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/demo/build/static/css/main.fca9f117.chunk.css",
+    "main.js": "/demo/build/static/js/main.477fc041.chunk.js",
+    "main.js.map": "/demo/build/static/js/main.477fc041.chunk.js.map",
+    "runtime~main.js": "/demo/build/static/js/runtime~main.9aec2fa6.js",
+    "runtime~main.js.map": "/demo/build/static/js/runtime~main.9aec2fa6.js.map",
+    "static/css/2.1cce6371.chunk.css": "/demo/build/static/css/2.1cce6371.chunk.css",
+    "static/js/2.8fc23438.chunk.js": "/demo/build/static/js/2.8fc23438.chunk.js",
+    "static/js/2.8fc23438.chunk.js.map": "/demo/build/static/js/2.8fc23438.chunk.js.map",
+    "index.html": "/demo/build/index.html",
+    "precache-manifest.cc42233cbf2364e9d354ead170cef474.js": "/demo/build/precache-manifest.cc42233cbf2364e9d354ead170cef474.js",
+    "service-worker.js": "/demo/build/service-worker.js",
+    "static/css/2.1cce6371.chunk.css.map": "/demo/build/static/css/2.1cce6371.chunk.css.map",
+    "static/css/main.fca9f117.chunk.css.map": "/demo/build/static/css/main.fca9f117.chunk.css.map",
+    "static/media/logo.svg": "/demo/build/static/media/logo.5d5d9eef.svg"
+  }
+}
