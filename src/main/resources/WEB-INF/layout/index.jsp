@@ -1,1 +1,0 @@
-<%@include file=”/resources/demo/build/index.html”%>

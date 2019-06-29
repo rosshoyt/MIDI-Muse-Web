@@ -13,7 +13,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
    public void onStartup(ServletContext container) {
       AnnotationConfigWebApplicationContext context
             = new AnnotationConfigWebApplicationContext();
-      context.setConfigLocation("com.rosshoyt.resources");
+      context.setConfigLocation("src/main/resources/static");
 
       container.addListener(new ContextLoaderListener(context));
 
@@ -21,6 +21,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
             .addServlet("dispatcher", new DispatcherServlet(context));
 
       dispatcher.setLoadOnStartup(2);
-      dispatcher.addMapping("/resources/**");
+      dispatcher.addMapping("/");
    }
 }
