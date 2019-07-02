@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,7 @@ class Initializer implements CommandLineRunner {
       );
 
       MidiFileAnalysis mfa = repository.findByFileName("coolsong.mid");
-      Set<Chord> chords = new HashSet<>();
+      ArrayList<Chord> chords = new ArrayList<>();
 
 
       chords.add(Chord.builder().chordName("C major").realTimelength(Duration.ofSeconds(20)).build());

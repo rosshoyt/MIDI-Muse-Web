@@ -23,14 +23,14 @@ class MidiFileAnalysisController {
       this.midiFileAnalysisRepository = midiFileAnalysisRepository;
    }
 
-   @GetMapping("/groups")
+   @GetMapping("/midifiles")
    Collection<MidiFileAnalysis> groups() {
       return midiFileAnalysisRepository.findAll();
    }
 
-   @GetMapping("/group/{id}")
-   ResponseEntity<?> getMidiFileAnalysis(@PathVariable Long id) {
-      Optional<MidiFileAnalysis> group = midiFileAnalysisRepository.findById(id);
+   @GetMapping("/midifile/{id}")
+   ResponseEntity<?> getMidiFileAnalysis(@PathVariable String id) {
+      Optional<MidiFileAnalysis> group = midiFileAnalysisRepository.findById(Long.parseLong(id));
       return group.map(response -> ResponseEntity.ok().body(response))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
    }
@@ -56,10 +56,5 @@ class MidiFileAnalysisController {
       midiFileAnalysisRepository.deleteById(id);
       return ResponseEntity.ok().build();
    }
-
-//   @RequestMapping(method={RequestMethod.GET})
-//   public String index() {
-//      return "index";
-//   }
 
 }

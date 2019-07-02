@@ -6,6 +6,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,6 +25,5 @@ public class MidiFileAnalysis {
    private int midiFileType;
    private int numTracks;
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   private Set<Chord> chords;
-
+   private List<Chord> chords;
 }
