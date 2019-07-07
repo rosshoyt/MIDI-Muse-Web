@@ -16,6 +16,14 @@ import java.util.stream.Stream;
 @Component
 class Initializer implements CommandLineRunner {
 
+   private static String[] fakeFileNames= new String[] {
+      "coolsong.mid", "beethovens42ndSymphony.midi", "hoegartenIsBad.mid", "howdyM8.midi",
+         "testing1234.midi","filmScore.mid","piano_recording.mid","temp.mid","comicSansDanceSong.midi",
+         "helloWorld.midi","asdf1234.mid","bestSongEvarr.mid"
+   };
+
+
+
    private final MidiFileAnalysisRepository repository;
 
    public Initializer(MidiFileAnalysisRepository repository) {
@@ -28,8 +36,7 @@ class Initializer implements CommandLineRunner {
    }
 
    private void fillMFAR() {
-      Stream.of("coolsong.mid", "beethoven420.midi", "hoegardensucks.mid",
-            "howdym8.midi").forEach(name ->
+      Stream.of(fakeFileNames).forEach(name ->
             repository.save(new MidiFileAnalysis(name))
       );
 
