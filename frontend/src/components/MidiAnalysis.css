@@ -1,19 +1,15 @@
 .MidiAnalysis {
+  margin: 40px;
+  background-color: burlywood;
+}
+#wrapper {
   display: flex;
-  height:100%;
-  flex-flow: column;
-  margin-top: 20px;
-  margin-left: 40px;
-  margin-right: 40px;
-  
-  background-color:gray;
-  
 }
-.panel-heading {
-  margin: 10px;
+
+#left {
+  flex: 0 0 65%;
 }
-.rowC{
-  margin: 10px;
-  display:flex;
-  flex-direction:row;
-}
+
+#right {
+  flex: 1;
+} 

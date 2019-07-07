@@ -1,9 +1,7 @@
 footer {
   font-size: calc(2vmin - 2px);
   position: absolute;
-  left: 0;
   bottom: 0;
-  right:0;
   width: 100%;
   padding: 20px 10px;
   background: #666;
@@ -12,4 +10,3 @@ footer {
   align-items: center;
   justify-content: center;
 };
-

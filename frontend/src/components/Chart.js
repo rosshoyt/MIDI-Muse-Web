@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Bar, Line, Pie} from 'react-chartjs-2';
-import './Chart.css';
+
 function MidiFileListEntry(id, fileName, chordList ) {
   this.id = id;
   this.fileName=fileName;
@@ -52,7 +52,6 @@ class Chart extends Component {
   
   render(){
     return(
-      <div className="container">
       <div className="chart" legendPosition="bottom">
       <Pie
         
@@ -69,7 +68,6 @@ class Chart extends Component {
           }}
           data={this.state.data}
       />
-      </div>
       </div>
     )
   }

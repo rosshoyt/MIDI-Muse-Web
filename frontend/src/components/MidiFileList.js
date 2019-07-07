@@ -31,12 +31,9 @@ export class MidiFileList extends Component {
       return <p>Loading...</p>;
     }
         return (
-          <div class="panel panel-default">
-          <div class="panel-heading"><h4 class="panel-title">Files:</h4>
-          </div>
-          <div class="rowC">
-          <div class="panel-body">
-              <div class="list-group" id="list-tab" role="tablist">
+          <div class="col-4">
+            <h4>Midi File List</h4>
+            <div class="list-group" id="list-tab" role="tablist">
               {midiFileRepoContents.map(midifile =>
                 <a class = "list-group-item list-group-item-action" 
                 id={midifile.id}data-toggle="list"role="tab" 
@@ -45,8 +42,6 @@ export class MidiFileList extends Component {
                 </a>
               )}
             </div>
-          </div>
-          </div>
           </div>
         );
     }
