@@ -45,7 +45,7 @@ export default class AnalysisContainer extends Component {
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => { this.toggle('3'); }}
             >
-              Moar Tabs
+              More Music Data Views
             </NavLink>
           </NavItem>
         </Nav>
@@ -60,7 +60,7 @@ export default class AnalysisContainer extends Component {
           <TabPane tabId="2">
 
                 <Analysis_Modal_Pie/>
-]
+
           </TabPane>
           <TabPane tabId="3">
             <Row>
