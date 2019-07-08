@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Bar, Line, Pie} from 'react-chartjs-2';
-import './Chart.css';
+import './Analysis_Modal_Pie.css';
 function MidiFileListEntry(id, fileName, chordList ) {
   this.id = id;
   this.fileName=fileName;
@@ -11,12 +11,12 @@ function MidiFileListEntry(id, fileName, chordList ) {
 TODO make separate listcomponent for basic midi file analysis
 (what midi file type, other basic data)
 */
-class Chart extends Component {
+class Analysis_Modal_Pie extends Component {
   constructor(props){
     super(props);
     this.state = {
       midiFileRepoContents: [],
-      chartData:props.chartData,
+      Analysis_Modal_PieData:props.Analysis_Modal_PieData,
       data: {
         labels: [
           "C major", "G major", "D major", "A major",
@@ -56,7 +56,7 @@ class Chart extends Component {
   render(){
     return(
       <div className="container">
-      <div className="chart" legendPosition="bottom">
+      <div className="Analysis_Modal_Pie" legendPosition="bottom">
       <Pie
           options={{
             title:{
@@ -76,4 +76,4 @@ class Chart extends Component {
     )
   }
 }
-export default Chart;
+export default Analysis_Modal_Pie;

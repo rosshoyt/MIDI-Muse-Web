@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Chart from './Chart'
+
 import MidiFileList from './MidiFileList'
 import "./MidiAnalyzerContainer.css"
 import { cpus } from 'os';
 import { FileUpload } from './FileUpload';
+import AnalysisContainer from './AnalysisContainer';
 
 const DEFAULT_FILE_SELECTION = "coolsong.mid";
 const DEFAULT_FILE_ID = 1;
@@ -28,7 +29,7 @@ export class MidiAnalyzerContainer extends Component {
                       
                     </div>
                     
-                    <Chart/>
+                    <AnalysisContainer/>
                   </div>
                  
         </div>
