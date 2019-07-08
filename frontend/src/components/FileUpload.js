@@ -1,27 +1,31 @@
 import React, { Component } from 'react';
+import { MidiParser } from 'midi-parser-js';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+
+
+function processFile(){
+  
+}  
 
 export class FileUpload extends Component {
-    render() {
-        return (
-          <div>
-            <div>
-              <form method="POST" encType="multipart/form-data" action="/">
-                <table>
-                  <tbody>
-                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-                  </tbody>
-                </table>
-              </form>
-            </div>
-            <div>
-              <ul>
-                <li each="file : ${files}">
-                    <a href="${file}" text="${file}" />
-                </li>
-              </ul>
-            </div>
-          </div>
+
+  render() {
+      return (
+        <Form>
+        <FormGroup>
+        <h3>Select a MIDI file to analyze.</h3>
+        <h4>You can either:</h4>
+        <h5>1. Upload a .mid or .midi file</h5>
+        <h5>2. Or, select one of the pre-loaded examples</h5>
+        <Input type="file" name="file" id="exampleFile" />
+        <div>
+          Note: Files uploaded are not stored
+        </div>
+        </FormGroup>
+        <Button>Submit</Button>
+        </Form>
         );
+        
     }
 }
+export default FileUpload;

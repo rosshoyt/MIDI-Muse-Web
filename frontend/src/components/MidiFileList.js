@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import FileUpload from './FileUpload';
 import './MidiFileList.css'
 export class MidiFileList extends Component {
   constructor(props){
@@ -31,6 +32,7 @@ export class MidiFileList extends Component {
       return <p>Loading...</p>;
     }
         return (
+          
           <div class="panel panel-default">
           <div class="panel-heading"><h4 class="panel-title">Files:</h4>
           </div>

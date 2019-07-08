@@ -17,3 +17,8 @@
   display:flex;
   flex-direction:row;
 }
+.colC{
+  margin: 10px;
+  display:flex;
+  flex-direction:column;
+}

@@ -21,14 +21,16 @@ export class MidiAnalyzerContainer extends Component {
   render() {
         return (
           <div class="MidiAnalyzerContainer">
-            <h3>Midi File Analysis Module</h3>
                   <div className="rowC">
-                    <MidiFileList/>
+                    <div className="colC">
+                      <FileUpload/>
+                      <MidiFileList/> 
+                      
+                    </div>
+                    
                     <Chart/>
                   </div>
-                  <div>
-                    <FileUpload/>
-                  </div>
+                 
         </div>
         );
 
