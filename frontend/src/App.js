@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { Header } from './Header';
-import { MidiAnalysis } from './MidiAnalysis';
-import { Footer } from './Footer'
+import { Header } from './components/Header';
+import { MidiAnalyzerContainer } from './components/MidiAnalyzerContainer';
+import { Footer } from './components/Footer'
 
 class App extends Component {
 
@@ -12,15 +12,15 @@ class App extends Component {
       <div className="App">
         <div className="Site-content">
           <div className="App-header">
-              <Header />
+            <Header/>
           </div>
           <div>
-            <MidiAnalysis/>
+            <MidiAnalyzerContainer/>
           </div>
           </div>
-        <div>
+          <div>
           <Footer/>
-        </div>
+          </div>
       </div>
 
 //TODO FOOTER https://dev.to/letsbsocial1/flexbox-sticky-footer-and-react-e1h
