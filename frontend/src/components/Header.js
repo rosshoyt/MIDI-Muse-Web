@@ -7,7 +7,7 @@ export class Header extends Component {
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="https://www.rosshoyt.com">
+            <a class="navbar-brand" href="https://www.rosshoyt.com ">
               <span><img src="logo_60x60.png" class="img-responsive"/>Ross Hoyt Music</span>
             </a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">

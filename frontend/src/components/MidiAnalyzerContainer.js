@@ -28,7 +28,7 @@ export class MidiAnalyzerContainer extends Component {
                       <MidiFileList/> 
                       
                     </div>
-                    
+                  
                     <AnalysisContainer/>
                   </div>
                  

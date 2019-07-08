@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MidiParser } from 'midi-parser-js';
+
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 
