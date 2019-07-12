@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.rosshoyt.analysis.storage.StorageProperties;
 import com.rosshoyt.analysis.storage.StorageService;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
@@ -23,6 +25,15 @@ public class AnalysisApplication {
 		return (args) -> {
 			storageService.deleteAll();
 			storageService.init();
+		};
+	}
+
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/upload").allowedOrigins("http://localhost:3000","http://localhost:8080");
+			}
 		};
 	}
 }

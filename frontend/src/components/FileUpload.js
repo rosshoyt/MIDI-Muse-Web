@@ -46,7 +46,6 @@ export class FileUpload extends Component {
             <h5>1. Upload a .mid or .midi file</h5>
             <h5>2. Or, select one of the pre-loaded examples</h5>
             <Input type="file" name="file" id="exampleFile" onChange={this.onChange}/>
-            <p>Note: Files uploaded are not stored</p>
         </FormGroup>
         <Button>Submit</Button>
         </Form>

@@ -5,9 +5,9 @@ export class Footer extends Component {
     render() {
         return (
           <footer>
-            <p>Website Alpha 1.0</p>
-            <p>Analysis available under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache Liscense 2.0</a></p>
-            <p>© Ross Hoyt Music</p>
+            <p>Alpha V1.1</p>
+            <p>Musical Analysis available under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache Liscense 2.0</a></p>
+            <p><a href="https://www.rosshoyt.com">Ross Hoyt Music</a></p>
           </footer>
         );
     }

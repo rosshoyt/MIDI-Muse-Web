@@ -20,4 +20,5 @@ public class Chord {
    private Long id;
    private String chordName;
    private Duration realTimelength;
+
 }
