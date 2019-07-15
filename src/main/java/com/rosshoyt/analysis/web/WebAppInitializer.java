@@ -1,4 +1,4 @@
-package com.rosshoyt.analysis;
+package com.rosshoyt.analysis.web;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;

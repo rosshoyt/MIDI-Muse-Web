@@ -1,37 +1,24 @@
-package com.rosshoyt.analysis;
-import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.model.MidiFileAnalysisRepository;
-import com.rosshoyt.analysis.model.Chord;
+package com.rosshoyt.analysis.web;
+
+import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
-import com.rosshoyt.analysis.web.FileUploadController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 
 import java.io.File;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Component
 class Initializer implements CommandLineRunner {
 
-   private static String[] fakeFileNames = new String[] { "coolsong.mid", "beethovens42ndSymphony.midi",
-         "hoegartenIsBad.mid", "howdyM8.midi", "testing1234.midi","filmScore.mid","piano_recording.mid",
-         "temp.mid","comicSansDanceSong.midi", "helloWorld.midi","asdf1234.mid","bestSongEvarr.mid"
-   };
-
+   // Utilites to pre-load 'Example' MIDI files into database
    private static final String PRELOADED_MIDI_FILES_DIR = "preloaded-midi-files";
-
-
-
    private static LocalDirectoryScanner directoryScanner = new LocalDirectoryScanner(
          PRELOADED_MIDI_FILES_DIR, FileUploadController.MIDI_FILE_EXTENSIONS_SUPPORTED);
+
+   private MidiFileAnalyzer midiFileAnalyzer;
 
    private final MidiFileAnalysisRepository repository;
 
@@ -46,7 +33,9 @@ class Initializer implements CommandLineRunner {
 
    private void fillMFAR() {
       List<File> preloadMIDIFIles = directoryScanner.getFiles();
-      for(File file: preloadMIDIFIles)
+      for(File file: preloadMIDIFIles) {
+         
+      }
 
 
 
@@ -76,4 +65,9 @@ class Initializer implements CommandLineRunner {
 //
 //      }
 //   }
+//    private static String[] fakeFileNames = new String[] { "coolsong.mid", "beethovens42ndSymphony.midi",
+//         "hoegartenIsBad.mid", "howdyM8.midi", "testing1234.midi","filmScore.mid","piano_recording.mid",
+//         "temp.mid","comicSansDanceSong.midi", "helloWorld.midi","asdf1234.mid","bestSongEvarr.mid"
+//   };
+
 }

@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.io.File;
-
+//TODO refactor file validation to use FileExtensionValidator
 public class LocalDirectoryScanner {
    private Path root;
 

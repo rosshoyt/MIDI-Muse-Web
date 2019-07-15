@@ -10,20 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Base Spring JPA Persistence Wrapper for JSON Response to
+ * MIDIAnalysis file upload
+ */
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "midifile_analysis")
 public class MidiFileAnalysis {
 
    @Id
    @GeneratedValue
    private Long id;
-   @NonNull
-   private String fileName;
-   private int midiFileType;
-   private int numTracks;
-   @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   private List<Chord> chords;
+
+   @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   @MapsId
+   private RawAnalysis rawAnalysis;
+
+   @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   @MapsId
+   private MusicalAnalysis musicalAnalysis;
+
+   @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+   private MidiFile midiFile;
+
 }

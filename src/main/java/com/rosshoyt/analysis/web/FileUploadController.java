@@ -1,47 +1,53 @@
 package com.rosshoyt.analysis.web;
 
 
-import com.rosshoyt.analysis.midi.MidiAnalyzer;
+
+import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rosshoyt.analysis.storage.StorageFileNotFoundException;
 import com.rosshoyt.analysis.storage.StorageService;
 
+import java.io.IOException;
+import java.util.stream.Collectors;
+
 @Controller
 public class FileUploadController {
    public static final String[] MIDI_FILE_EXTENSIONS_SUPPORTED = { "mid", "midi"};
-   public static MidiAnalyzer midiAnalyzer;
+   public static MidiFileAnalyzer midiAnalyzer;
    private final StorageService storageService;
 
    @Autowired
    public FileUploadController(StorageService storageService) {
       this.storageService = storageService;
    }
+/*
+   @GetMapping("/")
+   public String listUploadedFiles(Model model) throws IOException {
 
-//   @GetMapping("/")
-//   public String listUploadedFiles(Model model) throws IOException {
-//
-//      model.addAttribute("files", storageService.loadAll().map(
-//            path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                  "serveFile", path.getFileName().toString()).build().toString())
-//            .collect(Collectors.toList()));
-//
-//      return "uploadForm";
-//   }
+      model.addAttribute("files", storageService.loadAll().map(
+            path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                  "serveFile", path.getFileName().toString()).build().toString())
+            .collect(Collectors.toList()));
 
-//   @GetMapping("/files/{filename:.+}")
-//   @ResponseBody
-//   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-//
-//      Resource file = storageService.loadAsResource(filename);
-//      return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-//            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-//   }
+      return "uploadForm";
+   }
+
+   @GetMapping("/files/{filename:.+}")
+   @ResponseBody
+   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+      Resource file = storageService.loadAsResource(filename);
+      return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+   }*/
    @CrossOrigin
    @PostMapping("/upload")
    public String handleFileUpload(@RequestParam("file") MultipartFile file,
