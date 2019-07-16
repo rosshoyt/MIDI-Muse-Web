@@ -1,4 +1,4 @@
-package com.rosshoyt.analysis.web;
+package com.rosshoyt.analysis;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

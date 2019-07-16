@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class FileUploadController {
-   public static final String[] MIDI_FILE_EXTENSIONS_SUPPORTED = { "mid", "midi"};
+
    public static MidiFileAnalyzer midiAnalyzer;
    private final StorageService storageService;
 
@@ -53,7 +53,7 @@ public class FileUploadController {
    public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                   RedirectAttributes redirectAttributes) {
 
-      System.out.println("In PostMapping / with fileName = " + file.getName());
+      System.out.println("In PostMapping / with fileName = " + file.getOriginalFilename());
       storageService.store(file);
 
       redirectAttributes.addFlashAttribute("message",

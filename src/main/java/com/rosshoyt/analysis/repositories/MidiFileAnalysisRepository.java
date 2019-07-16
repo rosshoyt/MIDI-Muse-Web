@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface MidiFileAnalysisRepository
       extends JpaRepository<MidiFileAnalysis, Long> {
-   MidiFileAnalysis findByFileName(String fileName);
+   //MidiFileAnalysis findByFileName(String fileName);
 }

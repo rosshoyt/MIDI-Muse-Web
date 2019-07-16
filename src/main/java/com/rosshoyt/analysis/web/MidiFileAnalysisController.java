@@ -1,6 +1,6 @@
 package com.rosshoyt.analysis.web;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.music.MidiFileAnalysisRepository;
+import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

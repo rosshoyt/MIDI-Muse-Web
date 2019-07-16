@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -14,10 +16,11 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
-@Table(name = "midifile_header")
 public class MidiHeaderProperties {
+   @Id
+   @GeneratedValue
+   private long id;
 
    private int midiFileType;
    private String comment;
@@ -26,17 +29,17 @@ public class MidiHeaderProperties {
    private Date date;
    private String copyrightInfo;
 
-
-   @Override
-   public String toString(){
-      StringBuilder sb;
-      return "MidiHeader Info-"
-            + "\nTitle: " + title
-            + "\nAuthor: " + author
-            + "\nDate: " + date
-            + "\nCopyright Info: " + copyrightInfo
-            + "\nComment: " + comment;
-   }
+//
+//   @Override
+//   public String toString(){
+//      StringBuilder sb;
+//      return "MidiHeader Info-"
+//            + "\nTitle: " + title
+//            + "\nAuthor: " + author
+//            + "\nDate: " + date
+//            + "\nCopyright Info: " + copyrightInfo
+//            + "\nComment: " + comment;
+//   }
 
 
 }

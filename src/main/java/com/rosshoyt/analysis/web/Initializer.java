@@ -1,8 +1,11 @@
 package com.rosshoyt.analysis.web;
 
 import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
+import com.rosshoyt.analysis.utils.SMFValidator;
+import org.hibernate.query.criteria.internal.expression.SizeOfPluralAttributeExpression;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +19,7 @@ class Initializer implements CommandLineRunner {
    // Utilites to pre-load 'Example' MIDI files into database
    private static final String PRELOADED_MIDI_FILES_DIR = "preloaded-midi-files";
    private static LocalDirectoryScanner directoryScanner = new LocalDirectoryScanner(
-         PRELOADED_MIDI_FILES_DIR, FileUploadController.MIDI_FILE_EXTENSIONS_SUPPORTED);
+         PRELOADED_MIDI_FILES_DIR, SMFValidator.MIDI_FILE_EXTENSIONS_SUPPORTED);
 
    private MidiFileAnalyzer midiFileAnalyzer;
 
@@ -32,10 +35,19 @@ class Initializer implements CommandLineRunner {
    }
 
    private void fillMFAR() {
-      List<File> preloadMIDIFIles = directoryScanner.getFiles();
-      for(File file: preloadMIDIFIles) {
-         
+      List<File> preloadMidiFiles = directoryScanner.getFiles();
+//      for(File file: preloadMidiFiles) {
+//
+//      }
+      MidiFileAnalysis analysis;
+      try {
+         System.out.println("Analyzing pre-loaded midi file");
+         analysis = midiFileAnalyzer.analyze(preloadMidiFiles.get(1));
+         repository.save(analysis);
+      } catch (Exception e){
+         e.printStackTrace();
       }
+
 
 
 
@@ -51,8 +63,8 @@ class Initializer implements CommandLineRunner {
       chords.add(Chord.builder().chordName("F major").realTimelength(Duration.ofSeconds(10)).build());
       chords.add(Chord.builder().chordName("Ab minor").realTimelength(Duration.ofSeconds(10)).build());
       mfa.setChords(chords);
+*/
 
-      repository.save(mfa);*/
 
 
       repository.findAll().forEach(System.out::println);

@@ -13,7 +13,6 @@ import javax.persistence.Id;
  */
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 public class RawAnalysis {
    @Id

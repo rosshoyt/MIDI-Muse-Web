@@ -1,11 +1,10 @@
-package com.rosshoyt.analysis.midi_midiFile_tools;
+package com.rosshoyt.analysis.midi_file_tools;
 
-import algorithms.MusicTools;
+
 import com.rosshoyt.analysis.model.MidiFile;
 import com.rosshoyt.analysis.model.MidiHeaderProperties;
 import com.rosshoyt.analysis.model.RawAnalysis;
-import midi.reference.MidiTimeUtils;
-import orm.MidiHeaderProperties;
+
 
 import javax.sound.midi.*;
 import java.io.File;
@@ -26,6 +25,7 @@ public class MidiFileParser {
 
    }
 
+/*
 
    public RawAnalysis parseMidi(File midiFile) throws InvalidMidiDataException, IOException {
       RawAnalysis analysis = new RawAnalysis();
@@ -55,10 +55,12 @@ public class MidiFileParser {
       sortedMidiFileData.setHeader(getHeaderData(this.midiFileFormat));
 
 
-      /**
+      */
+/**
        * Begin parse with information obtained in Header
        * TODO custom header parsing
-       */
+       *//*
+
       //analysis.setDivisionType(sequence.getDivisionType());
       //analysis.setResolution(sequence.getResolution());
       //ShortMessageTrackAnalysis[] shortMessageAnalyses = new ShortMessageTrackAnalysis[tracks.length];
@@ -179,6 +181,7 @@ public class MidiFileParser {
       }
    }
 
+*/
 
 
 }
