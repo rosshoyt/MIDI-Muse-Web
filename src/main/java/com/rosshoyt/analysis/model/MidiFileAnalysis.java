@@ -1,9 +1,6 @@
 package com.rosshoyt.analysis.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
+@ToString
 @Entity
 public class MidiFileAnalysis {
 

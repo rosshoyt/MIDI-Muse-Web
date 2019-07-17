@@ -18,7 +18,7 @@ export class Header extends Component {
                 <li class="nav-item">
                   <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
                 </li>
-                
+        
               </ul>
             </div>
           </nav> 

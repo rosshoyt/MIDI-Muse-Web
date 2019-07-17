@@ -1,9 +1,6 @@
 package com.rosshoyt.analysis.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString
 @Entity
 public class MidiFile {
 
@@ -25,7 +23,9 @@ public class MidiFile {
    private String fileName;
    @NonNull
    private String fileType;
+
    @Lob
+   @ToString.Exclude
    private byte[] data;
 
    @OneToOne(fetch = FetchType.LAZY)

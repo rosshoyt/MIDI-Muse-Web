@@ -1,6 +1,7 @@
 package com.rosshoyt.analysis.utils;
 
 import com.google.common.io.Files;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Arrays;
@@ -22,9 +23,13 @@ public class FileExtensionValidator {
       }
    }
 
-   public boolean isValid(File file) {
-      if(file != null && SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getName())))
-         return true;
-      return false;
+   public boolean fileHasSupportedExtension(File file) {
+      return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getName()));
+   }
+   public boolean multipartFileHasSupportedExtension(MultipartFile multipartFile){
+      return SUPPORTED_FILE_EXTENSIONS.contains(multipartFile.getContentType());
+   }
+   public boolean isSupportedExtension(String extension) {
+      return SUPPORTED_FILE_EXTENSIONS.contains(extension);
    }
 }

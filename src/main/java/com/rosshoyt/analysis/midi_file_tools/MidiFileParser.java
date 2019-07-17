@@ -1,32 +1,35 @@
 package com.rosshoyt.analysis.midi_file_tools;
 
 
+import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.midi_file_tools.kaitai.StandardMidiFile;
 import com.rosshoyt.analysis.model.MidiFile;
 import com.rosshoyt.analysis.model.MidiHeaderProperties;
 import com.rosshoyt.analysis.model.RawAnalysis;
 
+import com.rosshoyt.analysis.utils.MidiFileUtils;
+import io.kaitai.struct.ByteBufferKaitaiStream;
+import org.apache.commons.io.IOUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.sound.midi.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 import java.util.Map;
 
 
 /**
- * Class created to parse one midi midiFile. Must be re-intantiated for
- * each Midi midiFile to be parsed.
+ *
  */
-public class MidiFileParser {
-
-   
-
-   public MidiFileParser() {
-
-   }
+public interface MidiFileParser {
+   public StandardMidiFile parse(MultipartFile multipartFile) throws IOException;
+   public StandardMidiFile parse(File file) throws IOException;
+   public StandardMidiFile parse(byte[] data);
+}
 
 /*
-
+   //OLD CODE
    public RawAnalysis parseMidi(File midiFile) throws InvalidMidiDataException, IOException {
       RawAnalysis analysis = new RawAnalysis();
 
@@ -184,5 +187,4 @@ public class MidiFileParser {
 */
 
 
-}
 

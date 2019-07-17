@@ -54,6 +54,7 @@ class Analysis_Modal_Pie extends Component {
   }
   
   render(){
+    
     return(
       <div className="container">
       <div className="Analysis_Modal_Pie" legendPosition="bottom">

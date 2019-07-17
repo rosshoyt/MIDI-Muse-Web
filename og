@@ -1,0 +1,67 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.rosshoyt:analysis >------------------------
+[INFO] Building analysis 1.0.2.RELEASE
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot-maven-plugin:2.1.6.RELEASE:run (default-cli) > test-compile @ analysis >>>
+[INFO] 
+[INFO] --- frontend-maven-plugin:1.6:install-node-and-npm (install node and npm) @ analysis ---
+[INFO] Node v8.9.4 is already installed.
+[INFO] NPM 5.6.0 is already installed.
+[INFO] 
+[INFO] --- frontend-maven-plugin:1.6:npm (npm install) @ analysis ---
+[INFO] Skipping execution.
+[INFO] 
+[INFO] --- frontend-maven-plugin:1.6:npm (npm run build) @ analysis ---
+[INFO] Skipping execution.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ analysis ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] Copying 20 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ analysis ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 31 source files to /Users/RossHoyt/Development/Spring/analysis/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ analysis ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /Users/RossHoyt/Development/Spring/analysis/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ analysis ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /Users/RossHoyt/Development/Spring/analysis/target/test-classes
+[INFO] 
+[INFO] <<< spring-boot-maven-plugin:2.1.6.RELEASE:run (default-cli) < test-compile @ analysis <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.1.6.RELEASE:run (default-cli) @ analysis ---
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+[32m :: Spring Boot :: [39m      [2m (v2.1.6.RELEASE)[0;39m
+
+[2m2019-07-16 02:17:34.454[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mc.rosshoyt.analysis.AnalysisApplication [0;39m [2m:[0;39m Starting AnalysisApplication on Rosss-MacBook-Pro.local with PID 20348 (/Users/RossHoyt/Development/Spring/analysis/target/classes started by RossHoyt in /Users/RossHoyt/Development/Spring/analysis)
+[2m2019-07-16 02:17:34.459[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mc.rosshoyt.analysis.AnalysisApplication [0;39m [2m:[0;39m No active profile set, falling back to default profiles: default
+[2m2019-07-16 02:17:35.961[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36m.s.d.r.c.RepositoryConfigurationDelegate[0;39m [2m:[0;39m Bootstrapping Spring Data repositories in DEFAULT mode.
+[2m2019-07-16 02:17:36.135[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36m.s.d.r.c.RepositoryConfigurationDelegate[0;39m [2m:[0;39m Finished Spring Data repository scanning in 152ms. Found 2 repository interfaces.
+[2m2019-07-16 02:17:36.971[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mtrationDelegate$BeanPostProcessorChecker[0;39m [2m:[0;39m Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$2dd7c2e0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[2m2019-07-16 02:17:37.642[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.s.b.w.embedded.tomcat.TomcatWebServer [0;39m [2m:[0;39m Tomcat initialized with port(s): 8080 (http)
+[2m2019-07-16 02:17:37.712[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.apache.catalina.core.StandardService  [0;39m [2m:[0;39m Starting service [Tomcat]
+[2m2019-07-16 02:17:37.713[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.apache.catalina.core.StandardEngine [0;39m [2m:[0;39m Starting Servlet engine: [Apache Tomcat/9.0.21]
+[2m2019-07-16 02:17:37.941[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.a.c.c.C.[Tomcat].[localhost].[/]      [0;39m [2m:[0;39m Initializing Spring embedded WebApplicationContext
+[2m2019-07-16 02:17:37.942[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.s.web.context.ContextLoader           [0;39m [2m:[0;39m Root WebApplicationContext: initialization completed in 3398 ms
+[2m2019-07-16 02:17:38.306[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Starting...
+[2m2019-07-16 02:17:38.801[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Start completed.
+[2m2019-07-16 02:17:38.988[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.hibernate.jpa.internal.util.LogHelper [0;39m [2m:[0;39m HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+[2m2019-07-16 02:17:39.182[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.Version                   [0;39m [2m:[0;39m HHH000412: Hibernate Core {5.3.10.Final}
+[2m2019-07-16 02:17:39.185[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.cfg.Environment           [0;39m [2m:[0;39m HHH000206: hibernate.properties not found
+[2m2019-07-16 02:17:39.606[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.hibernate.annotations.common.Version  [0;39m [2m:[0;39m HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+[2m2019-07-16 02:17:40.106[0;39m [32m INFO[0;39m [35m20348[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.dialect.Dialect           [0;39m [2m:[0;39m HHH000400: Using dialect: org.hibernate.dialect.H2Dialect

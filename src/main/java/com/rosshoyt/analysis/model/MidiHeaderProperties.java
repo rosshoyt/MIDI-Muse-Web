@@ -3,6 +3,7 @@ package com.rosshoyt.analysis.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import java.util.Date;
  *
  */
 @Data
+@ToString
 @NoArgsConstructor
 @Entity
 public class MidiHeaderProperties {
