@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class MusicalAnalysis {
    @Id
-   @GeneratedValue
+   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private long id;
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    private List<Chord> chords;

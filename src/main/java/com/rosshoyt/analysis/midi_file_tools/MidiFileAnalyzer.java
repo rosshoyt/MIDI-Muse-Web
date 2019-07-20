@@ -11,15 +11,12 @@ import com.rosshoyt.analysis.model.MidiFileAnalysis;
 
 import com.rosshoyt.analysis.model.MusicalAnalysis;
 import com.rosshoyt.analysis.model.RawAnalysis;
-import com.rosshoyt.analysis.utils.MidiFileUtils;
-import io.kaitai.struct.ByteBufferKaitaiStream;
-import org.apache.commons.io.IOUtils;
+import com.rosshoyt.analysis.utils.FileUtils;
+import io.kaitai.struct.KaitaiStream;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.sound.midi.InvalidMidiDataException;
 import java.io.*;
-import java.util.Properties;
 
 
 /**
@@ -31,51 +28,60 @@ import java.util.Properties;
 
 public class MidiFileAnalyzer {
    
-   private KaitaiSMFParser smfParser;
+
+   private MidiFileValidator midiFileValidator;
    /**
     *
     */
    public MidiFileAnalyzer() {
-      this.smfParser = new KaitaiSMFParser();
+
+      this.midiFileValidator = new MidiFileValidator();
    }
    // TODO Refactor to avoid code duplication in analyze() methods
 
+   public MidiFileAnalysis analyze(File file) throws IOException, InvalidMidiFileException {
+      System.out.print("---Starting MIDI FILE ANALYSIS---");
+      System.out.println("Validating and parsing file");
+      StandardMidiFile smf;
+      try{
+         smf = midiFileValidator.validate(file);
+      } catch(Exception e) {
+         if(e instanceof InvalidMidiFileException) System.out.println("File not valid MIDI File extension");
+         else if(e instanceof KaitaiStream.UnexpectedDataError) System.out.println("MIDI File contained invalid data");
+         else e.printStackTrace();
+         return null;
+      }
+      System.out.println("Validation passed, analyzing parse results");
+      MidiFileAnalysis mfa = analyzeStandardMidiFile(smf);
+      //TODO refactor to not extract byte[] twice (in below line and in MidiFileValidator class)
+      mfa = addRawFileToMFA(mfa, file);
+
+      return mfa;
+
+
+
+
+   }
    public MidiFileAnalysis analyze(MultipartFile multipartFile) throws InvalidMidiFileException, IOException {
       MidiFileAnalysis midiFileAnalysis;
-      System.out.println("---Starting STANDARD MIDI FILE Analysis---");
-      if(MidiFileUtils.isValidSMF(multipartFile)) {
-         System.out.println("--MultipartFile " + multipartFile.getOriginalFilename() + "passed validation--\n...Beginning parse...");
-         StandardMidiFile smf;
-         smf = smfParser.parse(multipartFile);
-         midiFileAnalysis = analyzeKaitaiSMF(smf);
-      } else throw new InvalidMidiFileException();
-      return midiFileAnalysis;
-   }
 
-   public MidiFileAnalysis analyze(File file) throws InvalidMidiFileException, IOException {
-      System.out.print("---Starting MIDI FILE ANALYSIS---\n...Validating file...");
-      if(MidiFileUtils.isValidSMF(file)) {
-         System.out.print("MIDI File \"" + file.getName() + "\" passed validation\n--Parsing SMF with Kaitai Struct--\n");
-         byte[] fileData = MidiFileUtils.fileToByteArray(file);
-
-         StandardMidiFile smf = smfParser.parse(fileData);
-         MidiFileAnalysis mfa = analyzeKaitaiSMF(smf);
-
-         MidiFile midiFile = new MidiFile();
-         midiFile.setData(fileData);
-         midiFile.setFileName(file.getName());
-         midiFile.setFileType(MidiFileUtils.getExtension(file));
-
-         mfa.setMidiFile(midiFile);
-         return mfa;
-
-      } else throw new InvalidMidiFileException();
+//      System.out.println("---Starting STANDARD MIDI FILE Analysis---");
+//      if(FileUtils.isValidSMF(multipartFile)) {
+//         System.out.println("--MultipartFile " + multipartFile.getOriginalFilename() + "passed validation--\n...Beginning parse...");
+//         StandardMidiFile smf;
+//         //smf = midiFileParser.parse(multipartFile);
+//         //midiFileAnalysis = analyzeStandardMidiFile(smf);
+//      } else throw new InvalidMidiFileException();
+//      //return midiFileAnalysis;
+      return null;
    }
 
 
 
-   public MidiFileAnalysis analyzeKaitaiSMF(StandardMidiFile smf){
-      System.out.println("---Analyzing the Kaitai SMF parse---");
+
+
+   private MidiFileAnalysis analyzeStandardMidiFile(StandardMidiFile smf){
+      System.out.println("---Analyzing the Kaitai Struct SMF parse---");
       MidiFileAnalysis midiFileAnalysis = new MidiFileAnalysis();
       System.out.println("...Creating raw analysis...");
       RawAnalysis rawAnalysis = analyzeRaw(smf);
@@ -99,6 +105,25 @@ public class MidiFileAnalyzer {
       raw.setDivisionType(smf.hdr().division());
       return raw;
    }
+   private static MidiFileAnalysis addRawFileToMFA(MidiFileAnalysis mfa, File file){
+      byte[] data;
+      try{
+         data = FileUtils.getByteArray(file);
+      } catch(Exception e) {
+         e.printStackTrace();
+         return null;
+      }
+      MidiFile midiFile = new MidiFile();
+      midiFile.setId(mfa.getId());
+      midiFile.setData(data);
+      midiFile.setFileName(file.getName());
+      midiFile.setFileType(FileUtils.getExtension(file));
+      mfa.setMidiFile(midiFile);
+      return mfa;
+   }
+
+
+
 //   public static MidiFile getPersistableMidiFile(){
 //      // TODO refactor -> find new location for this functionality
 //      System.out.println("...Adding Binary File Data to the MidiFileAnalysis object for DB storage...");

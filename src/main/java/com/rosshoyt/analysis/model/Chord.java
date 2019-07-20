@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 public class Chord {
    @Id
-   @GeneratedValue
+   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long id;
    private String chordName;
    private Duration realTimelength;

@@ -18,7 +18,7 @@ import java.util.Set;
 public class MidiFileAnalysis {
 
    @Id
-   @GeneratedValue
+   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long id;
 
    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
@@ -30,6 +30,7 @@ public class MidiFileAnalysis {
    private MusicalAnalysis musicalAnalysis;
 
    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+   @MapsId
    private MidiFile midiFile;
 
 }

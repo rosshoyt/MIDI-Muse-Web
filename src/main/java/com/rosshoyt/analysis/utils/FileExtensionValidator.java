@@ -23,10 +23,10 @@ public class FileExtensionValidator {
       }
    }
 
-   public boolean fileHasSupportedExtension(File file) {
+   public boolean extensionIsSupported(File file) {
       return SUPPORTED_FILE_EXTENSIONS.contains(Files.getFileExtension(file.getName()));
    }
-   public boolean multipartFileHasSupportedExtension(MultipartFile multipartFile){
+   public boolean extensionIsSupported(MultipartFile multipartFile){
       return SUPPORTED_FILE_EXTENSIONS.contains(multipartFile.getContentType());
    }
    public boolean isSupportedExtension(String extension) {
