@@ -16,6 +16,11 @@ import javax.persistence.*;
 @Entity
 public class MidiFile {
 
+   public MidiFile(String fileName, String fileType, byte[] data){
+      this.fileName = fileName;
+      this.fileType = fileType;
+      this.data = data;
+   }
    @Id
    @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long id;

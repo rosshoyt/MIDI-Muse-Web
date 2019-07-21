@@ -3,7 +3,11 @@ package com.rosshoyt.analysis.web;
 
 
 import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
+import io.kaitai.struct.KaitaiStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,18 +19,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.rosshoyt.analysis.storage.StorageFileNotFoundException;
 import com.rosshoyt.analysis.storage.StorageService;
 
+import javax.persistence.Entity;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
 @Controller
+@EntityScan
 public class FileUploadController {
 
-   public static MidiFileAnalyzer midiAnalyzer;
+   private MidiFileAnalysisRepository midiFileAnalysisRepository;
+   public static MidiFileAnalyzer midiFileAnalyzer;
    private final StorageService storageService;
 
    @Autowired
    public FileUploadController(StorageService storageService) {
       this.storageService = storageService;
+      this.midiFileAnalyzer = new MidiFileAnalyzer();
+
    }
 /*
    @GetMapping("/")
@@ -53,11 +62,31 @@ public class FileUploadController {
    public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                   RedirectAttributes redirectAttributes) {
 
-      System.out.println("In PostMapping / with fileName = " + file.getOriginalFilename());
-      storageService.store(file);
+      System.out.println("In PostMapping /upload with fileName = " + file.getOriginalFilename());
 
-      redirectAttributes.addFlashAttribute("message",
-            "You successfully uploaded " + file.getOriginalFilename() + "!");
+      boolean successfulUpload = true;
+      try{
+         midiFileAnalyzer.analyze(file);
+      } catch(Exception e){
+         e.printStackTrace();
+         successfulUpload = false;
+         if(e instanceof InvalidMidiFileException) {
+
+            redirectAttributes.addFlashAttribute("message", "File format/type not supported");
+         } else if(e instanceof KaitaiStream.UnexpectedDataError){
+
+            redirectAttributes.addFlashAttribute("message", "Midi File contained unexpected data");
+         }
+      }
+
+      //storageService.store(file);
+
+
+      if(successfulUpload) {
+         redirectAttributes.addFlashAttribute("message",
+               "You successfully uploaded " + file.getOriginalFilename() + "!");
+         System.out.println("Midi File Successfully uploaded and analyzed.");
+      }
 
       return "redirect:/";
    }

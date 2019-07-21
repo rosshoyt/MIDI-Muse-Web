@@ -43,11 +43,7 @@ class Analysis_Modal_Pie extends Component {
     legendPosition:'right'
   }
 
-  async componentDidMount() {
-    const response = await fetch('/api/midifile/1');
-    const body = await response.json();
-    this.setState({ midiFileRepoContents: body, isLoading: false });
-  }
+
 
   fetchSongData() {
     

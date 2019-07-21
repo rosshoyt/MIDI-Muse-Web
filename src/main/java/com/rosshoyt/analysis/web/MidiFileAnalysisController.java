@@ -1,4 +1,5 @@
 package com.rosshoyt.analysis.web;
+import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import org.slf4j.Logger;
@@ -18,9 +19,11 @@ class MidiFileAnalysisController {
 
    private final Logger log = LoggerFactory.getLogger(MidiFileAnalysisController.class);
    private MidiFileAnalysisRepository midiFileAnalysisRepository;
+   private MidiFileAnalyzer midiFileAnalyzer;
 
    public MidiFileAnalysisController(MidiFileAnalysisRepository midiFileAnalysisRepository) {
       this.midiFileAnalysisRepository = midiFileAnalysisRepository;
+      this.midiFileAnalyzer = new MidiFileAnalyzer();
    }
 
    @GetMapping("/midifiles")
@@ -35,13 +38,13 @@ class MidiFileAnalysisController {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
    }
 
-   @PostMapping("/group")
-   ResponseEntity<MidiFileAnalysis> createMidiFileAnalysis(@Valid @RequestBody MidiFileAnalysis group) throws URISyntaxException {
-      log.info("Request to create group: {}", group);
-      MidiFileAnalysis result = midiFileAnalysisRepository.save(group);
-      return ResponseEntity.created(new URI("/api/group/" + result.getId()))
-            .body(result);
-   }
+//   @PostMapping("/uploadmidifile")
+//   ResponseEntity<MidiFileAnalysis> createMidiFileAnalysis(@Valid @RequestBody MidiFileAnalysis group) throws URISyntaxException {
+//      log.info("Request to create midiFileAnalysis: {}", group);
+//      MidiFileAnalysis result = midiFileAnalysisRepository.save(midiFileAnalyzer.analyze());
+//      return ResponseEntity.created(new URI("/api/group/" + result.getId()))
+//            .body(result);
+//   }
 
    @PutMapping("/group/{id}")
    ResponseEntity<MidiFileAnalysis> updateMidiFileAnalysis(@Valid @RequestBody MidiFileAnalysis group) {
