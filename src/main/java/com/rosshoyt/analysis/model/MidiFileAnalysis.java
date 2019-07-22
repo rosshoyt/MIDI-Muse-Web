@@ -18,19 +18,16 @@ import java.util.Set;
 public class MidiFileAnalysis {
 
    @Id
-   @GeneratedValue(strategy=GenerationType.IDENTITY)
+   @GeneratedValue(strategy=GenerationType.SEQUENCE)
    private Long id;
 
    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @MapsId
    private RawAnalysis rawAnalysis;
 
    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @MapsId
    private MusicalAnalysis musicalAnalysis;
 
-   @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-   @MapsId
+   @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    private MidiFile midiFile;
 
 }

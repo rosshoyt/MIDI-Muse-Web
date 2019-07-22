@@ -13,9 +13,17 @@ import java.util.List;
 @ToString
 @Entity
 public class MusicalAnalysis {
+   
    @Id
-   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private long id;
+   
+   @OneToOne
+   @JoinColumn(name = "id")
+   @MapsId
+   @ToString.Exclude 
+   private MidiFileAnalysis midiFileAnalysis;
+
+
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    private List<Chord> chords;
 }

@@ -5,10 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Domain class...
@@ -19,8 +16,13 @@ import javax.persistence.Id;
 @Entity
 public class RawAnalysis {
    @Id
-   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long id;
+
+   @OneToOne
+   @JoinColumn(name = "id")
+   @MapsId
+   @ToString.Exclude
+   private MidiFileAnalysis midiFileAnalysis;
 
    /*
    * MThd header derived fields (in near order of appearance)

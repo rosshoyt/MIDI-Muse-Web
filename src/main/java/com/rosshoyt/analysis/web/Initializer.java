@@ -54,7 +54,8 @@ class Initializer implements CommandLineRunner {
          }
       }
 
-
+      repository.findAll().forEach(System.out::println);
+   }
 
 
 /*      Stream.of(fakeFileNames).forEach(name ->
@@ -73,8 +74,7 @@ class Initializer implements CommandLineRunner {
 
 
 
-      repository.findAll().forEach(System.out::println);
-   }
+
 //   private List<File> getPreloadedMidiFiles(Path dir){
 //      System.out.println("---Scanning preloaded .MIDI/.MID files---");
 //      ArrayList<File> midiFiles = new ArrayList<>();

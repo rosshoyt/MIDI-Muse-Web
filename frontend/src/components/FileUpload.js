@@ -27,7 +27,7 @@ export class FileUpload extends Component {
     this.setState({file:e.target.files[0]})
   }
   fileUpload(file){
-    const url = '/upload';
+    const url = '/uploadmidifile';
     const formData = new FormData();
     formData.append('file',file)
     const config = {
@@ -43,8 +43,8 @@ export class FileUpload extends Component {
           <FormGroup>
             <h3>Select a MIDI file to analyze.</h3>
             <h4>You can either:</h4>
-            <h5>1. Upload a .mid or .midi file</h5>
-            <h5>2. Or, select one of the pre-loaded examples</h5>
+            <p>1. Upload a .mid or .midi file</p>
+            <p>2. Or, select one of the pre-loaded examples</p>
             <Input type="file" name="file" id="exampleFile" onChange={this.onChange}/>
         </FormGroup>
         <Button>Submit</Button>

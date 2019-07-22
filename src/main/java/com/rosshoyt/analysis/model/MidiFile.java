@@ -16,24 +16,30 @@ import javax.persistence.*;
 @Entity
 public class MidiFile {
 
-   public MidiFile(String fileName, String fileType, byte[] data){
-      this.fileName = fileName;
-      this.fileType = fileType;
-      this.data = data;
-   }
    @Id
-   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long id;
-   @NonNull
-   private String fileName;
-   @NonNull
-   private String fileType;
-
+   
    @Lob
    @ToString.Exclude
-   private byte[] data;
+   private byte[] file;
 
    @OneToOne(fetch = FetchType.LAZY)
-   MidiFileAnalysis analysis;
+   @JoinColumn(name = "id")
+   @MapsId
+   @ToString.Exclude 
+   private MidiFileAnalysis analysis;
+
+   @NonNull
+   private String fileName;
+   
+   @NonNull
+   private String fileExtension;
+
+   public MidiFile(String fileName, String fileExtension, byte[] file){
+      this.fileName = fileName;
+      this.fileExtension = fileExtension;
+      this.file = file;
+   }
+
 
 }
