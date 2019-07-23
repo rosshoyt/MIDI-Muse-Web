@@ -5,6 +5,7 @@ package com.rosshoyt.analysis.web;
 import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
 import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
+import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 import io.kaitai.struct.KaitaiStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -23,11 +24,14 @@ public class FileUploadController {
 
    private MidiFileAnalysisRepository midiFileAnalysisRepository;
    public static MidiFileAnalyzer midiFileAnalyzer;
-   private final StorageService storageService;
+
+   MidiFileAnalysisService midiFileAnalysisService;
+
+
 
    @Autowired
-   public FileUploadController(StorageService storageService) {
-      this.storageService = storageService;
+   public FileUploadController(MidiFileAnalysisService midiFileAnalysisService) {
+      this.midiFileAnalysisService = midiFileAnalysisService;
       this.midiFileAnalyzer = new MidiFileAnalyzer();
 
    }
@@ -60,7 +64,7 @@ public class FileUploadController {
 
       boolean successfulUpload = true;
       try{
-         midiFileAnalyzer.initialParse(file);
+         midiFileAnalysisService.addMidiFile(file);
       } catch(Exception e){
          e.printStackTrace();
          successfulUpload = false;

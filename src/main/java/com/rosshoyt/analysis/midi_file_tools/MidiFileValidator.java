@@ -2,6 +2,8 @@ package com.rosshoyt.analysis.midi_file_tools;
 
 import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidFileException;
 import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.midi_file_tools.exceptions.UnexpectedMidiDataException;
+import com.rosshoyt.analysis.midi_file_tools.kaitai.KaitaiSMFParser;
 import com.rosshoyt.analysis.midi_file_tools.kaitai.StandardMidiFile;
 import com.rosshoyt.analysis.utils.FileExtensionValidator;
 import com.rosshoyt.analysis.utils.FileUtils;
@@ -13,38 +15,30 @@ import java.io.File;
 import java.io.IOException;
 
 public class MidiFileValidator {
-   public static final String[] MIDI_FILE_EXTENSIONS_SUPPORTED =  { "mid", "midi", "smf"};
-   private static FileExtensionValidator extensionValidator = new FileExtensionValidator(MIDI_FILE_EXTENSIONS_SUPPORTED);
 
-
-   public ParseResult validate(File file) throws InvalidMidiFileException, IOException {
+   public ParseResult validate(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating file...");
       if(file != null && extensionValidator.extensionIsSupported(file)) {
-         ParseResult parseResult = new ParseResult();
+         ParseResult parseResult = parser.parse(FileUtils.getByteArray(file));
          parseResult.fileName = FileUtils.getFileNameWithoutExtension(file.getName());
          parseResult.extension = FileUtils.getExtension(file);
-         return parse(parseResult, FileUtils.getByteArray(file));
+         return parseResult;
       }
       else throw new InvalidMidiFileException();
+
    }
-   public ParseResult validate(MultipartFile multipartFile) throws InvalidMidiFileException, IOException{
+   public ParseResult validate(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating multipart file...");
       if(multipartFile != null && extensionValidator.extensionIsSupported(multipartFile)) {
-         ParseResult parseResult = new ParseResult();
+         ParseResult parseResult = parser.parse(multipartFile.getBytes());
          parseResult.fileName = FileUtils.getFileNameWithoutExtension(multipartFile.getName());
          parseResult.extension = multipartFile.getContentType();
-         return parse(parseResult, multipartFile.getBytes());
+         return parseResult;
       }
       else throw new InvalidMidiFileException();
    }
-   private ParseResult parse(ParseResult parseResult, byte[] data) throws KaitaiStream.UnexpectedDataError {
-      System.out.print("...Parsing SMF with Kaitai Struct...\n");
-      // Kaitai Struct SMF parse
-      parseResult.smf = new StandardMidiFile(new ByteBufferKaitaiStream(data));
-      // Retain data for later use
-      parseResult.data = data;
-      return parseResult;
-   }
-
-
+   // Utils
+   public static final String[] MIDI_FILE_EXTENSIONS_SUPPORTED =  { "mid", "midi", "smf"};
+   private static FileExtensionValidator extensionValidator = new FileExtensionValidator(MIDI_FILE_EXTENSIONS_SUPPORTED);
+   private static StandardMidiFileParser parser = new KaitaiSMFParser();
 }

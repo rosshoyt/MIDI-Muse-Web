@@ -16,12 +16,12 @@ public class MusicalAnalysis {
    
    @Id
    private long id;
-   
-   @OneToOne
-   @JoinColumn(name = "id")
-   @MapsId
-   @ToString.Exclude 
-   private MidiFileAnalysis midiFileAnalysis;
+
+//   @OneToOne
+//   @JoinColumn(name = "id")
+//   @MapsId
+//   @ToString.Exclude
+//   private MidiFileAnalysis midiFileAnalysis;
 
 
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)

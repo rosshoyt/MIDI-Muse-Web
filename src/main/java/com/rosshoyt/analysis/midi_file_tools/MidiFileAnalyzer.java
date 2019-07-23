@@ -5,6 +5,7 @@ package com.rosshoyt.analysis.midi_file_tools;
 
 import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
 
+import com.rosshoyt.analysis.midi_file_tools.exceptions.UnexpectedMidiDataException;
 import com.rosshoyt.analysis.midi_file_tools.kaitai.StandardMidiFile;
 import com.rosshoyt.analysis.model.MidiFile;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
@@ -37,83 +38,37 @@ public class MidiFileAnalyzer {
 
       this.midiFileValidator = new MidiFileValidator();
    }
-   // TODO Refactor to avoid code duplication in initialParse() methods
 
-   public ParseResult initialParse(File file) throws IOException, InvalidMidiFileException, KaitaiStream.UnexpectedDataError {
-      System.out.print("---Starting MIDI FILE ANALYSIS---");
-      return midiFileValidator.validate(file);
+//   public MidiFileAnalysis analyzeParseResult(MidiFileAnalysis midiFileAnalysis,
+//                                              ParseResult parseResult){
+//      System.out.println("---Analyzing the Kaitai Struct SMF parse---");
+//      //MidiFileAnalysis midiFileAnalysis = new MidiFileAnalysis();
 //
-//      System.out.println("Validation passed, analyzing parse results");
-//      MidiFileAnalysis mfa = analyzeParseResult(parseResult.smf);
-//      mfa = addFileData(mfa,
-//            FileUtils.getFileNameWithoutExtension(file.getName()),
-//            FileUtils.getExtension(file),
-//            parseResult.data
-//      );
+//      System.out.println("...Creating raw analysis...");
+//      RawAnalysis rawAnalysis = analyzeRaw(parseResult.smf);
+//      rawAnalysis.setMidiFileAnalysis(midiFileAnalysis);
+//      midiFileAnalysis.setRawAnalysis(rawAnalysis);
 //
+//      System.out.println("...Creating musical analysis...");
+//      MusicalAnalysis musicalAnalysis = analyzeMusic(rawAnalysis);
+//      musicalAnalysis.setMidiFileAnalysis(midiFileAnalysis);
+//      midiFileAnalysis.setMusicalAnalysis(musicalAnalysis);
 //
-//      return mfa;
-
-
-   }
-
-   public ParseResult initialParse(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, KaitaiStream.UnexpectedDataError {
-      System.out.print("---Starting MIDI FILE ANALYSIS---");
-      return  midiFileValidator.validate(multipartFile);
-
-//      System.out.println("Validation passed, analyzing parse results");
-//      MidiFileAnalysis mfa = analyzeParseResult(parseResult);
-//
-//      mfa = addFileData(mfa,
-//            FileUtils.getFileNameWithoutExtension(multipartFile.getName()),
-//            multipartFile.getContentType(),
-//            parseResult.data
-//      );
-//
-//
-//      return mfa;
-   }
-
-
-//
-//   public MidiFileAnalysis analyzeParseResult(ParseResult parseResult){
-//
+//      System.out.println("---Analysis complete---");
+//      return midiFileAnalysis;
 //   }
 
-   public MidiFileAnalysis analyzeParseResult(MidiFileAnalysis midiFileAnalysis,
-                                              ParseResult parseResult){
-      System.out.println("---Analyzing the Kaitai Struct SMF parse---");
-      //MidiFileAnalysis midiFileAnalysis = new MidiFileAnalysis();
-
-      System.out.println("...Creating raw analysis...");
-      RawAnalysis rawAnalysis = analyzeRaw(parseResult.smf);
-      rawAnalysis.setMidiFileAnalysis(midiFileAnalysis);
-      midiFileAnalysis.setRawAnalysis(rawAnalysis);
-
-      System.out.println("...Creating musical analysis...");
-      MusicalAnalysis musicalAnalysis = analyzeMusic(rawAnalysis);
-      musicalAnalysis.setMidiFileAnalysis(midiFileAnalysis);
-      midiFileAnalysis.setMusicalAnalysis(musicalAnalysis);
-
-      System.out.println("...Adding midifile data...");
-      MidiFile midiFile = new MidiFile(parseResult.fileName, parseResult.extension, parseResult.data);
-      midiFile.setMidiFileAnalysis(midiFileAnalysis);
-      midiFileAnalysis.setMidiFile(midiFile);
-      System.out.println("---Analysis complete---");
-      return midiFileAnalysis;
-   }
-
-   private static MusicalAnalysis analyzeMusic(RawAnalysis raw) {
-      MusicalAnalysis mus = new MusicalAnalysis();
-      return mus;
-   }
-
-   private static RawAnalysis analyzeRaw(StandardMidiFile smf) {
+   public static RawAnalysis analyzeRaw(StandardMidiFile smf) {
       RawAnalysis raw = new RawAnalysis();
       raw.setMidiFileFormatType(smf.hdr().format());
       raw.setNumTracks(smf.hdr().numTracks());
       raw.setDivisionType(smf.hdr().division());
       return raw;
+   }
+
+   public static MusicalAnalysis analyzeMusic(RawAnalysis raw) {
+      MusicalAnalysis mus = new MusicalAnalysis();
+      return mus;
    }
 //   public static MidiFileAnalysis addFileData(MidiFileAnalysis mfa, ParseResult parseResult){
 //

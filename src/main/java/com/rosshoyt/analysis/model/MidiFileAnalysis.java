@@ -21,13 +21,16 @@ public class MidiFileAnalysis {
    @GeneratedValue(strategy=GenerationType.SEQUENCE)
    private Long id;
 
-   @OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   @OneToOne
    private RawAnalysis rawAnalysis;
 
-   @OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   ///@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   @OneToOne
    private MusicalAnalysis musicalAnalysis;
 
-   @OneToOne(mappedBy = "midiFileAnalysis",  fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+   @OneToOne
    private MidiFile midiFile;
 
 }

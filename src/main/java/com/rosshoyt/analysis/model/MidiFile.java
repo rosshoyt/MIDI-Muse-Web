@@ -12,22 +12,26 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity
 public class MidiFile {
 
    @Id
    private Long id;
-   
+
+
+   //TODO Remove this reference if keeps causing problems, manually set id
+//   @OneToOne(fetch = FetchType.EAGER)
+//   @JoinColumn(name = "id")
+//   @ToString.Exclude
+//   @MapsId
+//   private MidiFileAnalysis midiFileAnalysis;
+
    @Lob
    @ToString.Exclude
    private byte[] file;
 
-   @OneToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "id")
-   @MapsId
-   @ToString.Exclude 
-   private MidiFileAnalysis midiFileAnalysis;
 
    @NonNull
    private String fileName;

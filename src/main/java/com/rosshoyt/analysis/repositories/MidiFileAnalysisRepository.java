@@ -1,9 +1,12 @@
 package com.rosshoyt.analysis.repositories;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
+
 import java.util.List;
 
 public interface MidiFileAnalysisRepository
-      extends JpaRepository<MidiFileAnalysis, Long> {
-   //MidiFileAnalysis findByFileName(String fileName);
+      extends CrudRepository<MidiFileAnalysis, Long> {
+
 }

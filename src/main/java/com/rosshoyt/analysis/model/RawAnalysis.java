@@ -18,11 +18,11 @@ public class RawAnalysis {
    @Id
    private Long id;
 
-   @OneToOne
-   @JoinColumn(name = "id")
-   @MapsId
-   @ToString.Exclude
-   private MidiFileAnalysis midiFileAnalysis;
+//   @OneToOne
+//   @JoinColumn(name = "id")
+//   @MapsId
+//   @ToString.Exclude
+//   private MidiFileAnalysis midiFileAnalysis;
 
    /*
    * MThd header derived fields (in near order of appearance)
