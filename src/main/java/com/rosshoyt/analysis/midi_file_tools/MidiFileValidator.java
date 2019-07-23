@@ -18,7 +18,7 @@ public class MidiFileValidator {
 
    public ParseResult validate(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating file...");
-      if(file != null && extensionValidator.extensionIsSupported(file)) {
+      if(extensionValidator.extensionIsSupported(file)) {
          ParseResult parseResult = parser.parse(FileUtils.getByteArray(file));
          parseResult.fileName = FileUtils.getFileNameWithoutExtension(file.getName());
          parseResult.extension = FileUtils.getExtension(file);
@@ -29,7 +29,7 @@ public class MidiFileValidator {
    }
    public ParseResult validate(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating multipart file...");
-      if(multipartFile != null && extensionValidator.extensionIsSupported(multipartFile)) {
+      if(extensionValidator.extensionIsSupported(multipartFile)) {
          ParseResult parseResult = parser.parse(multipartFile.getBytes());
          parseResult.fileName = FileUtils.getFileNameWithoutExtension(multipartFile.getName());
          parseResult.extension = multipartFile.getContentType();

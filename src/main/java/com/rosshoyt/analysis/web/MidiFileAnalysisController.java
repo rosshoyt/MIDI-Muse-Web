@@ -48,9 +48,9 @@ class MidiFileAnalysisController {
    @CrossOrigin
    @PostMapping(path = "/uploadmidifile")//, produces = { MediaType.APPLICATION_JSON_VALUE})
    ResponseEntity uploadMidiFile(@RequestParam("file") MultipartFile file) {
-      log.info("Request to initialParse file", file.getOriginalFilename());
-
+      //log.info("Request to initialParse file", file.getOriginalFilename());
       try {
+         System.out.println("Request to upload file " +  file.getOriginalFilename());
          //result =
          MidiFileAnalysis midiFileAnalysis = midiFileAnalysisService.addMidiFile(file);
          return ResponseEntity
