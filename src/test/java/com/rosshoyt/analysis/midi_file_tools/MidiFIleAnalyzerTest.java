@@ -1,11 +1,9 @@
 package com.rosshoyt.analysis.midi_file_tools;
 
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 
 public class MidiFIleAnalyzerTest {
@@ -15,7 +13,8 @@ public class MidiFIleAnalyzerTest {
    public void analyze(){
       MidiFileAnalyzer midiFileAnalyzer = new MidiFileAnalyzer();
       try {
-         MidiFileAnalysis mfa = midiFileAnalyzer.analyze(smfType1);
+         ParseResult parseResult = midiFileAnalyzer.initialParse(smfType1);
+         MidiFileAnalysis mfa = midiFileAnalyzer.analyzeParseResult(new MidiFileAnalysis(), parseResult);
          System.out.println(mfa);
 
       } catch(Exception e) {

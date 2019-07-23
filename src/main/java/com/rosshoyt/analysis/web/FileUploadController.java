@@ -8,20 +8,14 @@ import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import io.kaitai.struct.KaitaiStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rosshoyt.analysis.storage.StorageFileNotFoundException;
 import com.rosshoyt.analysis.storage.StorageService;
-
-import javax.persistence.Entity;
-import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Controller
 @EntityScan
@@ -66,7 +60,7 @@ public class FileUploadController {
 
       boolean successfulUpload = true;
       try{
-         midiFileAnalyzer.analyze(file);
+         midiFileAnalyzer.initialParse(file);
       } catch(Exception e){
          e.printStackTrace();
          successfulUpload = false;

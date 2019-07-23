@@ -14,25 +14,34 @@ import java.io.IOException;
 
 public class MidiFileValidator {
    public static final String[] MIDI_FILE_EXTENSIONS_SUPPORTED =  { "mid", "midi", "smf"};
-   public static FileExtensionValidator extensionValidator = new FileExtensionValidator(MIDI_FILE_EXTENSIONS_SUPPORTED);
+   private static FileExtensionValidator extensionValidator = new FileExtensionValidator(MIDI_FILE_EXTENSIONS_SUPPORTED);
 
 
    public ParseResult validate(File file) throws InvalidMidiFileException, IOException {
-      if(file != null && extensionValidator.extensionIsSupported(file))
-         return validate(FileUtils.getByteArray(file));
+      System.out.println("...Validating file...");
+      if(file != null && extensionValidator.extensionIsSupported(file)) {
+         ParseResult parseResult = new ParseResult();
+         parseResult.fileName = FileUtils.getFileNameWithoutExtension(file.getName());
+         parseResult.extension = FileUtils.getExtension(file);
+         return parse(parseResult, FileUtils.getByteArray(file));
+      }
       else throw new InvalidMidiFileException();
    }
    public ParseResult validate(MultipartFile multipartFile) throws InvalidMidiFileException, IOException{
-      if(multipartFile != null && extensionValidator.extensionIsSupported(multipartFile))
-         return validate(FileUtils.getByteArray(multipartFile));
+      System.out.println("...Validating multipart file...");
+      if(multipartFile != null && extensionValidator.extensionIsSupported(multipartFile)) {
+         ParseResult parseResult = new ParseResult();
+         parseResult.fileName = FileUtils.getFileNameWithoutExtension(multipartFile.getName());
+         parseResult.extension = multipartFile.getContentType();
+         return parse(parseResult, multipartFile.getBytes());
+      }
       else throw new InvalidMidiFileException();
    }
-   public ParseResult validate(byte[] data) throws KaitaiStream.UnexpectedDataError {
-      System.out.print("Parsing file with Kaitai Struct\n");
-      ParseResult parseResult = new ParseResult();
-      // Kaitai Struct parse
+   private ParseResult parse(ParseResult parseResult, byte[] data) throws KaitaiStream.UnexpectedDataError {
+      System.out.print("...Parsing SMF with Kaitai Struct...\n");
+      // Kaitai Struct SMF parse
       parseResult.smf = new StandardMidiFile(new ByteBufferKaitaiStream(data));
-      // Retain byte[] data for later use
+      // Retain data for later use
       parseResult.data = data;
       return parseResult;
    }

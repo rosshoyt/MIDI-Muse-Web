@@ -1,5 +1,6 @@
 package com.rosshoyt.analysis.web;
 import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.midi_file_tools.ParseResult;
 import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
@@ -7,15 +8,10 @@ import io.kaitai.struct.KaitaiStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -43,36 +39,46 @@ class MidiFileAnalysisController {
       return group.map(response -> ResponseEntity.ok().body(response))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
    }
+// TODO FIX
+//   @CrossOrigin
+//   @PostMapping(path = "/uploadmidifile")//, produces = { MediaType.APPLICATION_JSON_VALUE})
+//   ResponseEntity uploadMidiFile(@RequestParam("file") MultipartFile file) {
+//      log.info("Request to initialParse file", file.getOriginalFilename());
+//
+//      try {
+//         //result =
+//         ParseResult parseResult = midiFileAnalyzer.initialParse(file);
+//         return ResponseEntity
+//               .status(HttpStatus.CREATED)
+//               .body(this.midiFileAnalysisRepository.save(midiFileAnalyzer.analyzeParseResult(parseResult)));
+//      } catch (Exception e){
+//         e.printStackTrace();
+//         if(e instanceof InvalidMidiFileException) {
+//            return ResponseEntity
+//                  .status(HttpStatus.FORBIDDEN)
+//                  .body("File type not supported, must be .mid, .midi, or .smf");
+//         } else if(e instanceof KaitaiStream.UnexpectedDataError){
+//            return ResponseEntity
+//                  .status(HttpStatus.FORBIDDEN)
+//                  .body("File is not valid " + file.getContentType() + " file, contains unexpected data");
+//         }
+//         //else if(e instanceof NullPointerException || e instanceof IOException){}
+//         else return ResponseEntity
+//                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                     .body("Internal server error occurred");
+//
+//      }
+//
+//   }
 
-   @CrossOrigin
-   @PostMapping(path = "/uploadmidifile")//, produces = { MediaType.APPLICATION_JSON_VALUE})
-   ResponseEntity uploadMidiFile(@RequestParam("file") MultipartFile file) {
-      log.info("Request to analyze file", file.getOriginalFilename());
 
-      try {
-         //result =
-         return ResponseEntity
-               .status(HttpStatus.CREATED)
-               .body(this.midiFileAnalysisRepository.save(midiFileAnalyzer.analyze(file)));
-      } catch (Exception e){
-         e.printStackTrace();
-         if(e instanceof InvalidMidiFileException) {
-            return ResponseEntity
-                  .status(HttpStatus.FORBIDDEN)
-                  .body("File type not supported, must be .mid, .midi, or .smf");
-         } else if(e instanceof KaitaiStream.UnexpectedDataError){
-            return ResponseEntity
-                  .status(HttpStatus.FORBIDDEN)
-                  .body("File is not valid " + file.getContentType() + " file, contains unexpected data");
-         }
-         //else if(e instanceof NullPointerException || e instanceof IOException){}
-         else return ResponseEntity
-                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                     .body("Internal server error occurred");
 
-      }
 
-   }
+
+
+
+
+
 //   // Todo implement in above method
 //   @RequestMapping(method = RequestMethod.GET)
 //   public ResponseEntity getUser(@RequestHeader(value="Access-key") String accessKey,

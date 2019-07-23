@@ -27,7 +27,7 @@ public class MidiFile {
    @JoinColumn(name = "id")
    @MapsId
    @ToString.Exclude 
-   private MidiFileAnalysis analysis;
+   private MidiFileAnalysis midiFileAnalysis;
 
    @NonNull
    private String fileName;

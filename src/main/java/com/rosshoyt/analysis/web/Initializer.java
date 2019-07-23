@@ -2,10 +2,10 @@ package com.rosshoyt.analysis.web;
 
 import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
 import com.rosshoyt.analysis.midi_file_tools.MidiFileValidator;
+import com.rosshoyt.analysis.midi_file_tools.ParseResult;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
-import com.rosshoyt.analysis.utils.FileUtils;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -46,14 +46,19 @@ class Initializer implements CommandLineRunner {
          System.out.println("Analyzing pre-loaded midi file " + file.getName());
          try {
 
-            MidiFileAnalysis midiFileAnalysis = midiFileAnalyzer.analyze(file);
-            System.out.println(midiFileAnalysis);
-            repository.save(midiFileAnalysis);
+            ParseResult parseResult= midiFileAnalyzer.initialParse(file);
+
+            MidiFileAnalysis mfa = repository.save(new MidiFileAnalysis());
+            mfa = midiFileAnalyzer.analyzeParseResult(mfa, parseResult);
+            repository.save(mfa);
+
+            System.out.println(mfa);
+            //repository.save(midiFileAnalysis);
          } catch (Exception e) {
             e.printStackTrace();
          }
       }
-
+      System.out.println("All entries added to repo, here they are ->");
       repository.findAll().forEach(System.out::println);
    }
 
