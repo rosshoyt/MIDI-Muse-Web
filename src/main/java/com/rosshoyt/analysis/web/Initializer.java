@@ -5,8 +5,10 @@ import com.rosshoyt.analysis.midi_file_tools.MidiFileValidator;
 import com.rosshoyt.analysis.midi_file_tools.ParseResult;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
+import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Component;
@@ -24,15 +26,14 @@ class Initializer implements CommandLineRunner {
    private static LocalDirectoryScanner directoryScanner = new LocalDirectoryScanner(
          PRELOADED_MIDI_FILES_DIR, MidiFileValidator.MIDI_FILE_EXTENSIONS_SUPPORTED);
 
-   private MidiFileAnalyzer midiFileAnalyzer;
+   @Autowired
+   private MidiFileAnalysisService midiFileAnalysisService;
 
-   private final MidiFileAnalysisRepository repository;
-
-   public Initializer(MidiFileAnalysisRepository repository) {
-
-      this.repository = repository;
-      midiFileAnalyzer = new MidiFileAnalyzer();
-   }
+//
+//   public Initializer(MidiFileAnalysisService midiFileAnalysisService) {
+//      this.midiFileAnalysisService = midiFileAnalysisService;
+//
+//   }
 
    @Override
    public void run(String... strings) {
@@ -46,20 +47,15 @@ class Initializer implements CommandLineRunner {
          System.out.println("Analyzing pre-loaded midi file " + file.getName());
          try {
 
-            ParseResult parseResult= midiFileAnalyzer.initialParse(file);
+           midiFileAnalysisService.addMidiFile(file);
 
-            MidiFileAnalysis mfa = repository.save(new MidiFileAnalysis());
-            mfa = midiFileAnalyzer.analyzeParseResult(mfa, parseResult);
-            repository.save(mfa);
-
-            System.out.println(mfa);
             //repository.save(midiFileAnalysis);
          } catch (Exception e) {
             e.printStackTrace();
          }
       }
       System.out.println("All entries added to repo, here they are ->");
-      repository.findAll().forEach(System.out::println);
+      midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println);
    }
 
 

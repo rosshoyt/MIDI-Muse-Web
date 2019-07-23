@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 /**
- *
+ * TODO Move byte[] data to separate from the midifile naming data
  */
 @Data
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class MidiFile {
    @ToString.Exclude
    private byte[] file;
 
-   @OneToOne(fetch = FetchType.LAZY)
+   @OneToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "id")
    @MapsId
    @ToString.Exclude 
