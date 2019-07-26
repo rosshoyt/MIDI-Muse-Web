@@ -33,10 +33,6 @@ public class MidiFileAnalysisService {
       this.midiFileRepository = midiFileRepository;
    }
 
-
-
-
-
    public List<MidiFileAnalysis> getAllMidiFileAnalyses() {
       List<MidiFileAnalysis> analyses = new ArrayList<>();
       midiFileAnalysisRepository.findAll().forEach(analyses::add);

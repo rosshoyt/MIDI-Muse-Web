@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
-import Analysis_Modal_Pie from './Analysis_Modal_Pie'
+import Analysis_Modal_Pie from './MidiFileDataDisplay/Analysis_Modal_Pie'
 
 export default class AnalysisContainer extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ export default class AnalysisContainer extends Component {
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => { this.toggle('1'); }}
             >
-              File Info
+              Basic Midi File Info
             </NavLink>
           </NavItem>
           <NavItem>
@@ -45,7 +45,7 @@ export default class AnalysisContainer extends Component {
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => { this.toggle('3'); }}
             >
-              More Music Data Views
+              Note Distributions
             </NavLink>
           </NavItem>
         </Nav>
@@ -53,7 +53,7 @@ export default class AnalysisContainer extends Component {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <h4>Tab 1 Contents</h4>
+                <p>Tab 1 Contents</p>
               </Col>
             </Row>
           </TabPane>
