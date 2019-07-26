@@ -72,12 +72,13 @@ public class MidiFileAnalysisService {
       System.out.println("Analyzing Raw SMF parse");
       RawAnalysis rawAnalysis = midiFileAnalyzer.analyzeRaw(parseResult.smf);
       System.out.println("Analyzing musical data");
-      MusicalAnalysis musicalAnalysis = midiFileAnalyzer.analyzeMusic(rawAnalysis);
+      MusicalAnalysis musicalAnalysis = midiFileAnalyzer.analyzeMusic(parseResult.smf);
       System.out.println("...Setting IDs manually... [Refactor for automatic ID gen]");
       rawAnalysis.setId(mfa.getId());
       musicalAnalysis.setId(mfa.getId());
       mfa.setRawAnalysis(rawAnalysis);
       mfa.setMusicalAnalysis(musicalAnalysis);
+      mfa.setMidiFile(midiFile);
 
       System.out.println("Midi File Analysis results: "+ mfa);
       System.out.println("Updating MFA DB Entry");

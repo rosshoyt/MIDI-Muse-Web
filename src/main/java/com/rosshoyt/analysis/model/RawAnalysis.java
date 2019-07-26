@@ -31,4 +31,9 @@ public class RawAnalysis {
    private int numTracks;
    private float divisionType;
 
+   /*
+   * Basic Raw musical information for display (TODO refactor and add more advanced schema based on each Track)
+    */
+   private int numMidiMessages;
+
 }

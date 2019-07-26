@@ -3,21 +3,12 @@ package com.rosshoyt.analysis.midi_file_tools;
 
 
 
-import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
-
-import com.rosshoyt.analysis.midi_file_tools.exceptions.UnexpectedMidiDataException;
 import com.rosshoyt.analysis.midi_file_tools.kaitai.StandardMidiFile;
-import com.rosshoyt.analysis.model.MidiFile;
-import com.rosshoyt.analysis.model.MidiFileAnalysis;
 
 import com.rosshoyt.analysis.model.MusicalAnalysis;
 import com.rosshoyt.analysis.model.RawAnalysis;
-import com.rosshoyt.analysis.utils.FileUtils;
-import io.kaitai.struct.KaitaiStream;
-import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.*;
+import java.util.ArrayList;
 
 
 /**
@@ -39,37 +30,85 @@ public class MidiFileAnalyzer {
       this.midiFileValidator = new MidiFileValidator();
    }
 
-//   public MidiFileAnalysis analyzeParseResult(MidiFileAnalysis midiFileAnalysis,
-//                                              ParseResult parseResult){
-//      System.out.println("---Analyzing the Kaitai Struct SMF parse---");
-//      //MidiFileAnalysis midiFileAnalysis = new MidiFileAnalysis();
-//
-//      System.out.println("...Creating raw analysis...");
-//      RawAnalysis rawAnalysis = analyzeRaw(parseResult.smf);
-//      rawAnalysis.setMidiFileAnalysis(midiFileAnalysis);
-//      midiFileAnalysis.setRawAnalysis(rawAnalysis);
-//
-//      System.out.println("...Creating musical analysis...");
-//      MusicalAnalysis musicalAnalysis = analyzeMusic(rawAnalysis);
-//      musicalAnalysis.setMidiFileAnalysis(midiFileAnalysis);
-//      midiFileAnalysis.setMusicalAnalysis(musicalAnalysis);
-//
-//      System.out.println("---Analysis complete---");
-//      return midiFileAnalysis;
-//   }
-
    public static RawAnalysis analyzeRaw(StandardMidiFile smf) {
       RawAnalysis raw = new RawAnalysis();
       raw.setMidiFileFormatType(smf.hdr().format());
       raw.setNumTracks(smf.hdr().numTracks());
       raw.setDivisionType(smf.hdr().division());
+
+
+      raw.setNumMidiMessages(countNumMidiEvents(smf.tracks()));
       return raw;
    }
+   private static int countNumMidiEvents(ArrayList<StandardMidiFile.Track> tracks){
+      int numMidiEvents = 0;
+      for(StandardMidiFile.Track track : tracks){
+         numMidiEvents += track.events().event().size();
+      }
+      System.out.println(numMidiEvents + " total Midi events");
+      return numMidiEvents;
+   }
 
-   public static MusicalAnalysis analyzeMusic(RawAnalysis raw) {
+   public static MusicalAnalysis analyzeMusic(StandardMidiFile smf) {
       MusicalAnalysis mus = new MusicalAnalysis();
+
+      System.out.println("ANALYZING SMF");
+
+      if(smf.hdr().format() != 2) {
+         int trackCounter = 0;
+         int totalNoteCount = 0;
+         for(StandardMidiFile.Track track : smf.tracks()){
+            System.out.println("ANALYZING TRACK #" + trackCounter);//: " + event.eventType());
+
+            //StandardMidiFile.TrackEvents trackEvents = track.events();
+            //System.out.println("TrackEvents raw: " + trackEvents.);
+            int trackEventCounter = 0;
+            for(StandardMidiFile.TrackEvent event : track.events().event()){
+               switch (event.eventType()) {
+                  case 224:
+                     //StandardMidiFile.NoteOnEvent noteOnEvent = new StandardMidiFile.NoteOnEvent(event._io(), event);
+                     System.out.println("Trc#" + trackCounter /*+ " @" + event.vTime().value()*/ + " TrcEvent# " + trackEventCounter + " NOTE_ON");//[note = " + noteOnEvent.note() + ", vel = " + noteOnEvent.velocity() + "]");
+                     totalNoteCount++;
+                     //StandardMidiFile.NoteOffEvent noteOnEvent = event(StandardMidiFile.NoteOnEvent);
+                     //System.out.println("Track #" + trackCounter +" TrackEvent# " + trackEventCounter + " NOTE_ON [note = " + noteOnEvent.note() + ", vel = " + noteOnEvent.velocity() + "]");
+                     break;
+                  case 128:
+                     System.out.println("Trc#" + trackCounter /*+ " @" + event.vTime().value() */+ " TrcEvent# " + trackEventCounter + " NOTE_OFF");//[note = " + noteOnEvent.note() + ", vel = " + noteOnEvent.velocity() + "]");
+
+                     //StandardMidiFile.NoteOffEvent noteOffEvent = new StandardMidiFile.NoteOffEvent(event._io(), event, smf);
+                     //System.out.println("Track #" + trackCounter +" TrackEvent# " + trackEventCounter + " NOTE_ON [note = " + noteOffEvent.note() + ", vel = " + noteOffEvent.velocity() + "]");
+                     break;
+               }
+
+               trackEventCounter++;
+            }
+
+            trackCounter++;
+         }
+         mus.setTotalNotes(totalNoteCount);
+      }
       return mus;
    }
+//   public enum TrackEventType{
+//      PitchBendEvent(224),
+//      NoteOnEvent(144),
+//      ChannelPressureEvent(208),
+//      ProgramChangeEvent(192),
+//      PolyphonicPressureEvent(160),
+//      ControllerEvent(176),
+//      NoteOffEvent(128);
+//
+//      final int value;
+//      TrackEventType(int value) {
+//         this.value = value;
+//      }
+//
+//      public int getValue(){
+//         return this.value;
+//      }
+//
+//   }
+
 //   public static MidiFileAnalysis addFileData(MidiFileAnalysis mfa, ParseResult parseResult){
 //
 //      return mfa;

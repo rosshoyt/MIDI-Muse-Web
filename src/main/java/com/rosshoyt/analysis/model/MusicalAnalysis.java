@@ -26,4 +26,7 @@ public class MusicalAnalysis {
 
    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    private List<Chord> chords;
+
+   private int totalNotes;
+
 }

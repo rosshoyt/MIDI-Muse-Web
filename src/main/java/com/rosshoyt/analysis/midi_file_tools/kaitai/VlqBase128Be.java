@@ -2,11 +2,11 @@ package com.rosshoyt.analysis.midi_file_tools.kaitai;
 
 // This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
-import io.kaitai.struct.ByteBufferKaitaiStream;
-import io.kaitai.struct.KaitaiStruct;
-import io.kaitai.struct.KaitaiStream;
-import java.io.IOException;
-import java.util.ArrayList;
+      import io.kaitai.struct.ByteBufferKaitaiStream;
+      import io.kaitai.struct.KaitaiStruct;
+      import io.kaitai.struct.KaitaiStream;
+      import java.io.IOException;
+      import java.util.ArrayList;
 
 
 /**

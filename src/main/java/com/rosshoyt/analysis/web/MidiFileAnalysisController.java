@@ -37,7 +37,7 @@ class MidiFileAnalysisController {
       return midiFileAnalysisService.getAllMidiFiles();
    }
 
-   @GetMapping("/midifile/{id}")
+   @GetMapping("/midifileanalysis/{id}")
    ResponseEntity<?> getMidiFileAnalysis(@PathVariable String id) {
       Optional<MidiFileAnalysis> group = midiFileAnalysisService.getMidiFileAnalysis(Long.parseLong(id));
       return group.map(response -> ResponseEntity.ok().body(response))
