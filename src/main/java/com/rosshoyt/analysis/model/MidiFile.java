@@ -39,6 +39,9 @@ public class MidiFile {
    @NonNull
    private String fileExtension;
 
+   // TODO Add full file name support
+   //String fullFileName;
+
    public MidiFile(String fileName, String fileExtension, byte[] file){
       this.fileName = fileName;
       this.fileExtension = fileExtension;

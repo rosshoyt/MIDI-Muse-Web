@@ -4,6 +4,7 @@ import './App.css';
 import { Header } from './components/Header';
 import { MidiAnalyzerContainer } from './components/MidiAnalyzerContainer';
 import { Footer } from './components/Footer'
+import BasicContainer from './components/BasicContainer';
 
 class App extends Component {
 
@@ -19,7 +20,7 @@ class App extends Component {
           </div>
           </div>
           <div>
-          <Footer/>
+          {/* <Footer/> */}
           </div>
       </div>
 

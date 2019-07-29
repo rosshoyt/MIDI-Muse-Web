@@ -29,7 +29,7 @@ class Analysis_Modal_Pie extends Component {
             data:
             [ 25, 0, 5, 0,
               0,  0, 0, 0,
-              15, 0, 0, 0
+              15, 0, 0, 49
             ]
           }
         ]

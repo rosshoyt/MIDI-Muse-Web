@@ -41,16 +41,15 @@ export class FileUpload extends Component {
       return (
         <Form onSubmit={this.onFormSubmit}>
           <FormGroup>
-            <h3>Select a MIDI file to analyze.</h3>
-            <h4>You can either:</h4>
-            <p>1. Upload a .mid or .midi file</p>
-            <p>2. Or, select one of the pre-loaded examples</p>
+            <h4>Choose a MIDI file to analyze.</h4>
+            <h5>1. Select one of the pre-loaded examples </h5>
+            <h5>2. Or, upload a Standard Midi File (.mid, .midi, .smf formats)</h5>
             <Input type="file" name="file" id="exampleFile" onChange={this.onChange}/>
         </FormGroup>
         <Button>Submit</Button>
         </Form>
         );
         
-    }
+    } 
 }
 export default FileUpload;
