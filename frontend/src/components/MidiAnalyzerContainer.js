@@ -61,8 +61,10 @@ export class MidiAnalyzerContainer extends Component {
                   
                   
                     <div className="colC">
-                    <h4>AnalysisContainer</h4>
-                    <AnalysisContainer/>
+                    
+                    <AnalysisContainer
+                      currentAnalysis={currentAnalysis}
+                    />
                    
                     </div>
                     </div>  

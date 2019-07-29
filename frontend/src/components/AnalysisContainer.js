@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
+import SelectedFileBox from './SelectedFileBox.js';
 import Analysis_Modal_Pie from './MidiFileDataDisplay/Analysis_Modal_Pie'
+import BasicFileInfo from './MidiFileDataDisplay/BasicFileInfo.js';
+
 
 export default class AnalysisContainer extends Component {
   constructor(props) {
@@ -23,13 +26,19 @@ export default class AnalysisContainer extends Component {
   render() {
     return (
       <div>
-        <Nav tabs>
+        {/* <div>
+          <SelectedFileBox fileName={this.props.currentAnalysis.fileName}
+                                   fileExtension={this.props.currentAnalysis.fileExtension}
+                  />
+
+        </div> */}
+          <Nav tabs>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => { this.toggle('1'); }}
             >
-              Basic Midi File Info
+            File Info
             </NavLink>
           </NavItem>
           <NavItem>
@@ -51,11 +60,10 @@ export default class AnalysisContainer extends Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
-            <Row>
-              <Col sm="12">
-                <p>Tab 1 Contents</p>
-              </Col>
-            </Row>
+            <BasicFileInfo
+              currentAnalysis={this.props.currentAnalysis}
+            />
+            
           </TabPane>
           <TabPane tabId="2">
 

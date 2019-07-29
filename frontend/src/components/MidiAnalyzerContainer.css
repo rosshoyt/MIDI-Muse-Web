@@ -1,6 +1,6 @@
 .MidiAnalyzerContainer {
   
-  
+  flex:1;
   
   height:100%;
   
@@ -16,8 +16,8 @@
 .rowC{
   margin: 10px;
   display:flex;
+  flex:3;
   
-  flex-flow: row wrap;
   width: 100%;
   height: 100%;
   background-color: green;
@@ -25,7 +25,9 @@
 .colC{
   margin: 10px;
   display: flex;
+  flex:100;
   flex-direction: column;
   flex: 1;
   background-color: orchid
 }
+
