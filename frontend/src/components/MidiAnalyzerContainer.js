@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-import MidiFileList from './MidiFileList'
-import "./MidiAnalyzerContainer.css"
-import { cpus } from 'os';
-import { FileUpload } from './FileUpload';
 import AnalysisContainer from './AnalysisContainer';
+import "./MidiAnalyzerContainer.css"
+
 import SelectedFileBox from './SelectedFileBox.js';
+import LeftContainer from './LeftContainer';
 
 
 let DEFAULT_SELECTION_ID = 1;
@@ -48,22 +47,27 @@ export class MidiAnalyzerContainer extends Component {
     }
         return (
          
-          <div class="MidiAnalyzerContainer">
+          <div class="MidiAnalyzerContainer" >
                   <SelectedFileBox fileName={currentAnalysis.midiFile.fileName}
                                    fileExtension={currentAnalysis.midiFile.fileExtension}
                   />
                   <div className="rowC">
+                    <LeftContainer
+                    midiFileList={midiFileList} 
+                    idCurrentFileSelected={currentAnalysis.id}
+                    fileListItemSelectedCallback={this.fileListItemSelectedCallback}
+                    />
+                    
+                  
+                  
                     <div className="colC">
-                    <FileUpload/>
-                    <MidiFileList midiFileList={midiFileList} 
-                                  idCurrentFileSelected={currentAnalysis.id}
-                                  fileListItemSelectedCallback={this.fileListItemSelectedCallback}
-                    />  
-                      
+                    <h4>AnalysisContainer</h4>
+                    <AnalysisContainer/>
+                   
                     </div>
+                    </div>  
                     
-                    
-                  </div>
+                 
                  
           </div>
         );
