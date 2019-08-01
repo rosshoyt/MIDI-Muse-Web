@@ -1,10 +1,6 @@
 package com.rosshoyt.analysis.web;
 
-import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
-import com.rosshoyt.analysis.midi_file_tools.MidiFileValidator;
-import com.rosshoyt.analysis.midi_file_tools.ParseResult;
-import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
+import com.rosshoyt.analysis.midifile.tools.MidiFileValidator;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
 

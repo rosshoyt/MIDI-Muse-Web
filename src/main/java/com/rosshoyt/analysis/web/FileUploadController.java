@@ -2,8 +2,8 @@ package com.rosshoyt.analysis.web;
 
 
 
-import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
-import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.midifile.tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 import io.kaitai.struct.KaitaiStream;
@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rosshoyt.analysis.storage.StorageFileNotFoundException;
-import com.rosshoyt.analysis.storage.StorageService;
 
 @Controller
 @EntityScan

@@ -1,16 +1,18 @@
 package com.rosshoyt.analysis.services;
 
-import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
-import com.rosshoyt.analysis.midi_file_tools.MidiFileValidator;
-import com.rosshoyt.analysis.midi_file_tools.ParseResult;
-import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
-import com.rosshoyt.analysis.midi_file_tools.exceptions.UnexpectedMidiDataException;
-import com.rosshoyt.analysis.model.MidiFile;
-import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.model.MusicalAnalysis;
-import com.rosshoyt.analysis.model.RawAnalysis;
+import com.rosshoyt.analysis.midifile.tools.MidiFileAnalyzer;
+import com.rosshoyt.analysis.midifile.tools.MidiFileValidator;
+import com.rosshoyt.analysis.midifile.tools.ParseResult;
+import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.midifile.tools.exceptions.UnexpectedMidiDataException;
+import com.rosshoyt.analysis.model.*;
+import com.rosshoyt.analysis.model.file.FileByteData;
+import com.rosshoyt.analysis.model.file.MidiFileDetail;
+import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
+import com.rosshoyt.analysis.model.raw.OldRawAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
-import com.rosshoyt.analysis.repositories.MidiFileRepository;
+import com.rosshoyt.analysis.repositories.FileDetailRepository;
+import com.rosshoyt.analysis.repositories.RawAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,13 +26,17 @@ import java.util.Optional;
 // TODO based on https://technology.amis.nl/2019/02/26/building-a-restful-web-service-with-spring-boot-using-an-h2-in-memory-database-and-also-an-external-mysql-database/
 @Service
 public class MidiFileAnalysisService {
-
-
+   // CRUD Repos
+   private final MidiFileAnalysisRepository midiFileAnalysisRepository;
+   private final FileDetailRepository fileDetailRepository;
+   private final RawAnalysisRepository rawAnalysisRepository;
 
    @Autowired
-   public MidiFileAnalysisService(MidiFileAnalysisRepository midiFileAnalysisRepository, MidiFileRepository midiFileRepository) {
+   public MidiFileAnalysisService(MidiFileAnalysisRepository midiFileAnalysisRepository, FileDetailRepository fileDetailRepository,
+                                  RawAnalysisRepository rawAnalysisRepository) {
       this.midiFileAnalysisRepository = midiFileAnalysisRepository;
-      this.midiFileRepository = midiFileRepository;
+      this.fileDetailRepository = fileDetailRepository;
+      this.rawAnalysisRepository = rawAnalysisRepository;
    }
 
    public List<MidiFileAnalysis> getAllMidiFileAnalyses() {
@@ -38,18 +44,16 @@ public class MidiFileAnalysisService {
       midiFileAnalysisRepository.findAll().forEach(analyses::add);
       return analyses;
    }
+
    public Optional<MidiFileAnalysis> getMidiFileAnalysis(long id) {
       return midiFileAnalysisRepository.findById(id);
    }
 
-   public List<MidiFile> getAllMidiFiles(){
-      List<MidiFile> midiFileList= new ArrayList<>();
-
-      midiFileRepository.findAll().forEach(midiFileList::add);
-
-      return midiFileList;
+   public List<MidiFileDetail> getMidiFileDetailList(){
+      List<MidiFileDetail> midiFileDetailList = new ArrayList<>();
+      fileDetailRepository.findAll().forEach(midiFileDetailList::add);
+      return midiFileDetailList;
    }
-
 
    public MidiFileAnalysis addMidiFile(File file) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       return addMidiFile(midiFileValidator.validate(file));
@@ -58,23 +62,27 @@ public class MidiFileAnalysisService {
       return addMidiFile(midiFileValidator.validate(multipartFile));
    }
    private MidiFileAnalysis addMidiFile(ParseResult parseResult){
-      // File Has been validated,  saving a record to DB
-      MidiFileAnalysis mfa = midiFileAnalysisRepository.save(new MidiFileAnalysis());
+      // File Has been validated in parse(), saving record to DB
+      MidiFileAnalysis mfa = midiFileAnalysisRepository.save(new MidiFileAnalysis()); // Getting base entry
 
-      // Create other DB entries with PK of MFA entry
-      System.out.println("Adding MidiFile to DB");
-      MidiFile midiFile = midiFileRepository.save(new MidiFile(mfa.getId(), parseResult.data, parseResult.fileName, parseResult.extension));
+      /* Create other DB entries with PK of MFA entry */
+      MidiFileDetail midiFileDetail = midiFileAnalyzer.getMidiFileDetail(parseResult.smf, parseResult.fileName, parseResult.extension);
+      System.out.println("Persisting File Byte Data...");
+      midiFileDetail.setFileByteData(new FileByteData(mfa.getId(), parseResult.data));
+      fileDetailRepository.save(midiFileDetail);
+
       // Create analysis tables
       System.out.println("Analyzing Raw SMF parse");
-      RawAnalysis rawAnalysis = midiFileAnalyzer.analyzeRaw(parseResult.smf);
+      OldRawAnalysis oldRawAnalysis = midiFileAnalyzer.analyzeRaw(parseResult.smf);
       System.out.println("Analyzing musical data");
-      MusicalAnalysis musicalAnalysis = midiFileAnalyzer.analyzeMusic(parseResult.smf);
+      MusicalAnalysis musicalAnalysis = midiFileAnalyzer.analyzeMusic(oldRawAnalysis);
       System.out.println("...Setting IDs manually... [Refactor for automatic ID gen]");
-      rawAnalysis.setId(mfa.getId());
+      oldRawAnalysis.setId(mfa.getId());
+      rawAnalysisRepository.save(oldRawAnalysis);
       musicalAnalysis.setId(mfa.getId());
-      mfa.setRawAnalysis(rawAnalysis);
+      mfa.setOldRawAnalysis(oldRawAnalysis);
       mfa.setMusicalAnalysis(musicalAnalysis);
-      mfa.setMidiFile(midiFile);
+      mfa.setMidiFileDetail(midiFileDetail);
 
       System.out.println("Midi File Analysis results: "+ mfa);
       System.out.println("Updating MFA DB Entry");
@@ -88,9 +96,7 @@ public class MidiFileAnalysisService {
       midiFileAnalysisRepository.deleteById(id);
    }
 
-   // Repos
-   private final MidiFileAnalysisRepository midiFileAnalysisRepository;
-   private final MidiFileRepository midiFileRepository;
+
 
    // Utilities
    private static MidiFileAnalyzer midiFileAnalyzer = new MidiFileAnalyzer();

@@ -1,11 +1,11 @@
 package com.rosshoyt.analysis.model;
 
+import com.rosshoyt.analysis.model.file.MidiFileDetail;
+import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
+import com.rosshoyt.analysis.model.raw.OldRawAnalysis;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Base Spring JPA Persistence Wrapper for JSON Response to
@@ -23,14 +23,16 @@ public class MidiFileAnalysis {
 
    //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    @OneToOne(cascade=CascadeType.ALL)
-   private RawAnalysis rawAnalysis;
+   private OldRawAnalysis oldRawAnalysis;
 
    ///@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    @OneToOne(cascade=CascadeType.ALL)
    private MusicalAnalysis musicalAnalysis;
 
    //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+
+
    @OneToOne
-   private MidiFile midiFile;
+   private MidiFileDetail midiFileDetail;
 
 }

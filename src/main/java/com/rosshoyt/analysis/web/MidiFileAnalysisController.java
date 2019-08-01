@@ -1,10 +1,7 @@
 package com.rosshoyt.analysis.web;
-import com.rosshoyt.analysis.midi_file_tools.MidiFileAnalyzer;
-import com.rosshoyt.analysis.midi_file_tools.ParseResult;
-import com.rosshoyt.analysis.midi_file_tools.exceptions.InvalidMidiFileException;
-import com.rosshoyt.analysis.model.MidiFile;
+import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
+import com.rosshoyt.analysis.model.file.FileByteData;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
-import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 
 import io.kaitai.struct.KaitaiStream;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +29,8 @@ class MidiFileAnalysisController {
 
 
    @GetMapping("/midifiles")
-   List<MidiFile> getAllMidiFiles() {
-      return midiFileAnalysisService.getAllMidiFiles();
+   List<FileByteData> getAllMidiFiles() {
+      return midiFileAnalysisService.getMidiFileDetailList();
    }
 
    @GetMapping("/midifileanalysis/{id}")
