@@ -6,13 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class SysexEventBody {
+public class SysexEvent extends TrackEvent {
 
    private VlqBase128Be len;
    private byte[] data;
-   @Id 
-   private Long id;
-   private Long fkRawAnalysisId;
-   private TrackEvent _parent;
+
+
+
 
 }

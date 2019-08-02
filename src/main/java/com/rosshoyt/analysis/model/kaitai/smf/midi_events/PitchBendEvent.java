@@ -1,9 +1,11 @@
-package com.rosshoyt.analysis.model.kaitai.smf;
+package com.rosshoyt.analysis.model.kaitai.smf.midi_events;
+
+import com.rosshoyt.analysis.model.kaitai.smf.MidiEvent;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 @Entity
-public class PitchBendEvent {
+public class PitchBendEvent extends MidiEvent {
 
 
    private Integer bendValue;
@@ -12,9 +14,5 @@ public class PitchBendEvent {
 
    private int b1;
    private int b2;
-   @Id
-   private Long id;
-   private Long fkRawAnalysisId;
-   private TrackEvent _parent;
 
 }

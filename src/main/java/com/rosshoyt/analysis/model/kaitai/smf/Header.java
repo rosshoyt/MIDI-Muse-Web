@@ -7,13 +7,9 @@ import javax.persistence.Id;
 public class Header {
 
 
-   private long lenHeader;
+
    private int format;
    private int numTracks;
    private short division;
-   @Id
-   private Long id;
-   private Long fkRawAnalysisId;
-   private RawAnalysis _parent;
 
 }

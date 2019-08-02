@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 @Entity
 public class RawAnalysis {
-   @OneToOne()
+   @OneToOne
    private Header hdr;
    @OneToMany(fetch = FetchType.LAZY)
    private ArrayList<Track> tracks;

@@ -1,6 +1,7 @@
 package com.rosshoyt.analysis.model;
 
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
+import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 import com.rosshoyt.analysis.model.raw.OldRawAnalysis;
 import lombok.*;
@@ -30,7 +31,8 @@ public class MidiFileAnalysis {
    private MusicalAnalysis musicalAnalysis;
 
    //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-
+   @OneToOne(fetch = FetchType.LAZY)
+   private RawAnalysis rawAnalysis;
 
    @OneToOne
    private MidiFileDetail midiFileDetail;
