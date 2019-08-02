@@ -3,6 +3,7 @@ package com.rosshoyt.analysis.model.file;
 import lombok.*;
 
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -11,6 +12,7 @@ import javax.persistence.OneToOne;
 @AllArgsConstructor
 @Builder
 @ToString
+@Entity
 public class MidiFileDetail {
 
    @Id
@@ -20,12 +22,7 @@ public class MidiFileDetail {
    private String fileName;
    private String fileExtension;
 
-   /*
-    * MThd header derived fields (in near order of appearance)
-    */
-   private int midiFileFormatType; // 0, 1 or 2
-   private int numTracks;
-   private float divisionType;
+
 
    @OneToOne
    private FileByteData fileByteData;

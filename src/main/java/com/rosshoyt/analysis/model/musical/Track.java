@@ -2,6 +2,7 @@ package com.rosshoyt.analysis.model.musical;
 
 import lombok.*;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -12,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
+@Entity
 public class Track {
    @Id
    private Long id;

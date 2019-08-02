@@ -1,9 +1,13 @@
 package com.rosshoyt.analysis.model.kaitai.smf.meta_events;
 
-import com.rosshoyt.analysis.model.kaitai.smf.MetaEvent;
+
+import com.rosshoyt.analysis.model.kaitai.smf._TrackEvent;
+import lombok.Data;
+
 import javax.persistence.Entity;
 
+@Data
 @Entity
-public class MidiChannelPrefixAssignment extends MetaEvent {
+public class MidiChannelPrefixAssignment extends _TrackEvent {
 
 }

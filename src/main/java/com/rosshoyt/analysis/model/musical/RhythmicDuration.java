@@ -8,11 +8,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
-public abstract class RhythmicDuration {
+@Entity
+public class RhythmicDuration {
    @Id
    private Long id;
 

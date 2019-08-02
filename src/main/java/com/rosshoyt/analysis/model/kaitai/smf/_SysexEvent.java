@@ -1,15 +1,17 @@
 package com.rosshoyt.analysis.model.kaitai.smf;
 
 import com.rosshoyt.analysis.midifile.tools.kaitai.VlqBase128Be;
+import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
+@Data
 @Entity
-public class SysexEvent extends TrackEvent {
+public class _SysexEvent extends _TrackEvent {
 
-   private VlqBase128Be len;
+   private Integer value;
    private byte[] data;
+
 
 
 

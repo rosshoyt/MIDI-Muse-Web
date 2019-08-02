@@ -10,8 +10,6 @@ import javax.persistence.*;
  * Holds byte[] of a Standard Midi File
  */
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity

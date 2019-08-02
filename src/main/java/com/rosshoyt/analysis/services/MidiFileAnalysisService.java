@@ -8,8 +8,8 @@ import com.rosshoyt.analysis.midifile.tools.exceptions.UnexpectedMidiDataExcepti
 import com.rosshoyt.analysis.model.*;
 import com.rosshoyt.analysis.model.file.FileByteData;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
+import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
-import com.rosshoyt.analysis.model.raw.OldRawAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.repositories.FileDetailRepository;
 import com.rosshoyt.analysis.repositories.RawAnalysisRepository;
@@ -73,14 +73,14 @@ public class MidiFileAnalysisService {
 
       // Create analysis tables
       System.out.println("Analyzing Raw SMF parse");
-      OldRawAnalysis oldRawAnalysis = midiFileAnalyzer.analyzeRaw(parseResult.smf);
+      RawAnalysis rawAnalysis = MidiFileAnalyzer.analyzeRaw(parseResult.smf, mfa);
       System.out.println("Analyzing musical data");
-      MusicalAnalysis musicalAnalysis = midiFileAnalyzer.analyzeMusic(oldRawAnalysis);
+      MusicalAnalysis musicalAnalysis = MidiFileAnalyzer.analyzeMusic(rawAnalysis);
       System.out.println("...Setting IDs manually... [Refactor for automatic ID gen]");
-      oldRawAnalysis.setId(mfa.getId());
-      rawAnalysisRepository.save(oldRawAnalysis);
+      rawAnalysis.setId(mfa.getId());
+      rawAnalysisRepository.save(rawAnalysis);
       musicalAnalysis.setId(mfa.getId());
-      mfa.setOldRawAnalysis(oldRawAnalysis);
+      mfa.setRawAnalysis(rawAnalysis);
       mfa.setMusicalAnalysis(musicalAnalysis);
       mfa.setMidiFileDetail(midiFileDetail);
 

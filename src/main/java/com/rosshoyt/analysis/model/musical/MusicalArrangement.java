@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+@Entity
 public class MusicalArrangement {
     @Id
     private Long id;

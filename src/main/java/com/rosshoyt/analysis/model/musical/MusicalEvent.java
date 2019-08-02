@@ -2,15 +2,17 @@ package com.rosshoyt.analysis.model.musical;
 
 import lombok.*;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
-public abstract class MusicalEvent {
+@Entity
+public class MusicalEvent {
    @Id
    private Long id;
    @OneToOne

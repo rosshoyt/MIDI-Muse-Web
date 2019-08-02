@@ -1,12 +1,14 @@
 package com.rosshoyt.analysis.model.kaitai.smf.midi_events;
 
 
-import com.rosshoyt.analysis.model.kaitai.smf.MidiEvent;
+import com.rosshoyt.analysis.model.kaitai.smf._TrackEvent;
+import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
+
+@Data
 @Entity
-public class PolyphonicPressureEvent extends MidiEvent {
+public class _PolyphonicPressureEvent extends _TrackEvent {
 
    private int note;
    private int pressure;
