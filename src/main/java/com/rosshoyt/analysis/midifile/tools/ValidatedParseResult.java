@@ -2,7 +2,7 @@ package com.rosshoyt.analysis.midifile.tools;
 
 import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
 
-public class ParseResult {
+public class ValidatedParseResult {
    public StandardMidiFile smf;
    public byte[] data;
    public String fileName;

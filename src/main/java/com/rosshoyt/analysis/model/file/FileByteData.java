@@ -11,7 +11,7 @@ import javax.persistence.*;
  */
 @Data
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Entity
 public class FileByteData {
 
@@ -22,7 +22,10 @@ public class FileByteData {
    @ToString.Exclude
    private byte[] file;
 
-
+//   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//   @JoinColumn(name = "id")
+//   @MapsId
+//   private MidiFileDetail midiFileDetail;
 
 
 

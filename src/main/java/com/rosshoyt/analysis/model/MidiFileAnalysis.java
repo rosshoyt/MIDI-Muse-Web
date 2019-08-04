@@ -7,6 +7,7 @@ import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 /**
  * Base Spring JPA Persistence Wrapper for JSON Response to
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @ToString
+@Transactional
 @Entity
 public class MidiFileAnalysis {
 
@@ -24,7 +26,7 @@ public class MidiFileAnalysis {
 
 
    ///@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @OneToOne(fetch = FetchType.LAZY)
+   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private MusicalAnalysis musicalAnalysis;
 
    //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)

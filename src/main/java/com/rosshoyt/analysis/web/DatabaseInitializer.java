@@ -15,7 +15,7 @@ import java.util.*;
 
 @Component
 @EntityScan("com.rosshoyt.analysis")
-class Initializer implements CommandLineRunner {
+class DatabaseInitializer implements CommandLineRunner {
 
    // Utilites to pre-load 'Example' MIDI files into database
    private static final String PRELOADED_MIDI_FILES_DIR = "preloaded-midi-files";
@@ -49,6 +49,7 @@ class Initializer implements CommandLineRunner {
          } catch (Exception e) {
             e.printStackTrace();
          }
+
       }
       System.out.println("All entries added to repo, here they are ->");
       midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println);

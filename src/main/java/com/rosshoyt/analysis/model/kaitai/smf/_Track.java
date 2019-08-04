@@ -17,7 +17,7 @@ public class _Track {
    private int trackNumber;
    private int numTrackEvents;
 
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<_TrackEventContainer> trackEventContainers;
 
 

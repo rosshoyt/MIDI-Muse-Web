@@ -3,9 +3,7 @@ package com.rosshoyt.analysis.model.file;
 import lombok.*;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +22,7 @@ public class MidiFileDetail {
 
 
 
-   @OneToOne
+   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private FileByteData fileByteData;
 
 }

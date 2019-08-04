@@ -17,19 +17,21 @@ import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 import com.rosshoyt.analysis.model.musical.SustainPedal;
 
 
+
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * High level file analyzer.
+ * Middlez level file analyzer.
  * Works with one uploaded .mid/.midi file to extract useful information and return
  *
  * SQL database-persistable analysis data
  */
 
-public class MidiFileAnalyzer {
+public class RawSMFAnalyzer {
 
 
    private MidiFileValidator midiFileValidator;
@@ -37,7 +39,7 @@ public class MidiFileAnalyzer {
    /**
     *
     */
-   public MidiFileAnalyzer() {
+   public RawSMFAnalyzer() {
       this.midiFileValidator = new MidiFileValidator();
    }
 
@@ -49,12 +51,15 @@ public class MidiFileAnalyzer {
       return mfd;
    }
 
-   public static RawAnalysis analyzeRaw(StandardMidiFile smf, MidiFileAnalysis mfa) {
+   /**
+    * Takes an empty RawAnalysis and analyzes KaitaiStrcut SMF
+    * @param smf KaitaiStruct SMF parse result
+    * @param raw Persistent entity to hold raw analysis
+    * @param fkMidiFileAnalysisId id field of base database entry, the MidiFileAnalysis
+    * @return raw RawAnalysis with
+    */
+   public static RawAnalysis analyzeRaw(StandardMidiFile smf, Long fkMidiFileAnalysisId, RawAnalysis raw) {
       System.out.println("ANALYZING SMF -> RAW");
-      Long fkMidiFileAnalysisId = mfa.getId(); // the global analysis key
-      RawAnalysis raw = new RawAnalysis();
-      raw.setId(fkMidiFileAnalysisId);
-
       // Parse SMF Header
       raw.setHeader(analyzeHeader(smf));
 
@@ -87,6 +92,7 @@ public class MidiFileAnalyzer {
 
             if (event.eventHeader() == 255) {
                // Meta Message
+               //System.out.println(" Meta Message Encountered"); TODO REFACTOR ENUM TO PRINT TYPE HERE (THIS LINE)
                switch((int)event.metaEventBody().metaType().id()) { // TODO test this line
                   case 81: {
                      System.out.print("Meta Message Tempo Event\n");
@@ -104,6 +110,9 @@ public class MidiFileAnalyzer {
                      container.setTrackEvent(timeSignature);
                      trackEventContainerList.add(container);
                      break;
+                  }
+                  default: {
+                     System.out.println("Meta Message Encountered");
                   }
                }
             } else if (event.eventHeader() == 240) {
@@ -188,8 +197,11 @@ public class MidiFileAnalyzer {
    private static Tempo parseTempoEvent(byte[] body) {
       // body.length (will?) be 3
       Tempo tempo = new Tempo();
-      ByteBuffer wrapped = ByteBuffer.wrap(body); // big-endian by default
-      tempo.setNumMicrosecondsPerQuarterNote(wrapped.getLong());
+      System.out.println("Parsing tempo from byte[]: " + body);
+      // TODO test tempo extraction from byte[]
+      int x = (body[0] & 0xff) << 16 | (body[1] & 0xff) << 8 | (body[2] & 0xff);
+      System.out.println("Extracted microseconds/quarternote = " + x);
+      tempo.setNumMicrosecondsPerQuarterNote(x);
       return tempo;
    }
 
@@ -199,8 +211,11 @@ public class MidiFileAnalyzer {
       TimeSignature timeSignature = new TimeSignature();
       timeSignature.setNumerator(body[0]);
       timeSignature.setDenominator((int)Math.pow((double)2, body[1])); // raise 2 to the value of body[1]
-      timeSignature.setMidiClocksPerMetronomeClick(body[3]);
-      timeSignature.setNum32ndNotesPerBeat(body[4]);
+      timeSignature.setMidiClocksPerMetronomeClick(body[2]);
+      timeSignature.setNum32ndNotesPerBeat(body[3]);
+      System.out.println("Extracted Time Signature: " + timeSignature.getNumerator() + "/" + timeSignature.getDenominator());
+      System.out.println("32nd notes/beat: " + timeSignature.getNum32ndNotesPerBeat() + ", Midi Clocks per Metronome beat: "
+                           + timeSignature.getMidiClocksPerMetronomeClick());
       return timeSignature;
    }
 
