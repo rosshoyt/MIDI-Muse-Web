@@ -4,6 +4,7 @@ package com.rosshoyt.analysis.model.kaitai.smf;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 @Data
@@ -15,7 +16,7 @@ public class _TrackEventContainer {
    private Integer channel;
    private Integer tick;
 
-   @OneToOne
+   @OneToOne(fetch = FetchType.EAGER)
    private _TrackEvent trackEvent;
    // convenience fields
    private int trackNumber;

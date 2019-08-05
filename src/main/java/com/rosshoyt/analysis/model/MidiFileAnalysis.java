@@ -26,11 +26,11 @@ public class MidiFileAnalysis {
 
 
    ///@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   @OneToOne(fetch = FetchType.EAGER)
    private MusicalAnalysis musicalAnalysis;
 
    //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @OneToOne(fetch = FetchType.LAZY)
+   @OneToOne(fetch = FetchType.EAGER)
    private RawAnalysis rawAnalysis;
 
    @OneToOne(fetch = FetchType.EAGER)

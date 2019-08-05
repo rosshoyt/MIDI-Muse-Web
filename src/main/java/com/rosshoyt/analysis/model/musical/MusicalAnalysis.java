@@ -5,30 +5,30 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@ToString
+@Transactional
 @Entity
 public class MusicalAnalysis {
    
    @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
    private long id;
 
+//   @OneToMany//(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+//   private List<Chord> chords;
 
 
-   @OneToMany//(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   private List<Chord> chords;
-
-
-   @OneToOne
+   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
    private MusicalArrangement musicalArrangement;
 
-   @OneToMany
-   private Set<Track> tracks;
-   @OneToMany
-   private List<Note> notes;
+   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+   private List<Track> tracks;
+//   @OneToMany
+//   private List<Note> notes;
 
 }

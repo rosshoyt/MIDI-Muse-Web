@@ -8,10 +8,11 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.transaction.Transactional;
 
 @Data
 @NoArgsConstructor
-@ToString
+@Transactional
 @Entity
 public class SustainPedal extends MusicalEvent {
    @Id

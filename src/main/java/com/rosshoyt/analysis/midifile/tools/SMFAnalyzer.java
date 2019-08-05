@@ -5,7 +5,7 @@ package com.rosshoyt.analysis.midifile.tools;
 
 import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
 
-import com.rosshoyt.analysis.model.MidiFileAnalysis;
+import com.rosshoyt.analysis.model.file.FileByteData;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.kaitai.smf.*;
 import com.rosshoyt.analysis.model.kaitai.smf.meta_events.Tempo;
@@ -13,41 +13,40 @@ import com.rosshoyt.analysis.model.kaitai.smf.meta_events.TimeSignature;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOffEvent;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOnEvent;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events.controller_events._SustainPedalEvent;
-import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
-import com.rosshoyt.analysis.model.musical.SustainPedal;
+import com.rosshoyt.analysis.repositories.raw.RawTrackAnalysisRepository;
 
 
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Middlez level file analyzer.
+ * Middle level file analyzer.
  * Works with one uploaded .mid/.midi file to extract useful information and return
- *
- * SQL database-persistable analysis data
+ * SQL database-persistable analysis data (RawAnalysis)
  */
 
-public class RawSMFAnalyzer {
+public class SMFAnalyzer {
 
 
-   private MidiFileValidator midiFileValidator;
-
+   //private MidiFileValidator midiFileValidator;
+   private RawTrackAnalysisRepository rawTrackAnalysisRepository; // TODO move to own RawTrackAnalyzer service?
    /**
     *
     */
-   public RawSMFAnalyzer() {
-      this.midiFileValidator = new MidiFileValidator();
+   public SMFAnalyzer(RawTrackAnalysisRepository rawTrackAnalysisRepository) {
+      this.rawTrackAnalysisRepository = rawTrackAnalysisRepository;
+
+      /*this.midiFileValidator = new MidiFileValidator();*/
    }
 
-   public MidiFileDetail getMidiFileDetail(StandardMidiFile smf, String fileName, String extension) {
+   public static MidiFileDetail getMidiFileDetail(String fileName, String extension, RawAnalysis rawAnalysis, byte[] fileData) {
       MidiFileDetail mfd = new MidiFileDetail();
+      mfd.setId(rawAnalysis.getId());
       mfd.setFileName(fileName);
       mfd.setFileExtension(extension);
       mfd.setFullFileName(fileName + "." + extension);
+      mfd.setFileByteData(new FileByteData(rawAnalysis.getId(), fileData));
       return mfd;
    }
 
@@ -61,6 +60,7 @@ public class RawSMFAnalyzer {
    public static RawAnalysis analyzeRaw(StandardMidiFile smf, Long fkMidiFileAnalysisId, RawAnalysis raw) {
       System.out.println("ANALYZING SMF -> RAW");
       // Parse SMF Header
+      raw.setId(fkMidiFileAnalysisId);
       raw.setHeader(analyzeHeader(smf));
 
       //raw.setNumMidiMessages(countNumMidiEvents(smf.tracks()));
@@ -79,41 +79,48 @@ public class RawSMFAnalyzer {
          _track.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
          _track.setNumTrackEvents(smfTrack.events().event().size());
 
-         List<_TrackEventContainer> trackEventContainerList = new ArrayList<>();
+         List<_TrackEventContainer> _trackEventContainerList = new ArrayList<>();
          for (StandardMidiFile.TrackEvent event : smfTrack.events().event()) {
             Integer vTime = event.vTime().value();
             System.out.print("Track event @" + vTime + ": ");
+
             _TrackEventContainer container = new _TrackEventContainer();
             container.setTick(vTime);
             container.setChannel(event.channel());
             container.setTrackNumber(trackNumber);
             container.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
 
-
             if (event.eventHeader() == 255) {
                // Meta Message
                //System.out.println(" Meta Message Encountered"); TODO REFACTOR ENUM TO PRINT TYPE HERE (THIS LINE)
-               switch((int)event.metaEventBody().metaType().id()) { // TODO test this line
-                  case 81: {
-                     System.out.print("Meta Message Tempo Event\n");
-                     //StandardMidiFile.MetaEventBody metaEventBody = (StandardMidiFile.MetaEventBody)event.metaEventBody();
-                     Tempo tempo = parseTempoEvent(event.metaEventBody().body());
-                     tempo.setContainer(container);
-                     container.setTrackEvent(tempo);
-                     trackEventContainerList.add(container);
-                     break;
+               if(event.metaEventBody() != null && event.metaEventBody().metaType() != null) {
+
+
+                  switch ((int)event.metaEventBody().metaType().id()) { // TODO test this line
+                     case 81: {
+                        System.out.print("Meta Message Tempo Event\n");
+                        //StandardMidiFile.MetaEventBody metaEventBody = (StandardMidiFile.MetaEventBody)event.metaEventBody();
+                        Tempo tempo = parseTempoEvent(event.metaEventBody().body());
+                        tempo.setContainer(container);
+                        container.setTrackEvent(tempo);
+                        _trackEventContainerList.add(container);
+                        break;
+                     }
+                     case 88: {
+                        System.out.print("Meta Message Time Signature Event\n");
+                        TimeSignature timeSignature = parseTimeSignatureEvent(event.metaEventBody().body());
+                        timeSignature.setContainer(container);
+                        container.setTrackEvent(timeSignature);
+                        _trackEventContainerList.add(container);
+                        break;
+                     }
+                     default: {
+                        System.out.println("Other Meta Message Encountered");
+                     }
                   }
-                  case 88: {
-                     System.out.print("Meta Message Time Signature Event\n");
-                     TimeSignature timeSignature = parseTimeSignatureEvent(event.metaEventBody().body());
-                     timeSignature.setContainer(container);
-                     container.setTrackEvent(timeSignature);
-                     trackEventContainerList.add(container);
-                     break;
-                  }
-                  default: {
-                     System.out.println("Meta Message Encountered");
-                  }
+               }
+               else {
+                  System.out.println("MetaEventBody or MetaType was null");
                }
             } else if (event.eventHeader() == 240) {
                System.out.println("Sysex Message Event\n");
@@ -135,7 +142,7 @@ public class RawSMFAnalyzer {
                      _noteOn.setVelocity(smfNoteOnEvent.velocity());
                      _noteOn.setContainer(container);
                      container.setTrackEvent(_noteOn);
-                     trackEventContainerList.add(container);
+                     _trackEventContainerList.add(container);
                      break;
                   }
                   case 128: {
@@ -146,7 +153,7 @@ public class RawSMFAnalyzer {
                      _noteOff.setVelocity(smfNoteOffEvent.velocity());
                      _noteOff.setContainer(container);
                      container.setTrackEvent(_noteOff);
-                     trackEventContainerList.add(container);
+                     _trackEventContainerList.add(container);
                      //System.out.println("Trc#" + trackNumber /*+ " @" + event.vTime().value() */ + " TrcEvent# " + trackEventCounter + " NOTE_OFF");//[note = " + noteOnEvent.note() + ", vel = " + noteOnEvent.velocity() + "]");
                      break;
                   }
@@ -172,7 +179,7 @@ public class RawSMFAnalyzer {
                            _sustainPedalEvent.setValue(controllerEvent.value());
                            _sustainPedalEvent.setContainer(container);
                            container.setTrackEvent(_sustainPedalEvent);
-                           trackEventContainerList.add(container);
+                           _trackEventContainerList.add(container);
                            break;
                            /*if (controllerEvent.value() > 64) { // TODO doublecheck value of suspedal controller event message on vs off
                               _SusPedalOn susPedalOn = new SusPedalOn();
@@ -186,7 +193,9 @@ public class RawSMFAnalyzer {
                   }
                }
             }
+            System.out.print("Other Midi Track Event\n");
          }
+         _track.setTrackEventContainerList(_trackEventContainerList);
          _tracks.add(_track);
          trackNumber++;
       }
@@ -227,16 +236,7 @@ public class RawSMFAnalyzer {
       return _Header;
    }
 
-   public static MusicalAnalysis analyzeMusic(RawAnalysis oldRawAnalysis) {
-      MusicalAnalysis mus = new MusicalAnalysis();
 
-      System.out.println("TODO - MUSICAL ANALYSIS");
-
-
-      //mus.setTotalNotes(totalNoteCount);
-
-      return mus;
-   }
 
    private static int countNumMidiEvents(ArrayList<StandardMidiFile.Track> tracks){
       int numMidiEvents = 0;

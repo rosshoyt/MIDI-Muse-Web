@@ -2,20 +2,19 @@ package com.rosshoyt.analysis.model.musical;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+@Transactional
 @Entity
 public class Track {
    @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
    private Long id;
 
    private String trackName;
@@ -23,9 +22,7 @@ public class Track {
 
    int numNotes;
 
-
-
-   @OneToMany
+   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
    Set<SustainPedal> sustainPedalList;
 
 

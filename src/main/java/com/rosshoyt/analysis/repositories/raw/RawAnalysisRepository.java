@@ -1,4 +1,4 @@
-package com.rosshoyt.analysis.repositories;
+package com.rosshoyt.analysis.repositories.raw;
 
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import org.springframework.data.repository.CrudRepository;

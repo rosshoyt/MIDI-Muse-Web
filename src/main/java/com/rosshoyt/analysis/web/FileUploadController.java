@@ -2,7 +2,7 @@ package com.rosshoyt.analysis.web;
 
 
 
-import com.rosshoyt.analysis.midifile.tools.RawSMFAnalyzer;
+import com.rosshoyt.analysis.midifile.tools.SMFAnalyzer;
 import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;
@@ -22,7 +22,7 @@ import com.rosshoyt.analysis.storage.StorageFileNotFoundException;
 public class FileUploadController {
 
    private MidiFileAnalysisRepository midiFileAnalysisRepository;
-   public static RawSMFAnalyzer rawSMFAnalyzer;
+
 
    MidiFileAnalysisService midiFileAnalysisService;
 
@@ -31,7 +31,7 @@ public class FileUploadController {
    @Autowired
    public FileUploadController(MidiFileAnalysisService midiFileAnalysisService) {
       this.midiFileAnalysisService = midiFileAnalysisService;
-      this.rawSMFAnalyzer = new RawSMFAnalyzer();
+
 
    }
 /*
