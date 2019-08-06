@@ -1,7 +1,7 @@
 package com.rosshoyt.analysis.midifile.tools;
 
-import com.rosshoyt.analysis.midifile.tools.kaitai.KaitaiSMFParser;
 import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
+import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
 import com.rosshoyt.analysis.utils.FileUtils;
 import org.junit.Test;
 

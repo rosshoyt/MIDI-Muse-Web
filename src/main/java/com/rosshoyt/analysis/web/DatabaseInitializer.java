@@ -1,6 +1,6 @@
 package com.rosshoyt.analysis.web;
 
-import com.rosshoyt.analysis.midifile.tools.MidiFileValidator;
+import com.rosshoyt.analysis.midifile.tools.MidiFileValidatorParser;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;
 import com.rosshoyt.analysis.utils.LocalDirectoryScanner;
 
@@ -20,7 +20,7 @@ class DatabaseInitializer implements CommandLineRunner {
    // Utilites to pre-load 'Example' MIDI files into database
    private static final String PRELOADED_MIDI_FILES_DIR = "preloaded-midi-files";
    private static LocalDirectoryScanner directoryScanner = new LocalDirectoryScanner(
-         PRELOADED_MIDI_FILES_DIR, MidiFileValidator.MIDI_FILE_EXTENSIONS_SUPPORTED);
+         PRELOADED_MIDI_FILES_DIR, MidiFileValidatorParser.MIDI_FILE_EXTENSIONS_SUPPORTED);
 
    @Autowired
    private MidiFileAnalysisService midiFileAnalysisService;

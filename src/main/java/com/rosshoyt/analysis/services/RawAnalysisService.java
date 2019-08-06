@@ -1,10 +1,9 @@
 package com.rosshoyt.analysis.services;
 
 import com.rosshoyt.analysis.midifile.tools.SMFAnalyzer;
-import com.rosshoyt.analysis.midifile.tools.ValidatedParseResult;
+import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.repositories.raw.RawAnalysisRepository;
-import com.rosshoyt.analysis.repositories.music.TrackAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

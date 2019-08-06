@@ -1,14 +1,15 @@
-package com.rosshoyt.analysis.midifile.tools.kaitai;
+package com.rosshoyt.analysis.midifile.tools;
 
 import com.rosshoyt.analysis.midifile.tools.exceptions.UnexpectedMidiDataException;
-import com.rosshoyt.analysis.midifile.tools.ValidatedParseResult;
-import com.rosshoyt.analysis.midifile.tools.StandardMidiFileParser;
+import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
+import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
 import io.kaitai.struct.ByteBufferKaitaiStream;
 import io.kaitai.struct.KaitaiStream;
 
 
 public class KaitaiSMFParser implements StandardMidiFileParser {
    public ValidatedParseResult parse(byte[] data) throws UnexpectedMidiDataException {
+
       System.out.print("...Parsing SMF with Kaitai Struct...\n");
       ValidatedParseResult parseResult = new ValidatedParseResult();
       try {
@@ -20,6 +21,9 @@ public class KaitaiSMFParser implements StandardMidiFileParser {
       }
       // Retain data for later use
       parseResult.data = data;
+
       return parseResult;
    }
 }
+
+

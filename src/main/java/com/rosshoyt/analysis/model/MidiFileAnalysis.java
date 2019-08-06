@@ -25,13 +25,11 @@ public class MidiFileAnalysis {
    private Long id;
 
 
-   ///@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-   @OneToOne(fetch = FetchType.EAGER)
-   private MusicalAnalysis musicalAnalysis;
-
-   //@OneToOne(mappedBy = "midiFileAnalysis", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
    @OneToOne(fetch = FetchType.EAGER)
    private RawAnalysis rawAnalysis;
+
+   @OneToOne(fetch = FetchType.EAGER)
+   private MusicalAnalysis musicalAnalysis;
 
    @OneToOne(fetch = FetchType.EAGER)
    private MidiFileDetail midiFileDetail;

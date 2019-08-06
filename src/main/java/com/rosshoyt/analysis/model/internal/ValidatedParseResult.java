@@ -1,4 +1,4 @@
-package com.rosshoyt.analysis.midifile.tools;
+package com.rosshoyt.analysis.model.internal;
 
 import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
 

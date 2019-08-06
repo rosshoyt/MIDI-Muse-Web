@@ -2,7 +2,7 @@ package com.rosshoyt.analysis.midifile.tools;
 
 import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.midifile.tools.exceptions.UnexpectedMidiDataException;
-import com.rosshoyt.analysis.midifile.tools.kaitai.KaitaiSMFParser;
+import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
 import com.rosshoyt.analysis.utils.FileExtensionValidator;
 import com.rosshoyt.analysis.utils.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,9 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
-public class MidiFileValidator {
+public class MidiFileValidatorParser {
 
-   public ValidatedParseResult validate(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
+   public ValidatedParseResult validateAndParse(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating file...");
       if(extensionValidator.extensionIsSupported(file)) {
          ValidatedParseResult parseResult = parser.parse(FileUtils.getByteArray(file));
@@ -23,7 +23,7 @@ public class MidiFileValidator {
       else throw new InvalidMidiFileException();
 
    }
-   public ValidatedParseResult validate(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
+   public ValidatedParseResult validateAndParse(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating multipart file...");
       if(extensionValidator.extensionIsSupported(multipartFile)) {
          ValidatedParseResult parseResult = parser.parse(multipartFile.getBytes());

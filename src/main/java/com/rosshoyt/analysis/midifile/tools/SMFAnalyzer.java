@@ -13,7 +13,6 @@ import com.rosshoyt.analysis.model.kaitai.smf.meta_events.TimeSignature;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOffEvent;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOnEvent;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events.controller_events._SustainPedalEvent;
-import com.rosshoyt.analysis.repositories.raw.RawTrackAnalysisRepository;
 
 
 import java.util.ArrayList;
@@ -28,17 +27,6 @@ import java.util.List;
 
 public class SMFAnalyzer {
 
-
-   //private MidiFileValidator midiFileValidator;
-   private RawTrackAnalysisRepository rawTrackAnalysisRepository; // TODO move to own RawTrackAnalyzer service?
-   /**
-    *
-    */
-   public SMFAnalyzer(RawTrackAnalysisRepository rawTrackAnalysisRepository) {
-      this.rawTrackAnalysisRepository = rawTrackAnalysisRepository;
-
-      /*this.midiFileValidator = new MidiFileValidator();*/
-   }
 
    public static MidiFileDetail getMidiFileDetail(String fileName, String extension, RawAnalysis rawAnalysis, byte[] fileData) {
       MidiFileDetail mfd = new MidiFileDetail();
@@ -55,10 +43,9 @@ public class SMFAnalyzer {
     * @param smf KaitaiStruct SMF parse result
     * @param raw Persistent entity to hold raw analysis
     * @param fkMidiFileAnalysisId id field of base database entry, the MidiFileAnalysis
-    * @return raw RawAnalysis with
+    * @return raw RawAnalysis object containing analysis
     */
    public static RawAnalysis analyzeRaw(StandardMidiFile smf, Long fkMidiFileAnalysisId, RawAnalysis raw) {
-      System.out.println("ANALYZING SMF -> RAW");
       // Parse SMF Header
       raw.setId(fkMidiFileAnalysisId);
       raw.setHeader(analyzeHeader(smf));
@@ -79,17 +66,21 @@ public class SMFAnalyzer {
          _track.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
          _track.setNumTrackEvents(smfTrack.events().event().size());
 
+         Long currentTick = 0L;
          List<_TrackEventContainer> _trackEventContainerList = new ArrayList<>();
          for (StandardMidiFile.TrackEvent event : smfTrack.events().event()) {
             Integer vTime = event.vTime().value();
-            System.out.print("Track event @" + vTime + ": ");
+            currentTick += vTime;
+            System.out.print("Track event @" + currentTick + ": ");
 
             _TrackEventContainer container = new _TrackEventContainer();
-            container.setTick(vTime);
+            container.setVTime(vTime);
+            container.setTick(currentTick);
             container.setChannel(event.channel());
             container.setTrackNumber(trackNumber);
             container.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
 
+            boolean eventIsSupported = true;
             if (event.eventHeader() == 255) {
                // Meta Message
                //System.out.println(" Meta Message Encountered"); TODO REFACTOR ENUM TO PRINT TYPE HERE (THIS LINE)
@@ -116,14 +107,18 @@ public class SMFAnalyzer {
                      }
                      default: {
                         System.out.println("Other Meta Message Encountered");
+                        //eventIsSupported = false;
+                        break;
                      }
                   }
                }
                else {
                   System.out.println("MetaEventBody or MetaType was null");
+                  eventIsSupported = false;
                }
             } else if (event.eventHeader() == 240) {
-               System.out.println("Sysex Message Event\n");
+               System.out.println("Sysex Message Event");
+               //eventIsSupported = false;
                // Sysex message
             } else {
                // Midi Message
@@ -191,7 +186,12 @@ public class SMFAnalyzer {
                      }
                      break;
                   }
+                  default: {
+                     //eventIsSupported = false;
+                     break;
+                  }
                }
+
             }
             System.out.print("Other Midi Track Event\n");
          }

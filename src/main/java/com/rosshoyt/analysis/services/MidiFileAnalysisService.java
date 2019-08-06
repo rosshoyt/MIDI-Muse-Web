@@ -2,14 +2,13 @@ package com.rosshoyt.analysis.services;
 
 import com.rosshoyt.analysis.midifile.tools.musicanalysis.MusicAnalyzer;
 import com.rosshoyt.analysis.midifile.tools.SMFAnalyzer;
-import com.rosshoyt.analysis.midifile.tools.MidiFileValidator;
-import com.rosshoyt.analysis.midifile.tools.ValidatedParseResult;
+import com.rosshoyt.analysis.midifile.tools.MidiFileValidatorParser;
+import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
 import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.midifile.tools.exceptions.UnexpectedMidiDataException;
 import com.rosshoyt.analysis.model.*;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
-import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.repositories.MidiFileDetailRepository;
 import com.rosshoyt.analysis.repositories.music.MusicalAnalysisRepository;
@@ -43,7 +42,7 @@ public class MidiFileAnalysisService {
    // Utilities
 
    private static MusicAnalyzer musicAnalyzer;
-   private static MidiFileValidator midiFileValidator = new MidiFileValidator();
+   private static MidiFileValidatorParser midiFileValidatorParser = new MidiFileValidatorParser();
 
    @Autowired
    public MidiFileAnalysisService(MidiFileAnalysisRepository midiFileAnalysisRepository, MidiFileDetailRepository midiFileDetailRepository,
@@ -74,10 +73,10 @@ public class MidiFileAnalysisService {
    }
 
    public MidiFileAnalysis addMidiFile(File file) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
-      return addMidiFile(midiFileValidator.validate(file));
+      return addMidiFile(midiFileValidatorParser.validateAndParse(file));
    }
    public MidiFileAnalysis addMidiFile(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
-      return addMidiFile(midiFileValidator.validate(multipartFile));
+      return addMidiFile(midiFileValidatorParser.validateAndParse(multipartFile));
    }
    private MidiFileAnalysis addMidiFile(ValidatedParseResult parseResult){
       // File Has been validated in parse(), saving record to DB
@@ -105,10 +104,10 @@ public class MidiFileAnalysisService {
       //System.out.println("...Setting IDs manually... [Refactor for automatic ID gen]");
       //musicalAnalysis.setId(mfa.getId());
       mfa.setMusicalAnalysis(musicalAnalysisService.addMusicalAnalysis(rawAnalysis));
+      System.out.println("Updating MFA DB Entry");
       mfa = midiFileAnalysisRepository.save(mfa);
 
       System.out.println("Midi File Analysis results: " + mfa);
-      System.out.println("Updating MFA DB Entry");
       return mfa;
    }
    public void updateMidiFileAnalysis(Long id, MidiFileAnalysis midiFileAnalysis) {
