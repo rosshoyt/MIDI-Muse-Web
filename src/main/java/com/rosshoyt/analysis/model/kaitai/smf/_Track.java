@@ -20,7 +20,7 @@ public class _Track {
    private int numTrackEvents;
 
    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-   private List<_TrackEventContainer> trackEventContainerList;
+   private List<_TrackEvent> trackEventContainerList;
 
 
 

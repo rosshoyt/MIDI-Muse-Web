@@ -3,7 +3,7 @@ package com.rosshoyt.analysis.midifile.tools.musicanalysis;
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.model.kaitai.smf._Track;
 import com.rosshoyt.analysis.model.kaitai.smf._TrackEvent;
-import com.rosshoyt.analysis.model.kaitai.smf._TrackEventContainer;
+
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOffEvent;
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOnEvent;
 import com.rosshoyt.analysis.model.musical.MusicalAnalysis;

@@ -11,12 +11,19 @@ import javax.persistence.*;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class _TrackEvent {
+public class _TrackEvent {
    @Id
    @GeneratedValue(strategy=GenerationType.SEQUENCE)
    private Long id;
-   @OneToOne
-   private _TrackEventContainer container;
+
+   // Nullable
+   private Integer channel;
+   private Long tick; // ticks since start
+   private Integer vTime; // ticks since previous midi message
+
+   private int trackNumber;
+   private Long fkMidiFileAnalysisId;
+
 
 
 }

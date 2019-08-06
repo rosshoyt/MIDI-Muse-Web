@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 
 
 @Data
@@ -28,6 +28,9 @@ public class RawAnalysis {
    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
    @ToString.Exclude
    private List<_Track> tracks;
+
+//   @OneToMany
+//   private Set<_TrackEvent> events;
 
    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    //private MidiFileAnalysis midiFileAnalysis;

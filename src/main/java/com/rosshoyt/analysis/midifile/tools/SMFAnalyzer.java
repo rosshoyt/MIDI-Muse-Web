@@ -67,91 +67,90 @@ public class SMFAnalyzer {
          _track.setNumTrackEvents(smfTrack.events().event().size());
 
          Long currentTick = 0L;
-         List<_TrackEventContainer> _trackEventContainerList = new ArrayList<>();
+         List<_TrackEvent> _trackEventContainerList = new ArrayList<>();
          for (StandardMidiFile.TrackEvent event : smfTrack.events().event()) {
+            // Increment midi tick values;
             Integer vTime = event.vTime().value();
             currentTick += vTime;
             System.out.print("Track event @" + currentTick + ": ");
 
-            _TrackEventContainer container = new _TrackEventContainer();
-            container.setVTime(vTime);
-            container.setTick(currentTick);
-            container.setChannel(event.channel());
-            container.setTrackNumber(trackNumber);
-            container.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
 
-            boolean eventIsSupported = true;
+            // Set trackEvent to null
+            _TrackEvent container = null;// = new _TrackEvent();
+
+
+//            boolean eventIsSupported = true;
             if (event.eventHeader() == 255) {
-               // Meta Message
-               //System.out.println(" Meta Message Encountered"); TODO REFACTOR ENUM TO PRINT TYPE HERE (THIS LINE)
-               if(event.metaEventBody() != null && event.metaEventBody().metaType() != null) {
-
-
-                  switch ((int)event.metaEventBody().metaType().id()) { // TODO test this line
-                     case 81: {
-                        System.out.print("Meta Message Tempo Event\n");
-                        //StandardMidiFile.MetaEventBody metaEventBody = (StandardMidiFile.MetaEventBody)event.metaEventBody();
-                        Tempo tempo = parseTempoEvent(event.metaEventBody().body());
-                        tempo.setContainer(container);
-                        container.setTrackEvent(tempo);
-                        _trackEventContainerList.add(container);
-                        break;
-                     }
-                     case 88: {
-                        System.out.print("Meta Message Time Signature Event\n");
-                        TimeSignature timeSignature = parseTimeSignatureEvent(event.metaEventBody().body());
-                        timeSignature.setContainer(container);
-                        container.setTrackEvent(timeSignature);
-                        _trackEventContainerList.add(container);
-                        break;
-                     }
-                     default: {
-                        System.out.println("Other Meta Message Encountered");
-                        //eventIsSupported = false;
-                        break;
-                     }
-                  }
-               }
-               else {
-                  System.out.println("MetaEventBody or MetaType was null");
-                  eventIsSupported = false;
-               }
+               container = handleMetaEvent(event);
             } else if (event.eventHeader() == 240) {
                System.out.println("Sysex Message Event");
                //eventIsSupported = false;
                // Sysex message
             } else {
-               // Midi Message
-               switch (event.eventType()) {
+               container = handleMidiEvent(event);
+            }
+            //
+            if(container != null) {
+
+               container.setVTime(vTime);
+               container.setTick(currentTick);
+               container.setChannel(event.channel());
+               container.setTrackNumber(trackNumber);
+               container.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
+               _trackEventContainerList.add(container);
+            } else {
+               System.out.print("...Unsupported Track event type.\n");
+            }
+         }
+         _track.setTrackEventContainerList(_trackEventContainerList);
+         _tracks.add(_track);
+         trackNumber++;
+      }
+      raw.setTracks(_tracks);
+      return raw;
+   }
+
+   private static _TrackEvent handleMidiEvent(StandardMidiFile.TrackEvent event) {
+      switch (event.eventType()) {
+
+         case 144: {
+            System.out.print("Note On Message Event\n");
+            //StandardMidiFile.NoteOnEvent noteOnEvent = new StandardMidiFile.NoteOnEvent(event.eventBody()._io(), event, smf);
+            StandardMidiFile.NoteOnEvent smfNoteOnEvent = (StandardMidiFile.NoteOnEvent) event.eventBody();
+            _NoteOnEvent _noteOn = new _NoteOnEvent();
+            _noteOn.setNote(smfNoteOnEvent.note());
+            _noteOn.setVelocity(smfNoteOnEvent.velocity());
+            return _noteOn;
+         }
+         case 128: {
+            System.out.print("Note On Message Event\n");
+            StandardMidiFile.NoteOffEvent smfNoteOffEvent = (StandardMidiFile.NoteOffEvent) event.eventBody();
+            _NoteOffEvent _noteOff = new _NoteOffEvent();
+            _noteOff.setNote(smfNoteOffEvent.note());
+            _noteOff.setVelocity(smfNoteOffEvent.velocity());
+            return _noteOff;
+         }
 //                  case 224: {
 //                     StandardMidiFile.PitchBendEvent pitchBendEvent = (StandardMidiFile.PitchBendEvent)event.eventBody();
 //                     // TODO Support pitchbend influenced 'effectivePitch' field in model.music.Note
 //                     break;
 //                  }
-                  case 144: {
-                     System.out.print("Note On Message Event\n");
-                     //StandardMidiFile.NoteOnEvent noteOnEvent = new StandardMidiFile.NoteOnEvent(event.eventBody()._io(), event, smf);
-                     StandardMidiFile.NoteOnEvent smfNoteOnEvent = (StandardMidiFile.NoteOnEvent) event.eventBody();
-                     _NoteOnEvent _noteOn = new _NoteOnEvent();
-                     _noteOn.setNote(smfNoteOnEvent.note());
-                     _noteOn.setVelocity(smfNoteOnEvent.velocity());
-                     _noteOn.setContainer(container);
-                     container.setTrackEvent(_noteOn);
-                     _trackEventContainerList.add(container);
-                     break;
-                  }
-                  case 128: {
-                     System.out.print("Note On Message Event\n");
-                     StandardMidiFile.NoteOffEvent smfNoteOffEvent = (StandardMidiFile.NoteOffEvent) event.eventBody();
-                     _NoteOffEvent _noteOff = new _NoteOffEvent();
-                     _noteOff.setNote(smfNoteOffEvent.note());
-                     _noteOff.setVelocity(smfNoteOffEvent.velocity());
-                     _noteOff.setContainer(container);
-                     container.setTrackEvent(_noteOff);
-                     _trackEventContainerList.add(container);
-                     //System.out.println("Trc#" + trackNumber /*+ " @" + event.vTime().value() */ + " TrcEvent# " + trackEventCounter + " NOTE_OFF");//[note = " + noteOnEvent.note() + ", vel = " + noteOnEvent.velocity() + "]");
-                     break;
-                  }
+
+         case 176: {
+            StandardMidiFile.ControllerEvent controllerEvent = (StandardMidiFile.ControllerEvent) event.eventBody();
+            System.out.println("Controller Event #" + controllerEvent.controller());
+            switch (controllerEvent.controller()) {
+               case 64: {
+                  // Sustain Pedal
+                  _SustainPedalEvent _sustainPedalEvent = new _SustainPedalEvent();
+                  _sustainPedalEvent.setValue(controllerEvent.value());
+                  return _sustainPedalEvent;
+                  // TODO Support MidiController parsing values available @https://www.mixagesoftware.com/en/midikit/help/HTML/controllers.html
+                  // TODO also refactor Controller Event parsing to other method
+               }
+               default: {
+                  break;
+               }
 //                  case 208: {
 //                     this.eventBody = new ChannelPressureEvent(this._io, this, _root);
 //                     break;
@@ -164,43 +163,35 @@ public class SMFAnalyzer {
 //                     this.eventBody = new PolyphonicPressureEvent(this._io, this, _root);
 //                     break;
 //                  }
-                  case 176: {
-                     StandardMidiFile.ControllerEvent controllerEvent = (StandardMidiFile.ControllerEvent) event.eventBody();
-                     System.out.println("Controller Event #" + controllerEvent.controller());
-                     switch (controllerEvent.controller()) {
-                        case 64: {
-                           // Sustain Pedal
-                           _SustainPedalEvent _sustainPedalEvent = new _SustainPedalEvent();
-                           _sustainPedalEvent.setValue(controllerEvent.value());
-                           _sustainPedalEvent.setContainer(container);
-                           container.setTrackEvent(_sustainPedalEvent);
-                           _trackEventContainerList.add(container);
-                           break;
-                           /*if (controllerEvent.value() > 64) { // TODO doublecheck value of suspedal controller event message on vs off
-                              _SusPedalOn susPedalOn = new SusPedalOn();
-                           } else {
-                              SusPedalOff susPedalOff = new SusPedalOff();
-                           }*/
-                        }
-                        // TODO Support MidiController parsing values available @https://www.mixagesoftware.com/en/midikit/help/HTML/controllers.html
-                     }
-                     break;
-                  }
-                  default: {
-                     //eventIsSupported = false;
-                     break;
-                  }
-               }
-
             }
-            System.out.print("Other Midi Track Event\n");
          }
-         _track.setTrackEventContainerList(_trackEventContainerList);
-         _tracks.add(_track);
-         trackNumber++;
+         default: {
+            break;
+         }
       }
-      raw.setTracks(_tracks);
-      return raw;
+      return null;
+   }
+
+   private static _TrackEvent handleMetaEvent(StandardMidiFile.TrackEvent event) {
+      //System.out.println(" Meta Message Encountered"); TODO REFACTOR ENUM TO PRINT TYPE HERE (THIS LINE)
+      if(event.metaEventBody() != null && event.metaEventBody().metaType() != null) {
+         switch ((int)event.metaEventBody().metaType().id()) { // TODO test this line
+            case 81: {
+               System.out.print("Meta Message Tempo Event\n");
+               return parseTempoEvent(event.metaEventBody().body());
+            }
+            case 88: {
+               System.out.print("Meta Message Time Signature Event\n");
+               return parseTimeSignatureEvent(event.metaEventBody().body());
+            }
+            default: {
+               System.out.println("Other Meta Message Encountered");
+               return null;
+            }
+         }
+      }
+      System.out.println("MetaEventBody or MetaType was null");
+      return null;
    }
 
    private static Tempo parseTempoEvent(byte[] body) {
