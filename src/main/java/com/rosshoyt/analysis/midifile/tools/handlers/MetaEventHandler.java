@@ -19,7 +19,7 @@ public class MetaEventHandler {
                return parseTimeSignatureEvent(event.metaEventBody().body());
             }
             default: {
-               System.out.println("Other Meta Message Encountered");
+               System.out.print("Other Meta Message Encountered");
                return null;
             }
          }

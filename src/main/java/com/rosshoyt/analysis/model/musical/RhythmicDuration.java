@@ -10,8 +10,6 @@ import javax.persistence.OneToOne;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@ToString
 @Entity
 public class RhythmicDuration {
    @Id

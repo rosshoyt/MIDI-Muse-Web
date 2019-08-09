@@ -24,7 +24,7 @@ public class FileByteData {
 
 //   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //   @JoinColumn(name = "id")
-//   @MapsId
+//
 //   private MidiFileDetail midiFileDetail;
 
 

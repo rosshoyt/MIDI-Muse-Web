@@ -73,6 +73,12 @@ class MidiFileAnalysisController {
 
    }
 
+   @DeleteMapping("1/group/{id}")
+   public ResponseEntity<?> deleteMidiFileAnalysis(@PathVariable Long id) {
+      log.info("Request to delete group: {}", id);
+      midiFileAnalysisService.deleteMidiFileAnalysis(id);
+      return ResponseEntity.ok().build();
+   }
 
 
 
@@ -97,20 +103,14 @@ class MidiFileAnalysisController {
 //               .status(HttpStatus.FORBIDDEN)
 //               .body("Error Message");
 //      }
-//   }
 
+//   }
 //   @PutMapping("/group/{id}")
 //   ResponseEntity<MidiFileAnalysis> updateMidiFileAnalysis(@Valid @RequestBody MidiFileAnalysis group) {
 //      log.info("Request to update group: {}", group);
 //      MidiFileAnalysis result = midiFileAnalysisRepository.save(group);
 //      return ResponseEntity.ok().body(result);
-//   }
 
-   @DeleteMapping("/group/{id}")
-   public ResponseEntity<?> deleteMidiFileAnalysis(@PathVariable Long id) {
-      log.info("Request to delete group: {}", id);
-      midiFileAnalysisService.deleteMidiFileAnalysis(id);
-      return ResponseEntity.ok().build();
-   }
+//   }
 
 }

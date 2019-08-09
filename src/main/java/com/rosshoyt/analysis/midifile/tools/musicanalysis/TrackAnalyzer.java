@@ -1,6 +1,6 @@
 package com.rosshoyt.analysis.midifile.tools.musicanalysis;
 
-import com.rosshoyt.analysis.model.kaitai.smf._Track;
+
 import com.rosshoyt.analysis.model.kaitai.smf._TrackEvent;
 
 import com.rosshoyt.analysis.model.kaitai.smf.midi_events._NoteOnEvent;
@@ -8,7 +8,7 @@ import com.rosshoyt.analysis.model.kaitai.smf.midi_events.controller_events._Sus
 import com.rosshoyt.analysis.model.musical.Track;
 
 public class TrackAnalyzer {
-   public static Track analyzeTrack(_Track _track, Track analyzedTrack){
+   public static Track analyzeTrack(Track analyzedTrack){
 //      for(_TrackEventContainer eventContainer: _track.getTrackEventContainerList()){
 ////         _TrackEvent trackEvent = eventContainer.getTrackEvent();
 ////         if(trackEvent instanceof _SustainPedalEvent){
@@ -18,8 +18,5 @@ public class TrackAnalyzer {
 ////      }
       return analyzedTrack;
    }
-}
-class _TrackEventAnalyzer {
-
 }
 

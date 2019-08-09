@@ -1,7 +1,7 @@
 package com.rosshoyt.analysis.services;
 
 import com.rosshoyt.analysis.midifile.tools.musicanalysis.MusicAnalyzer;
-import com.rosshoyt.analysis.midifile.tools.SMFAnalyzer;
+import com.rosshoyt.analysis.midifile.tools.rawanalysis.SMFAnalyzer;
 import com.rosshoyt.analysis.midifile.tools.MidiFileValidatorParser;
 import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
 import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
@@ -14,6 +14,7 @@ import com.rosshoyt.analysis.repositories.MidiFileDetailRepository;
 import com.rosshoyt.analysis.repositories.music.MusicalAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import java.util.Optional;
  */
 
 @Service
+@Transactional
 public class MidiFileAnalysisService {
 
    // CRUD Repos
@@ -55,10 +57,16 @@ public class MidiFileAnalysisService {
       this.rawAnalysisService = rawAnalysisService;
       this.musicalAnalysisService = musicalAnalysisService;
    }
-
+   //@Transactional
    public List<MidiFileAnalysis> getAllMidiFileAnalyses() {
       List<MidiFileAnalysis> analyses = new ArrayList<>();
-      midiFileAnalysisRepository.findAll().forEach(analyses::add);
+      midiFileAnalysisRepository.findAll().forEach(mfa ->
+      {
+         mfa.setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(mfa).get());
+         mfa.setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(mfa).get());
+         analyses.add(mfa);
+      });
+
       return analyses;
    }
 
@@ -78,7 +86,8 @@ public class MidiFileAnalysisService {
    public MidiFileAnalysis addMidiFile(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       return addMidiFile(midiFileValidatorParser.validateAndParse(multipartFile));
    }
-   private MidiFileAnalysis addMidiFile(ValidatedParseResult parseResult){
+
+   public MidiFileAnalysis addMidiFile(ValidatedParseResult parseResult){
       // File Has been validated in parse(), saving record to DB
       MidiFileAnalysis mfa = midiFileAnalysisRepository.save(new MidiFileAnalysis()); // Getting base entry
 
@@ -86,7 +95,7 @@ public class MidiFileAnalysisService {
 
       // Raw Analysis TODO Methodize
       System.out.println("Analyzing Raw SMF parse");
-      RawAnalysis rawAnalysis = rawAnalysisService.addRawAnalysis(mfa.getId(), parseResult);
+      RawAnalysis rawAnalysis = rawAnalysisService.addRawAnalysis(mfa, parseResult);
       mfa.setRawAnalysis(rawAnalysis);
       mfa = midiFileAnalysisRepository.save(mfa);
 
@@ -103,10 +112,12 @@ public class MidiFileAnalysisService {
 
       //System.out.println("...Setting IDs manually... [Refactor for automatic ID gen]");
       //musicalAnalysis.setId(mfa.getId());
-      mfa.setMusicalAnalysis(musicalAnalysisService.addMusicalAnalysis(rawAnalysis));
+      mfa.setMusicalAnalysis(musicalAnalysisService.addMusicalAnalysis(mfa, rawAnalysis));
       System.out.println("Updating MFA DB Entry");
       mfa = midiFileAnalysisRepository.save(mfa);
 
+
+      //mfa.getMusicalAnalysis();
       System.out.println("Midi File Analysis results: " + mfa);
       return mfa;
    }

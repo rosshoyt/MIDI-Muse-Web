@@ -2,7 +2,6 @@ package com.rosshoyt.analysis.web;
 
 
 
-import com.rosshoyt.analysis.midifile.tools.SMFAnalyzer;
 import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;

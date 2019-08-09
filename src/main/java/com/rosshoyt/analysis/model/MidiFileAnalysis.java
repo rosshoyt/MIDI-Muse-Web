@@ -7,7 +7,7 @@ import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
+
 
 /**
  * Base Spring JPA Persistence Wrapper for JSON Response to
@@ -16,7 +16,6 @@ import javax.transaction.Transactional;
 @Data
 @NoArgsConstructor
 @ToString
-@Transactional
 @Entity
 public class MidiFileAnalysis {
 
@@ -25,10 +24,14 @@ public class MidiFileAnalysis {
    private Long id;
 
 
-   @OneToOne(fetch = FetchType.EAGER)
+   @OneToOne(fetch = FetchType.LAZY
+            ,mappedBy = "midiFileAnalysis"
+   )
    private RawAnalysis rawAnalysis;
 
-   @OneToOne(fetch = FetchType.EAGER)
+   @OneToOne(fetch = FetchType.LAZY
+         ,mappedBy = "midiFileAnalysis"
+   )
    private MusicalAnalysis musicalAnalysis;
 
    @OneToOne(fetch = FetchType.EAGER)

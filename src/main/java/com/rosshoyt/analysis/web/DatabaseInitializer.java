@@ -22,8 +22,12 @@ class DatabaseInitializer implements CommandLineRunner {
    private static LocalDirectoryScanner directoryScanner = new LocalDirectoryScanner(
          PRELOADED_MIDI_FILES_DIR, MidiFileValidatorParser.MIDI_FILE_EXTENSIONS_SUPPORTED);
 
-   @Autowired
-   private MidiFileAnalysisService midiFileAnalysisService;
+
+   private final MidiFileAnalysisService midiFileAnalysisService;
+
+   public DatabaseInitializer(MidiFileAnalysisService midiFileAnalysisService) {
+      this.midiFileAnalysisService = midiFileAnalysisService;
+   }
 
 //
 //   public Initializer(MidiFileAnalysisService midiFileAnalysisService) {
@@ -45,14 +49,19 @@ class DatabaseInitializer implements CommandLineRunner {
 
            midiFileAnalysisService.addMidiFile(file);
 
-            //repository.save(midiFileAnalysis);
+
          } catch (Exception e) {
             e.printStackTrace();
          }
 
       }
       System.out.println("All entries added to repo, here they are ->");
-      midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println);
+      midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println
+//            entry-> {
+//               entry.getMusicalAnalysis().getTracks();
+//               System.out.println(entry);
+//            }
+            );
    }
 
 

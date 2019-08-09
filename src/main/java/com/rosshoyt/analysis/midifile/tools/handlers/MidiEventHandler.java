@@ -21,7 +21,7 @@ public class MidiEventHandler {
             return _noteOn;
          }
          case 128: {
-            System.out.print("Note On Message Event\n");
+            System.out.print("Note Off Message Event\n");
             StandardMidiFile.NoteOffEvent smfNoteOffEvent = (StandardMidiFile.NoteOffEvent) event.eventBody();
             _NoteOffEvent _noteOff = new _NoteOffEvent();
             _noteOff.setNote(smfNoteOffEvent.note());

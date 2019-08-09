@@ -3,14 +3,13 @@ package com.rosshoyt.analysis.model.musical;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
+
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Transactional
 @Entity
 public class Track {
    @Id
