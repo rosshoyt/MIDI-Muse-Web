@@ -58,21 +58,32 @@ public class MidiFileAnalysisService {
       this.musicalAnalysisService = musicalAnalysisService;
       this.midiFileDetailService = midiFileDetailService;
    }
-   //@Transactional
+
    public List<MidiFileAnalysis> getAllMidiFileAnalyses() {
       List<MidiFileAnalysis> analyses = new ArrayList<>();
       midiFileAnalysisRepository.findAll().forEach(mfa ->
       {
-         mfa.setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(mfa).get());
-         mfa.setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(mfa).get());
+         mfa.setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(mfa).orElse(null));
+         mfa.setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(mfa).orElse(null));
          analyses.add(mfa);
       });
-
       return analyses;
    }
 
    public Optional<MidiFileAnalysis> getMidiFileAnalysis(long id) {
-      return midiFileAnalysisRepository.findById(id);
+      Optional<MidiFileAnalysis> optionalMFA = midiFileAnalysisRepository.findById(id);
+      System.out.println("User requested MidiFileAnalysis w/ id " + id);
+      if(optionalMFA.isPresent()){
+         //MidiFileAnalysis mfa = optionalMFA.get();
+         //Optional<RawAnalysis> optionalRA = rawAnalysisService.findRawAnalysisByMFA(mfa);
+         //RawAnalysis rawAnalysis = optionalRA.get();
+         optionalMFA.get().setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(optionalMFA.get()).get());
+         optionalMFA.get().setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(optionalMFA.get()).get());
+         optionalMFA.get().setMidiFileDetail(midiFileDetailService.findMidiFileDetailByMFA(optionalMFA.get()).get());
+         System.out.println("Returning Midi File analysis: " + optionalMFA.get());
+      } else System.out.println("Midi File Analysis not found");
+
+      return optionalMFA;
    }
 
    public List<MidiFileDetail> getMidiFileDetailList(){
@@ -80,10 +91,10 @@ public class MidiFileAnalysisService {
    }
 
    public MidiFileAnalysis addMidiFile(File file) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
-      return addMidiFile(midiFileValidatorParser.validateAndParse(file));
+      return addMidiFile(MidiFileValidatorParser.validateAndParse(file));
    }
    public MidiFileAnalysis addMidiFile(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
-      return addMidiFile(midiFileValidatorParser.validateAndParse(multipartFile));
+      return addMidiFile(MidiFileValidatorParser.validateAndParse(multipartFile));
    }
 
    public MidiFileAnalysis addMidiFile(ValidatedParseResult parseResult){

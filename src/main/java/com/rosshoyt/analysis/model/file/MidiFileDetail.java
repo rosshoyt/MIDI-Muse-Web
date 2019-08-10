@@ -35,6 +35,10 @@ public class MidiFileDetail {
    private String fileExtension;
 
 
+   private int format;
+   private int numTracks;
+   private short division;
+
 
    @OneToOne
 //         (fetch = FetchType.LAZY, cascade = CascadeType.PERSIST,

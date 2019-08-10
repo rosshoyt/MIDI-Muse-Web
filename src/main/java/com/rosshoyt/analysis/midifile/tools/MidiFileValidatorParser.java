@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class MidiFileValidatorParser {
 
-   public ValidatedParseResult validateAndParse(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
+   public static ValidatedParseResult validateAndParse(File file) throws  IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating file...");
       if(extensionValidator.extensionIsSupported(file)) {
          ValidatedParseResult parseResult = parser.parse(FileUtils.getByteArray(file));
@@ -21,9 +21,9 @@ public class MidiFileValidatorParser {
          return parseResult;
       }
       else throw new InvalidMidiFileException();
-
    }
-   public ValidatedParseResult validateAndParse(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
+
+   public static ValidatedParseResult validateAndParse(MultipartFile multipartFile) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
       System.out.println("...Validating multipart file...");
       if(extensionValidator.extensionIsSupported(multipartFile)) {
          ValidatedParseResult parseResult = parser.parse(multipartFile.getBytes());

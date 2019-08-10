@@ -15,11 +15,11 @@ export class BasicFileInfo extends Component {
          
           <div class="BasicFileInfo">
             <h4>
-              General Midi File Information
+              General Midi File Information for {this.props.currentAnalysis.midiFileDetail.fullFileName}
             </h4>
-            <h6>MIDI File Format: {this.props.currentAnalysis.rawAnalysis.midiFileFormatType}</h6>
-            <h6>Number of Tracks: {this.props.currentAnalysis.rawAnalysis.numTracks}</h6>  
-            <h6>Number of Midi Messages: {this.props.currentAnalysis.rawAnalysis.numMidiMessages}</h6>  
+            <h6>MIDI File Format: {this.props.currentAnalysis.midiFileDetail.format}</h6>
+            <h6>Number of Tracks: {this.props.currentAnalysis.midiFileDetail.numTracks}</h6>  
+            <h6>Rhythmic Division: {this.props.currentAnalysis.midiFileDetail.division}</h6>  
           </div>
         );
 

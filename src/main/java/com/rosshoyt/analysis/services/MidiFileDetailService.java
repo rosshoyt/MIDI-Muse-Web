@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -36,7 +37,15 @@ public class MidiFileDetailService {
       mfd.setFileName(parseResult.fileName);
       mfd.setFileExtension(parseResult.extension);
       mfd.setFullFileName(parseResult.fileName + "." + parseResult.extension);
+      // Midi Gen Display fields TODO address redundancy between _Header and these fields:
+      mfd.setFormat(mfa.getRawAnalysis().getHeader().getFormat());
+      mfd.setNumTracks(mfa.getRawAnalysis().getHeader().getNumTracks());
+      mfd.setDivision(mfa.getRawAnalysis().getHeader().getDivision());
       mfd.setFileByteData(fileByteDataRepository.save(new FileByteData(mfa, parseResult.data)));
       return midiFileDetailRepository.save(mfd);
+   }
+
+   public Optional<MidiFileDetail> findMidiFileDetailByMFA(MidiFileAnalysis mfa) {
+      return midiFileDetailRepository.findById(mfa.getId());
    }
 }

@@ -48,8 +48,8 @@ export class MidiAnalyzerContainer extends Component {
         return (
          
           <div class="MidiAnalyzerContainer" >
-                  <SelectedFileBox fileName={currentAnalysis.midiFile.fileName}
-                                   fileExtension={currentAnalysis.midiFile.fileExtension}
+                  <SelectedFileBox fileName={currentAnalysis.midiFileDetail.fileName}
+                                   fileExtension={currentAnalysis.midiFileDetail.fileExtension}
                   />
                   <div className="rowC">
                     <LeftContainer
