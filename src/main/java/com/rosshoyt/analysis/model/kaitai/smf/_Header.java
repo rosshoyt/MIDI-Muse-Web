@@ -1,5 +1,6 @@
 package com.rosshoyt.analysis.model.kaitai.smf;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class _Header {
    @JoinColumn(name = "id")
    @MapsId
    @ToString.Exclude
+   @JsonBackReference
    private RawAnalysis rawAnalysis;
 
    private int format;

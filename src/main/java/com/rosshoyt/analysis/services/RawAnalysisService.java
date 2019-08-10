@@ -48,7 +48,7 @@ public class  RawAnalysisService {
     */
    private RawAnalysis analyzeSMF(StandardMidiFile smf, RawAnalysis raw) {
       //if (raw.getHeader().format() != 2) { // TODO type2 parsing
-      raw.setHeader(SMFAnalyzer.analyzeSMFHeader(smf.hdr(),new _Header(raw)));
+      raw.setHeader(SMFAnalyzer.getHeader(smf.hdr(), new _Header(raw)));
 
       List<_TrackEvent> _eventList = new ArrayList<>();
 

@@ -1,5 +1,7 @@
 package com.rosshoyt.analysis.model.file;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import lombok.*;
 
 import javax.annotation.Nonnull;
@@ -14,9 +16,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class FileByteData {
+   public FileByteData(MidiFileAnalysis midiFileAnalysis, byte[] file) {
+      this.midiFileAnalysis = midiFileAnalysis;
+      this.file = file;
+   }
 
    @Id
    private Long id;
+
+   @OneToOne
+   @JoinColumn(name = "id")
+   @MapsId
+   @ToString.Exclude
+   @JsonBackReference
+   private MidiFileAnalysis midiFileAnalysis;
 
    @Lob
    @ToString.Exclude

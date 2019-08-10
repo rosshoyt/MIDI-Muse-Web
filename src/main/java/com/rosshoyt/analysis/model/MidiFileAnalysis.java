@@ -1,5 +1,6 @@
 package com.rosshoyt.analysis.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
@@ -24,17 +25,16 @@ public class MidiFileAnalysis {
    private Long id;
 
 
-   @OneToOne(fetch = FetchType.LAZY
-            ,mappedBy = "midiFileAnalysis"
-   )
+   @OneToOne(fetch = FetchType.LAZY, mappedBy = "midiFileAnalysis")
+   @JsonManagedReference
    private RawAnalysis rawAnalysis;
 
-   @OneToOne(fetch = FetchType.LAZY
-         ,mappedBy = "midiFileAnalysis"
-   )
+   @OneToOne(fetch = FetchType.LAZY, mappedBy = "midiFileAnalysis")
+   @JsonManagedReference
    private MusicalAnalysis musicalAnalysis;
 
-   @OneToOne(fetch = FetchType.EAGER)
+   @OneToOne(fetch = FetchType.EAGER, mappedBy = "midiFileAnalysis")
+   @JsonManagedReference
    private MidiFileDetail midiFileDetail;
 
 }

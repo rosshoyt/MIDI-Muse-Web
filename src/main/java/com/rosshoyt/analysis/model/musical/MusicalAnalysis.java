@@ -1,5 +1,6 @@
 package com.rosshoyt.analysis.model.musical;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class MusicalAnalysis {
    @JoinColumn(name = "id")
    @MapsId
    @ToString.Exclude
+   @JsonBackReference
    private MidiFileAnalysis midiFileAnalysis;
 
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

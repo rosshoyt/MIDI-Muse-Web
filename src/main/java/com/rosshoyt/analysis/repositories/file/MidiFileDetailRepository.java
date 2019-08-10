@@ -1,4 +1,4 @@
-package com.rosshoyt.analysis.repositories;
+package com.rosshoyt.analysis.repositories.file;
 
 
 

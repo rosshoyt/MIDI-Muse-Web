@@ -7,6 +7,7 @@ import com.rosshoyt.analysis.midifile.tools.handlers.MetaEventHandler;
 import com.rosshoyt.analysis.midifile.tools.handlers.MidiEventHandler;
 import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
 
+import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.model.file.FileByteData;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.kaitai.smf.*;
@@ -25,22 +26,17 @@ import java.util.List;
 public class SMFAnalyzer {
 
 
-   public static _Header analyzeSMFHeader(StandardMidiFile.Header hdr, _Header _header){
+   public static _Header getHeader(StandardMidiFile.Header hdr, _Header _header){
       _header.setFormat(hdr.format());
       _header.setNumTracks(hdr.numTracks());
       _header.setDivision(hdr.division());
       return _header;
    }
 
-   public static MidiFileDetail getMidiFileDetail(String fileName, String extension, RawAnalysis rawAnalysis, byte[] fileData) {
-      MidiFileDetail mfd = new MidiFileDetail();
-      mfd.setId(rawAnalysis.getId());
-      mfd.setFileName(fileName);
-      mfd.setFileExtension(extension);
-      mfd.setFullFileName(fileName + "." + extension);
-      mfd.setFileByteData(new FileByteData(rawAnalysis.getId(), fileData));
-      return mfd;
-   }
+//   public static MidiFileDetail getMidiFileDetail(String fileName, String extension,
+//                                                  MidiFileAnalysis midiFileAnalysis, byte[] fileData) {
+//
+//   }
 //   public static _Track analyzeSMFTrack(StandardMidiFile.Track smfTrack, _Track track){
 //
 //      return track;

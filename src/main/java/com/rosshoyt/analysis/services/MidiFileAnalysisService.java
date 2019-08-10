@@ -10,8 +10,9 @@ import com.rosshoyt.analysis.model.*;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
 import com.rosshoyt.analysis.repositories.MidiFileAnalysisRepository;
-import com.rosshoyt.analysis.repositories.MidiFileDetailRepository;
+import com.rosshoyt.analysis.repositories.file.MidiFileDetailRepository;
 import com.rosshoyt.analysis.repositories.music.MusicalAnalysisRepository;
+import com.rosshoyt.analysis.repositories.raw.RawAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,28 +35,28 @@ public class MidiFileAnalysisService {
 
    // CRUD Repos
    private final MidiFileAnalysisRepository midiFileAnalysisRepository;
-   private final MidiFileDetailRepository midiFileDetailRepository;
    private final MusicalAnalysisRepository musicalAnalysisRepository;
+   //private final MidiFileDetailRepository midiFileDetailRepository;
    //private final RawAnalysisRepository rawAnalysisRepository;
    // Helper services
    private final RawAnalysisService rawAnalysisService;
    private final MusicalAnalysisService musicalAnalysisService;
+   private final MidiFileDetailService midiFileDetailService;
 
    // Utilities
-
-   private static MusicAnalyzer musicAnalyzer;
    private static MidiFileValidatorParser midiFileValidatorParser = new MidiFileValidatorParser();
 
    @Autowired
-   public MidiFileAnalysisService(MidiFileAnalysisRepository midiFileAnalysisRepository, MidiFileDetailRepository midiFileDetailRepository,
-         /*RawAnalysisRepository rawAnalysisRepository,*/ MusicalAnalysisRepository musicalAnalysisRepository,
-                                  RawAnalysisService rawAnalysisService, MusicalAnalysisService musicalAnalysisService) {
+   public MidiFileAnalysisService(MidiFileAnalysisRepository midiFileAnalysisRepository, /*MidiFileDetailRepository midiFileDetailRepository,
+                                  RawAnalysisRepository rawAnalysisRepository,*/ MusicalAnalysisRepository musicalAnalysisRepository,
+                                  RawAnalysisService rawAnalysisService, MusicalAnalysisService musicalAnalysisService, MidiFileDetailService midiFileDetailService) {
       this.midiFileAnalysisRepository = midiFileAnalysisRepository;
-      this.midiFileDetailRepository = midiFileDetailRepository;
+      //this.midiFileDetailRepository = midiFileDetailRepository;
       //this.rawAnalysisRepository = rawAnalysisRepository;
       this.musicalAnalysisRepository = musicalAnalysisRepository;
       this.rawAnalysisService = rawAnalysisService;
       this.musicalAnalysisService = musicalAnalysisService;
+      this.midiFileDetailService = midiFileDetailService;
    }
    //@Transactional
    public List<MidiFileAnalysis> getAllMidiFileAnalyses() {
@@ -75,9 +76,7 @@ public class MidiFileAnalysisService {
    }
 
    public List<MidiFileDetail> getMidiFileDetailList(){
-      List<MidiFileDetail> midiFileDetailList = new ArrayList<>();
-      midiFileDetailRepository.findAll().forEach(midiFileDetailList::add);
-      return midiFileDetailList;
+      return midiFileDetailService.getMidiFileDetailList();
    }
 
    public MidiFileAnalysis addMidiFile(File file) throws IOException, InvalidMidiFileException, UnexpectedMidiDataException {
@@ -101,11 +100,9 @@ public class MidiFileAnalysisService {
 
       /* Create other DB entries with PK of MFA entry */
       System.out.println("Persisting File Byte Data...");
-      MidiFileDetail midiFileDetail = SMFAnalyzer.getMidiFileDetail(parseResult.fileName, parseResult.extension,
-                                 rawAnalysis, parseResult.data);
-      midiFileDetail = midiFileDetailRepository.save(midiFileDetail);
+      MidiFileDetail midiFileDetail = midiFileDetailService.addMidiFileDetail(mfa, parseResult);
       mfa.setMidiFileDetail(midiFileDetail);
-      mfa= midiFileAnalysisRepository.save(mfa);
+      mfa = midiFileAnalysisRepository.save(mfa);
 
       // Musical Analysis TODO Methodize
       System.out.println("Analyzing musical data...");
