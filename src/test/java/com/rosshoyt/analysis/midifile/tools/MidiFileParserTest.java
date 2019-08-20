@@ -1,8 +1,10 @@
 package com.rosshoyt.analysis.midifile.tools;
 
-import com.rosshoyt.analysis.midifile.tools.kaitai.StandardMidiFile;
-import com.rosshoyt.analysis.model.internal.ValidatedParseResult;
-import com.rosshoyt.analysis.utils.FileUtils;
+import com.rosshoyt.analysis.tools.midifile.parsing.kaitai.StandardMidiFile;
+import com.rosshoyt.analysis.model.internal.ValidParseResultContainer;
+import com.rosshoyt.analysis.tools.midifile.parsing.kaitai.KaitaiSMFParser;
+import com.rosshoyt.analysis.tools.midifile.parsing.StandardMidiFileParser;
+import com.rosshoyt.analysis.tools.utils.CustomFileUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,7 +16,7 @@ public class MidiFileParserTest {
       StandardMidiFileParser parser = new KaitaiSMFParser();
 
       try {
-         ValidatedParseResult parseResult = parser.parse(FileUtils.getByteArray(smfType1));
+         ValidParseResultContainer parseResult = parser.parse(CustomFileUtils.getByteArray(smfType1));
 
          StandardMidiFile smf = parseResult.smf;
 

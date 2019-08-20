@@ -1,0 +1,42 @@
+.cart {
+ 
+    .price {
+      font-size: 34px;
+    }
+  
+    .vcenter {
+      display: inline-block;
+      float: none;
+      horiz-align :right !important;
+    }
+  
+    .border {
+      border:solid 0.5px;
+    }
+  
+    .leftmargin{
+      margin-left: 10px;
+    }
+  
+    .length
+    {
+      display: none;
+      width: 100%;
+    }
+  
+    .grey
+    {
+      background-color: darkgray;
+    }
+  
+    .collapse {
+      display: none
+    }
+  
+    .collapse.in {
+      display: block
+    }
+  
+  
+  
+  }

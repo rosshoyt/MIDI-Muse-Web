@@ -9,7 +9,6 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
 @Entity
 public class Chord {

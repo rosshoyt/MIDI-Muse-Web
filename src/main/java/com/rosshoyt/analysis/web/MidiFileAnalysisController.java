@@ -1,6 +1,5 @@
 package com.rosshoyt.analysis.web;
-import com.rosshoyt.analysis.midifile.tools.exceptions.InvalidMidiFileException;
-import com.rosshoyt.analysis.model.file.FileByteData;
+import com.rosshoyt.analysis.exceptions.InvalidMidiFileException;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.services.MidiFileAnalysisService;

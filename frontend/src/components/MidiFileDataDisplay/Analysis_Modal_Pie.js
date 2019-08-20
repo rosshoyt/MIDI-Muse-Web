@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import {Bar, Line, Pie} from 'react-chartjs-2';
 import './Analysis_Modal_Pie.css';
-function MidiFileListEntry(id, fileName, chordList ) {
-  this.id = id;
-  this.fileName=fileName;
-  this.chordList=chordList;
 
-}
 /*
 TODO make separate listcomponent for basic midi file analysis
 (what midi file type, other basic data)

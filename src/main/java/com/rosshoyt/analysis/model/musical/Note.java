@@ -10,6 +10,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
+@ToString(callSuper = true)
 public class Note extends MusicalEvent {
 
 

@@ -2,7 +2,7 @@ package com.rosshoyt.analysis.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
-import com.rosshoyt.analysis.model.kaitai.smf.RawAnalysis;
+import com.rosshoyt.analysis.model.raw.RawAnalysis;
 import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
 
 import lombok.*;

@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
-import SelectedFileBox from './SelectedFileBox.js';
 import Analysis_Modal_Pie from './MidiFileDataDisplay/Analysis_Modal_Pie'
 import BasicFileInfo from './MidiFileDataDisplay/BasicFileInfo.js';
-
+import NoteDistributionBarChart from './MidiFileDataDisplay/NoteDistributionBarChart'
 
 export default class AnalysisContainer extends Component {
   constructor(props) {
@@ -54,6 +53,14 @@ export default class AnalysisContainer extends Component {
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => { this.toggle('3'); }}
             >
+              Misc stuff {'&'} thangz
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '5' })}
+              onClick={() => { this.toggle('4'); }}
+            >
               Note Distributions
             </NavLink>
           </NavItem>
@@ -63,12 +70,9 @@ export default class AnalysisContainer extends Component {
             <BasicFileInfo
               currentAnalysis={this.props.currentAnalysis}
             />
-            
           </TabPane>
           <TabPane tabId="2">
-
                 <Analysis_Modal_Pie/>
-
           </TabPane>
           <TabPane tabId="3">
             <Row>
@@ -87,6 +91,11 @@ export default class AnalysisContainer extends Component {
                 </Card>
               </Col>
             </Row>
+          </TabPane>
+          <TabPane tabId="4">
+
+                <NoteDistributionBarChart noteList = {this.props.currentAnalysis.musicalAnalysis.even}/>
+
           </TabPane>
         </TabContent>
       </div>
