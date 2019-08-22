@@ -1,8 +1,8 @@
 package com.rosshoyt.analysis.tools.musicdata.extraction;
 
 
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOffEvent;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOnEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOffEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOnEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +18,13 @@ public final class TrackChannelListeners {
       for(int i = 0; i < numTracks; i++) midiTrackListeners.put(i, new MidiTrackListener());
    }
 
-   public void addNoteOn(_NoteOnEvent noteOn) {
+   public void addNoteOn(RawNoteOnEvent noteOn) {
 
       //System.out.print("Adding " + noteOn + " to Track/Channel Listener "+ noteOn.getTrackNumber()+ "/" + noteOn.getChannel());
 
       midiTrackListeners.get(noteOn.getTrackNumber()).addNoteOnEvent(noteOn);
    }
-   public Optional<_NoteOnEvent> getNoteOnEventFromNoteOffEvent(_NoteOffEvent noteOff)  {
+   public Optional<RawNoteOnEvent> getNoteOnEventFromNoteOffEvent(RawNoteOffEvent noteOff)  {
       if(noteOff.getNote() >= 0 && noteOff.getNote() <= 127) { // TODO optimize corrupted midi data checking
          System.out.print("Getting noteOn for " + noteOff + " from Track/Channel Listener "+ noteOff.getTrackNumber()+ "/" + noteOff.getChannel());
          return midiTrackListeners.get(noteOff.getTrackNumber()).getNoteOnEventFromNoteOffEvent(noteOff);
@@ -40,12 +40,12 @@ public final class TrackChannelListeners {
             for(int i = 0; i < NUMBER_OF_MIDI_CHANNELS; i++) channelListenerMap.put(i, new MidiChannelListener());
          }
       }
-      private void addNoteOnEvent(_NoteOnEvent noteOnEvent){
+      private void addNoteOnEvent(RawNoteOnEvent noteOnEvent){
 
          channelListenerMap.get(noteOnEvent.getTrackNumber()).addNoteOnEvent(noteOnEvent);//[noteOnEvent.getChannel()];
       }
 
-      private Optional<_NoteOnEvent> getNoteOnEventFromNoteOffEvent(_NoteOffEvent noteOffEvent){
+      private Optional<RawNoteOnEvent> getNoteOnEventFromNoteOffEvent(RawNoteOffEvent noteOffEvent){
          //return hangingNotes[noteOffEvent.getChannel()][noteOffEvent.getNote()].poll();
          return channelListenerMap.get(noteOffEvent.getChannel()).getNoteOnEventFromNoteOffEvent(noteOffEvent);
 
@@ -55,19 +55,21 @@ public final class TrackChannelListeners {
          private Map<Integer, MidiPitchQueue> noteQueueMap = new HashMap<>();
 
          MidiChannelListener() {
-            for(int i = 0; i < NUMBER_OF_MIDI_NOTE_PITCHES; i++) noteQueueMap.put(i, new MidiPitchQueue());
+            {
+               for (int i = 0; i < NUMBER_OF_MIDI_NOTE_PITCHES; i++) noteQueueMap.put(i, new MidiPitchQueue());
+            }
          }
-         void addNoteOnEvent(_NoteOnEvent noteOnEvent){
+         void addNoteOnEvent(RawNoteOnEvent noteOnEvent){
             noteQueueMap.get(noteOnEvent.getNote()).addNoteOnEvent(noteOnEvent);
          }
-         Optional<_NoteOnEvent> getNoteOnEventFromNoteOffEvent(_NoteOffEvent noteOffEvent){
+         Optional<RawNoteOnEvent> getNoteOnEventFromNoteOffEvent(RawNoteOffEvent noteOffEvent){
             return noteQueueMap.get(noteOffEvent.getNote()).getNoteOn();
          }
 
          private final class MidiPitchQueue {
-            private Queue<_NoteOnEvent> noteOnEventQueue = new LinkedBlockingQueue<>();
+            private Queue<RawNoteOnEvent> noteOnEventQueue = new LinkedBlockingQueue<>();
 
-            void addNoteOnEvent(_NoteOnEvent noteOnEvent){
+            void addNoteOnEvent(RawNoteOnEvent noteOnEvent){
 
                noteOnEventQueue.add(noteOnEvent);
 
@@ -75,7 +77,7 @@ public final class TrackChannelListeners {
             boolean isEmpty(){
                return noteOnEventQueue.isEmpty();
             }
-            Optional<_NoteOnEvent> getNoteOn(){
+            Optional<RawNoteOnEvent> getNoteOn(){
 //               if(isEmpty()){
 //
 //               }

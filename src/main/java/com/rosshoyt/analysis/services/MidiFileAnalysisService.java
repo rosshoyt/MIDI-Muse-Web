@@ -59,7 +59,7 @@ public class MidiFileAnalysisService {
       midiFileAnalysisRepository.findAll().forEach(mfa ->
       {
          mfa.setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(mfa).orElse(null));
-         mfa.setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(mfa).orElse(null));
+         mfa.setRawAnalysis(rawAnalysisService.getRawAnalysisByFkMidiFileAnalysisId(mfa.getId()).orElse(null));
          analyses.add(mfa);
       });
       return analyses;
@@ -72,7 +72,7 @@ public class MidiFileAnalysisService {
          //MidiFileAnalysis mfa = optionalMFA.get();
          //Optional<RawAnalysis> optionalRA = rawAnalysisService.findRawAnalysisByMFA(mfa);
          //RawAnalysis rawAnalysis = optionalRA.get();
-         optionalMFA.get().setRawAnalysis(rawAnalysisService.findRawAnalysisByMFA(optionalMFA.get()).get());
+         optionalMFA.get().setRawAnalysis(rawAnalysisService.getRawAnalysisByFkMidiFileAnalysisId(optionalMFA.get().getId()).get());
          optionalMFA.get().setMusicalAnalysis(musicalAnalysisService.findMusicalAnalysisByMFA(optionalMFA.get()).get());
          optionalMFA.get().setMidiFileDetail(midiFileDetailService.findMidiFileDetailByMFA(optionalMFA.get()).get());
          System.out.println("Returning Midi File analysis: " + optionalMFA.get());

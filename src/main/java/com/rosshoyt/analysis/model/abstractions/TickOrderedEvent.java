@@ -1,11 +1,14 @@
 package com.rosshoyt.analysis.model.abstractions;
 
-import com.rosshoyt.analysis.model.raw._TrackEvent;
 import lombok.Data;
+import lombok.ToString;
 
+import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 @Data
+@ToString(callSuper = true)
+@MappedSuperclass
 public abstract class TickOrderedEvent extends FlaggableEvent implements Comparable<TickOrderedEvent> {
 
    private Long tick; // ticks since start

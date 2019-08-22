@@ -2,6 +2,7 @@ package com.rosshoyt.analysis.model.file;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
+import com.rosshoyt.analysis.model.abstractions.BaseReferencingEntity;
 import lombok.*;
 
 import javax.annotation.Nonnull;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class FileByteData {
+public class FileByteData extends BaseReferencingEntity {
    public FileByteData(MidiFileAnalysis midiFileAnalysis, byte[] file) {
       this.midiFileAnalysis = midiFileAnalysis;
       this.file = file;

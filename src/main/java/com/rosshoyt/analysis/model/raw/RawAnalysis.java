@@ -3,13 +3,14 @@ package com.rosshoyt.analysis.model.raw;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
+import com.rosshoyt.analysis.model.abstractions.BaseReferencingEntity;
 import com.rosshoyt.analysis.model.abstractions.TickOrderedEventComparator;
-import com.rosshoyt.analysis.model.internal.RawEventCountContainer;
-import com.rosshoyt.analysis.model.raw.meta_events.Tempo;
-import com.rosshoyt.analysis.model.raw.meta_events.TimeSignature;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOffEvent;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOnEvent;
-import com.rosshoyt.analysis.model.raw.midi_events.controller_events._SustainPedalEvent;
+import com.rosshoyt.analysis.model.raw.meta_events.RawTempoEvent;
+import com.rosshoyt.analysis.model.raw.meta_events.RawTimeSignatureEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOffEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOnEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.abstractions.RawNoteEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.controller_events.RawSustainPedalEvent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,59 +26,53 @@ import java.util.TreeSet;
 @Data
 @NoArgsConstructor
 @Entity
-public class RawAnalysis {
+public class RawAnalysis extends BaseReferencingEntity {
 
-   public RawAnalysis(MidiFileAnalysis midiFileAnalysis) {
-      this.midiFileAnalysis = midiFileAnalysis;
-   }
-
-   @Id
-   private Long id;
-
-   @OneToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "id")
-   @MapsId
-   @ToString.Exclude
-   @JsonBackReference
-   private MidiFileAnalysis midiFileAnalysis;
-
-   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "rawAnalysis")
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    @JsonManagedReference
-   private RawEventCounts rawEventCounts;
+   private RawAnalysisStatistics rawAnalysisStatistics;
 
-   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "rawAnalysis")
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    @JsonManagedReference
-   private _Header header;
+   private RawHeader rawHeader;
 
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-   private List<_TrackEvent> trackEvents;
+   //      @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//   private List<_NoteOnEvent> noteOnEventList;
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   private List<RawNoteEvent> rawNoteEvents;
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   private List<RawSustainPedalEvent> rawSustainPedalEvents;
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   private List<RawTempoEvent> rawTempoEvents;
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   private List<RawTimeSignatureEvent> rawTimeSignatureEvents;
 
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-   @SortComparator(TickOrderedEventComparator.class)
-   private SortedSet<_NoteOnEvent> noteOnEvents = new TreeSet<>();
+   //@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+   //private List<RawTrackEvent> trackEvents;
 
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-   @SortComparator(TickOrderedEventComparator.class)
-   private SortedSet<_NoteOffEvent> noteOffEvents = new TreeSet<>();
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//   @SortComparator(TickOrderedEventComparator.class)
+//   private SortedSet<RawNoteOnEvent> noteOnEvents = new TreeSet<>();
+//
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//   @SortComparator(TickOrderedEventComparator.class)
+//   private SortedSet<RawNoteOffEvent> noteOffEvents = new TreeSet<>();
 
    // (Controller Event)
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-   @SortComparator(TickOrderedEventComparator.class)
-   private SortedSet<_SustainPedalEvent> sustainPedalEventList = new TreeSet<>();
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//   @SortComparator(TickOrderedEventComparator.class)
+//   private SortedSet<RawSustainPedalEvent> sustainPedalEventList = new TreeSet<>();
 
    // Meta Events
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-   @SortComparator(TickOrderedEventComparator.class)
-   private SortedSet<Tempo> tempoEvents = new TreeSet<>();
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//   @SortComparator(TickOrderedEventComparator.class)
+//   private SortedSet<RawTempoEvent> rawTempoEventEvents = new TreeSet<>();
+//
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//   @SortComparator(TickOrderedEventComparator.class)
+//   private SortedSet<RawTimeSignatureEvent> rawTimeSignatureEventEvents = new TreeSet<>();
 
-   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-   @SortComparator(TickOrderedEventComparator.class)
-   private SortedSet<TimeSignature> timeSignatureEvents = new TreeSet<>();
 
-//   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//   private List<_NoteOnEvent> noteOnEventList;
-//   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//   private List<_NoteOffEvent> noteOffEventList;
    // Meta Events
 //   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 //   private List<_TrackEvent> copyrightEventList;
@@ -111,6 +106,18 @@ public class RawAnalysis {
 //   private List<_TrackEvent> textEventList;
 //   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 //   private List<_TrackEvent> timeSignatureEventList;
-
+/*
+OLD CONSTRUCTOR AND BACK REFERENCE TO BASE ENTITY
+ */
+//   public RawAnalysis(MidiFileAnalysis midiFileAnalysis) {
+//      this.midiFileAnalysis = midiFileAnalysis;
+//   }
+//
+//   @OneToOne(fetch = FetchType.LAZY)
+//   @JoinColumn(name = "id")
+//   @MapsId
+//   @ToString.Exclude
+//   @JsonBackReference
+//   private MidiFileAnalysis midiFileAnalysis;
 
 }

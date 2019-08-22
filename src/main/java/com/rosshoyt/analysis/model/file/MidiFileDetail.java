@@ -3,6 +3,7 @@ package com.rosshoyt.analysis.model.file;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rosshoyt.analysis.model.MidiFileAnalysis;
+import com.rosshoyt.analysis.model.abstractions.BaseReferencingEntity;
 import lombok.*;
 
 
@@ -13,14 +14,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Entity
-public class MidiFileDetail {
+public class MidiFileDetail extends BaseReferencingEntity {
 
    public MidiFileDetail(MidiFileAnalysis midiFileAnalysis) {
       this.midiFileAnalysis = midiFileAnalysis;
    }
 
-   @Id
-   private long id;
 
    @OneToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "id")

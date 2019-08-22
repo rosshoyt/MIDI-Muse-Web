@@ -55,12 +55,7 @@ class DatabaseInitializer implements CommandLineRunner {
 
       }
       System.out.println("All entries added to repo, here they are ->");
-      midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println
-//            entry-> {
-//               entry.getMusicalAnalysis().getTracks();
-//               System.out.println(entry);
-//            }
-            );
+      midiFileAnalysisService.getAllMidiFileAnalyses().forEach(System.out::println);
    }
 
 

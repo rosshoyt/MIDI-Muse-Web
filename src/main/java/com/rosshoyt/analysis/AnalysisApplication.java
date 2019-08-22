@@ -7,13 +7,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.rosshoyt.analysis.storage.StorageProperties;
-import com.rosshoyt.analysis.storage.StorageService;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
+//@EnableConfigurationProperties(StorageProperties.class)
 //@EntityScan()
 public class AnalysisApplication {
 
@@ -21,13 +19,13 @@ public class AnalysisApplication {
 		SpringApplication.run(AnalysisApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner init(StorageService storageService) {
-		return (args) -> {
-			storageService.deleteAll();
-			storageService.init();
-		};
-	}
+//	@Bean
+//	CommandLineRunner init(StorageService storageService) {
+//		return (args) -> {
+//			storageService.deleteAll();
+//			storageService.init();
+//		};
+//	}
 
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {

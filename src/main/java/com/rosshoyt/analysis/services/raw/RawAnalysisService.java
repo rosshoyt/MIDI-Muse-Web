@@ -1,13 +1,13 @@
 package com.rosshoyt.analysis.services.raw;
 
-import com.rosshoyt.analysis.model.internal.RawEventCountContainer;
-import com.rosshoyt.analysis.model.musical.SustainPedal;
-import com.rosshoyt.analysis.model.raw.RawEventCounts;
-import com.rosshoyt.analysis.model.raw.meta_events.Tempo;
-import com.rosshoyt.analysis.model.raw.meta_events.TimeSignature;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOffEvent;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOnEvent;
-import com.rosshoyt.analysis.model.raw.midi_events.controller_events._SustainPedalEvent;
+import com.rosshoyt.analysis.model.internal.RawAnalysisStatisticsContainer;
+import com.rosshoyt.analysis.model.raw.RawAnalysisStatistics;
+import com.rosshoyt.analysis.model.raw.meta_events.RawTempoEvent;
+import com.rosshoyt.analysis.model.raw.meta_events.RawTimeSignatureEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOffEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOnEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.abstractions.RawNoteEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.controller_events.RawSustainPedalEvent;
 import com.rosshoyt.analysis.tools.midifile.handlers.MetaEventHandler;
 import com.rosshoyt.analysis.tools.midifile.handlers.MidiEventHandler;
 import com.rosshoyt.analysis.tools.midifile.parsing.kaitai.StandardMidiFile;
@@ -15,10 +15,10 @@ import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.model.internal.ValidParseResultContainer;
 import com.rosshoyt.analysis.model.raw.RawAnalysis;
 
-import com.rosshoyt.analysis.model.raw._Header;
-import com.rosshoyt.analysis.model.raw._TrackEvent;
+import com.rosshoyt.analysis.model.raw.RawHeader;
+import com.rosshoyt.analysis.model.raw.abstractions.RawTrackEvent;
 import com.rosshoyt.analysis.repositories.raw.RawAnalysisRepository;
-import com.rosshoyt.analysis.repositories.raw.RawTrackEventRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,119 +28,139 @@ import java.util.*;
 public class RawAnalysisService {
    // CRUD Repos
    private final RawAnalysisRepository rawAnalysisRepository;
-   private final RawTrackEventRepository rawTrackEventRepository;
+   private final RawTrackEventService rawTrackEventService;
+
 
 
 
    @Autowired
-   public RawAnalysisService(RawAnalysisRepository rawAnalysisRepository, RawTrackEventRepository rawTrackEventRepository) {
+   public RawAnalysisService(RawAnalysisRepository rawAnalysisRepository, RawTrackEventService rawTrackEventService) {
       this.rawAnalysisRepository = rawAnalysisRepository;
-      this.rawTrackEventRepository = rawTrackEventRepository;
+      this.rawTrackEventService = rawTrackEventService;
    }
-   public Optional<RawAnalysis> findRawAnalysisByMFA(MidiFileAnalysis mfa){
-      return rawAnalysisRepository.findById(mfa.getId());
+   public Optional<RawAnalysis> getRawAnalysisByFkMidiFileAnalysisId(Long fkMidiFileAnalysisId){
+      Optional<RawAnalysis> optionalRawAnalysis = rawAnalysisRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId);
+      if(optionalRawAnalysis.isPresent()){
+         RawAnalysis rawAnalysis = optionalRawAnalysis.get();
+         rawAnalysis.setRawNoteEvents(rawTrackEventService.getRawNoteEvents(fkMidiFileAnalysisId));
+         rawAnalysis.setRawSustainPedalEvents(rawTrackEventService.getRawSustainPedalEvents(fkMidiFileAnalysisId));
+         rawAnalysis.setRawTempoEvents(rawTrackEventService.getRawTempoEvents(fkMidiFileAnalysisId));
+         rawAnalysis.setRawTimeSignatureEvents(rawTrackEventService.getRawTimeSignatureEvents(fkMidiFileAnalysisId));
+         return Optional.of(rawAnalysis);
+      }
+      return optionalRawAnalysis;
    }
 
 
    public RawAnalysis addRawAnalysis(MidiFileAnalysis midiFileAnalysis, ValidParseResultContainer parseResult) {
-      RawAnalysis rawAnalysis = new RawAnalysis(midiFileAnalysis);
-      return rawAnalysisRepository.save(analyzeSMF (parseResult.smf, rawAnalysis));
+      return rawAnalysisRepository.save(analyzeSMF(parseResult.smf, midiFileAnalysis.getId()));
    }
 
    /**
-    * Takes an empty RawAnalysis and analyzes KaitaiStruct SMF into that container
-    * @param smf KaitaiStruct SMF parse result
-    * @param raw Persistent entity to hold raw analysis
-    * //@param fkMidiFileAnalysisId id field of base database entry, the MidiFileAnalysis
-    * @return raw RawAnalysis object containing analysis
+    * Method that creates a persistent RawAnalysis from a KaitaiStruct SMF parse result
+    * TODO Support Type2 SMF parsing
+    * @param smf KaitaiStruct SMF parse result to be analyzed
+    * @param fkMidiFileAnalysisId foreign key to base DB entry
+    * @return raw RawAnalysis object containing extracted analysis
     */
-   private RawAnalysis analyzeSMF(StandardMidiFile smf, RawAnalysis raw) {
-      // TODO type2 parsing
-      // First analyze midi file header -
-      raw.setHeader(analyzeSMFHeader(smf.hdr(), new _Header(raw)));
+   private RawAnalysis analyzeSMF(StandardMidiFile smf, Long fkMidiFileAnalysisId) {
+      RawAnalysis raw = new RawAnalysis();
+      raw.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
 
-      // Create detached container for raw data analysis of midi file -
-      RawEventCountContainer rawEventCountContainer = new RawEventCountContainer();
+      // Container object that tracks data/stats of midi file with easily incremented fields - TODO create better solution
+      RawAnalysisStatisticsContainer rawAnalysisStatisticsContainer = new RawAnalysisStatisticsContainer();
 
+      // Analyze midi file header -
+      raw.setRawHeader(analyzeSMFHeader(smf.hdr(), raw.getFkMidiFileAnalysisId()));
 
-      SortedSet<_NoteOnEvent> noteOnEvents = new TreeSet<>();
-      SortedSet<_NoteOffEvent> noteOffEvents = new TreeSet<>();
-      SortedSet<_SustainPedalEvent> sustainPedalEvents = new TreeSet<>();
-      SortedSet<Tempo> tempoEvents = new TreeSet<>();
-      SortedSet<TimeSignature> timeSignatureEvents = new TreeSet<>();
+      // Containers for RawTrackEvent types to be persisted with RawAnalysis
+      List<RawNoteEvent> rawNoteEvents = new ArrayList<>();
+      List<RawSustainPedalEvent> rawSustainPedalEvents = new ArrayList<>();
+      List<RawTempoEvent> rawTempoEvents = new ArrayList<>();
+      List<RawTimeSignatureEvent> rawTimeSignatureEvents = new ArrayList<>();
 
-
-
-      // Parse Track's events
+      // Parse each track's events in order and handle based on type
       int trackNumber = 0;
       for (StandardMidiFile.Track smfTrack : smf.tracks()) {
          System.out.println("...Analyzing midi track #" + trackNumber + "... ");
-         rawEventCountContainer.numTotalEvents += smfTrack.events().event().size();
 
+         // Statistic tracking
+         rawAnalysisStatisticsContainer.numTotalEvents += smfTrack.events().event().size();
+
+         // Loop through the track's TrackEvents and handle each
          Long currentTick = 0L;
          for (StandardMidiFile.TrackEvent event : smfTrack.events().event()) {
+
             // Increment midi tick values;
             Integer vTime = event.vTime().value();
             currentTick += vTime;
-            Integer channel = event.channel();
+
+            Integer channel = event.channel(); // TODO move this line, not all TrackEvents have a channel
 
             System.out.print("Track #" + trackNumber + " channel #" + channel + " event @" + currentTick + ": ");
 
             // Create trackEvent reference and set to null
-            _TrackEvent _trackEvent = analyzeSMFTrackEvent(event, rawEventCountContainer);// = new _TrackEvent();
+            RawTrackEvent rawTrackEvent = analyzeSMFTrackEvent(event, rawAnalysisStatisticsContainer);// = new _TrackEvent();
 
-            if(_trackEvent != null) {
-               _trackEvent.setVTime(vTime);
-               _trackEvent.setTick(currentTick);
-               _trackEvent.setChannel(channel);
-               _trackEvent.setTrackNumber(trackNumber);
-               _trackEvent.setFkMidiFileAnalysisId(raw.getId());
-               // Parse results and persist in correct list
-               if(_trackEvent instanceof _NoteOnEvent) noteOnEvents.add((_NoteOnEvent)_trackEvent);
-               else if(_trackEvent instanceof _NoteOffEvent) noteOffEvents.add((_NoteOffEvent) _trackEvent);
-               else if(_trackEvent instanceof _SustainPedalEvent) sustainPedalEvents.add((_SustainPedalEvent)_trackEvent);
-               else if(_trackEvent instanceof Tempo) tempoEvents.add((Tempo)_trackEvent);
-               else if (_trackEvent instanceof TimeSignature) timeSignatureEvents.add((TimeSignature)_trackEvent);
+            if(rawTrackEvent != null) {
+               rawTrackEvent.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
+               rawTrackEvent.setVTime(vTime);
+               rawTrackEvent.setTick(currentTick);
+               rawTrackEvent.setChannel(channel);
+               rawTrackEvent.setTrackNumber(trackNumber);
+               rawTrackEvent.setFkMidiFileAnalysisId(raw.getId());
+               // Persist event in corresponding collection
+               if     (rawTrackEvent instanceof RawNoteOnEvent)         rawNoteEvents.add((RawNoteOnEvent)rawTrackEvent);
+               else if(rawTrackEvent instanceof RawNoteOnEvent)         rawNoteEvents.add((RawNoteOffEvent)rawTrackEvent);
+               else if(rawTrackEvent instanceof RawSustainPedalEvent)   rawSustainPedalEvents.add((RawSustainPedalEvent)rawTrackEvent);
+               else if(rawTrackEvent instanceof RawTempoEvent)          rawTempoEvents.add((RawTempoEvent)rawTrackEvent);
+               else if(rawTrackEvent instanceof RawTimeSignatureEvent)  rawTimeSignatureEvents.add((RawTimeSignatureEvent)rawTrackEvent);
 
             } else {
-               rawEventCountContainer.numUnsupportedEvents++;
+               rawAnalysisStatisticsContainer.numUnsupportedEvents++;
                System.out.println("...Unsupported Event Type");
             }
          }
 
          trackNumber++;
       }
-      // Set raw analysis fields
-      raw.setNoteOnEvents(noteOnEvents);
-      raw.setNoteOffEvents(noteOffEvents);
-      raw.setSustainPedalEventList(sustainPedalEvents);
-      raw.setTempoEvents(tempoEvents);
-      raw.setTimeSignatureEvents(timeSignatureEvents);
+      // Persist track events via RawTrackEventService layer
+      rawNoteEvents = rawTrackEventService.addRawNoteEvents(rawNoteEvents);
+      rawSustainPedalEvents = rawTrackEventService.addRawSustainPedalEvents(rawSustainPedalEvents);
+      rawTempoEvents = rawTrackEventService.addRawTempoEvents(rawTempoEvents);
+      rawTimeSignatureEvents = rawTrackEventService.addRawTimeSignatureEvents(rawTimeSignatureEvents);
 
-      // Set persistent data tracked fields from simple tracking class
-      RawEventCounts rawEventCounts = new RawEventCounts(rawEventCountContainer);
-      rawEventCounts.setRawAnalysis(raw);
-      raw.setRawEventCounts(rawEventCounts);
-      System.out.println("RawAnalysisService Parse data tracking results: " + rawEventCountContainer);
+      // Set raw analysis' fields
+      raw.setRawNoteEvents(rawNoteEvents);
+      raw.setRawSustainPedalEvents(rawSustainPedalEvents);
+      raw.setRawTempoEvents(rawTempoEvents);
+      raw.setRawTimeSignatureEvents(rawTimeSignatureEvents);
+
+      // Create persistent statistics from the statistics container class
+      RawAnalysisStatistics rawAnalysisStatistics = new RawAnalysisStatistics(rawAnalysisStatisticsContainer);
+      raw.setRawAnalysisStatistics(rawAnalysisStatistics);
+      System.out.println("RawAnalysisService Parse data tracking results: " + rawAnalysisStatisticsContainer);
       return raw;
    }
 
-   private static _Header analyzeSMFHeader(StandardMidiFile.Header hdr, _Header _header){
+   private static RawHeader analyzeSMFHeader(StandardMidiFile.Header hdr, Long fkMidiFileAnalysisId){
+      RawHeader _header = new RawHeader();
+      _header.setFkMidiFileAnalysisId(fkMidiFileAnalysisId);
       _header.setFormat(hdr.format());
       _header.setNumTracks(hdr.numTracks());
       _header.setDivision(hdr.division());
       return _header;
    }
-   private static _TrackEvent analyzeSMFTrackEvent(StandardMidiFile.TrackEvent smfTrackEvent, RawEventCountContainer rawEventCountContainer){
+   private static RawTrackEvent analyzeSMFTrackEvent(StandardMidiFile.TrackEvent smfTrackEvent, RawAnalysisStatisticsContainer rawAnalysisStatisticsContainer){
       if (smfTrackEvent.eventHeader() == 255) { // META
-         rawEventCountContainer.numMetaEvents++;
-         return MetaEventHandler.handleMetaEvent(smfTrackEvent, rawEventCountContainer);
+         rawAnalysisStatisticsContainer.numMetaEvents++;
+         return MetaEventHandler.handleMetaEvent(smfTrackEvent, rawAnalysisStatisticsContainer);
       } else if (smfTrackEvent.eventHeader() == 240) { // SYSEX
-         rawEventCountContainer.numSysexEvents++;
+         rawAnalysisStatisticsContainer.numSysexEvents++;
          System.out.println("Sysex Message Event");
       } else { // MIDI
-         rawEventCountContainer.numMidiEvents++;
-         return MidiEventHandler.handleMidiEvent(smfTrackEvent, rawEventCountContainer);
+         rawAnalysisStatisticsContainer.numMidiEvents++;
+         return MidiEventHandler.handleMidiEvent(smfTrackEvent, rawAnalysisStatisticsContainer);
       }
       return null;
    }

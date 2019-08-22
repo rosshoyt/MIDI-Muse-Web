@@ -4,10 +4,16 @@ import lombok.Data;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.MappedSuperclass;
 
 @Data
-public abstract class FlaggableEvent {
+@MappedSuperclass
+public abstract class FlaggableEvent extends BaseReferencingEntity {
+
+
    private boolean flagged;
-   @Enumerated(EnumType.STRING)
-   private Enum<FlagType> flagType;
+   private String flagMessage;
+
+//   @Enumerated(EnumType.STRING)
+//   private Enum<FlagType> flagType;
 }

@@ -1,10 +1,11 @@
 package com.rosshoyt.analysis.tools.musicdata.extraction;
 
 
-import com.rosshoyt.analysis.model.raw.RawEventCounts;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOffEvent;
-import com.rosshoyt.analysis.model.raw.midi_events._NoteOnEvent;
-import com.rosshoyt.analysis.model.musical.Note;
+import com.rosshoyt.analysis.model.raw.RawAnalysisStatistics;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOffEvent;
+import com.rosshoyt.analysis.model.raw.midi_events.RawNoteOnEvent;
+import com.rosshoyt.analysis.model.music.Note;
+import com.rosshoyt.analysis.model.raw.midi_events.abstractions.RawNoteEvent;
 
 import java.util.*;
 
@@ -20,24 +21,24 @@ public class NoteEventStitcher {
     */
    private NoteEventStitcher(){}
 
-   public static SortedSet<Note> stitchNotes(int numTracks, RawEventCounts rawEventCounts, SortedSet<_NoteOnEvent> noteOnEvents, SortedSet<_NoteOffEvent> noteOffEvents) {
+   public static SortedSet<Note> stitchNotes(int numTracks, RawAnalysisStatistics rawAnalysisStatistics, List<RawNoteEvent> noteEvents) {
       TrackChannelListeners trackChannelListeners = new TrackChannelListeners(numTracks);
       SortedSet<Note> notes = new TreeSet<>();
-
-
+      System.out.println("TODO reimplement Note Stitch algorithm");
+/*
       // Prepare iteration over note arrays
-      Iterator<_NoteOnEvent> noteOnEventIterator = noteOnEvents.iterator();
-      Iterator<_NoteOffEvent> noteOffEventIterator = noteOffEvents.iterator();
-      _NoteOnEvent noteOn = noteOnEventIterator.next();
-      _NoteOffEvent noteOff = noteOffEventIterator.next();
+      Iterator<RawNoteOnEvent> noteOnEventIterator = noteOnEvents.iterator();
+      Iterator<RawNoteOffEvent> noteOffEventIterator = noteOffEvents.iterator();
+      RawNoteOnEvent noteOn = noteOnEventIterator.next();
+      RawNoteOffEvent noteOff = noteOffEventIterator.next();
 
       // Prepare note-joining loop
-      int noteCreationTarget = Math.min(noteOnEvents.size(), noteOffEvents.size());
-      System.out.println("Note Creation Target = " + noteCreationTarget);
-      int notesCreated = 0;
-      boolean finalLoop = false;
+//      int noteCreationTarget = Math.min(noteOnEvents.size(), noteOffEvents.size());
+//      System.out.println("Note Creation Target = " + noteCreationTarget);
+//      int notesCreated = 0;
+//      boolean finalLoop = false;
       // Bring noteOff iterator to event happening after noteOn event, if needed
-      while(notesCreated < noteCreationTarget){ // TODO have to ensure equivalent #s note ons/offs, first noteOn happens before first noteOff
+//      while(notesCreated < noteCreationTarget){ // TODO have to ensure equivalent #s note ons/offs, first noteOn happens before first noteOff
          do{
 
 
@@ -48,7 +49,7 @@ public class NoteEventStitcher {
          } while(noteOn.getTick() <= noteOff.getTick() && !finalLoop);
          // Loop through remaining NoteOffs that occur before next NoteOn
          do {
-            Optional<_NoteOnEvent> noteOnResult = trackChannelListeners.getNoteOnEventFromNoteOffEvent(noteOff); // TODO add try/catch for custom exception when multiple note ons happen on a track/channel listener before a note off
+            Optional<RawNoteOnEvent> noteOnResult = trackChannelListeners.getNoteOnEventFromNoteOffEvent(noteOff); // TODO add try/catch for custom exception when multiple note ons happen on a track/channel listener before a note off
             if (noteOnResult.isPresent()) {
                System.out.println("Found Note On for Note Off");
                Note note = new Note();
@@ -68,7 +69,7 @@ public class NoteEventStitcher {
             }
             if(noteOffEventIterator.hasNext()) noteOff = noteOffEventIterator.next();
          }while (noteOff.getTick() < noteOn.getTick() && !finalLoop);
-      }
+      }*/
       return notes;
    }
 

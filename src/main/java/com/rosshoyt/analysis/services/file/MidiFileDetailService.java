@@ -37,9 +37,9 @@ public class MidiFileDetailService {
       mfd.setFileExtension(parseResult.extension);
       mfd.setFullFileName(parseResult.fileName + "." + parseResult.extension);
       // Midi Gen Display fields TODO address redundancy between _Header and these fields:
-      mfd.setFormat(mfa.getRawAnalysis().getHeader().getFormat());
-      mfd.setNumTracks(mfa.getRawAnalysis().getHeader().getNumTracks());
-      mfd.setDivision(mfa.getRawAnalysis().getHeader().getDivision());
+      mfd.setFormat(mfa.getRawAnalysis().getRawHeader().getFormat());
+      mfd.setNumTracks(mfa.getRawAnalysis().getRawHeader().getNumTracks());
+      mfd.setDivision(mfa.getRawAnalysis().getRawHeader().getDivision());
       mfd.setFileByteData(fileByteDataRepository.save(new FileByteData(mfa, parseResult.data)));
       return midiFileDetailRepository.save(mfd);
    }

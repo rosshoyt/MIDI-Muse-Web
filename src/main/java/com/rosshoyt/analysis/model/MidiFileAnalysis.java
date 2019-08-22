@@ -1,9 +1,10 @@
 package com.rosshoyt.analysis.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rosshoyt.analysis.model.abstractions.BaseEntity;
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
 import com.rosshoyt.analysis.model.raw.RawAnalysis;
-import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
+import com.rosshoyt.analysis.model.music.MusicalAnalysis;
 
 import lombok.*;
 
@@ -18,14 +19,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Entity
-public class MidiFileAnalysis {
-
-   @Id
-   @GeneratedValue(strategy=GenerationType.SEQUENCE)
-   private Long id;
+public class MidiFileAnalysis extends BaseEntity {
 
 
-   @OneToOne(fetch = FetchType.LAZY, mappedBy = "midiFileAnalysis")
+   @OneToOne(fetch = FetchType.LAZY)
    @JsonManagedReference
    private RawAnalysis rawAnalysis;
 

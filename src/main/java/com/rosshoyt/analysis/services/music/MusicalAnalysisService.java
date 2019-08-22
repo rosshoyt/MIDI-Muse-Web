@@ -4,8 +4,7 @@ import com.rosshoyt.analysis.model.MidiFileAnalysis;
 import com.rosshoyt.analysis.model.raw.RawAnalysis;
 
 
-import com.rosshoyt.analysis.model.musical.MusicalAnalysis;
-import com.rosshoyt.analysis.model.musical.Note;
+import com.rosshoyt.analysis.model.music.MusicalAnalysis;
 import com.rosshoyt.analysis.repositories.music.MusicalAnalysisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

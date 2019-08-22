@@ -1,8 +1,7 @@
 package com.rosshoyt.analysis.model.abstractions;
 
-import com.rosshoyt.analysis.model.abstractions.TickOrderedEvent;
-
 import java.util.Comparator;
+
 
 public class TickOrderedEventComparator implements Comparator<TickOrderedEvent> {
    @Override
