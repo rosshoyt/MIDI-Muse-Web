@@ -1,8 +1,7 @@
 package com.rosshoyt.analysis.repositories.music;
 
 import com.rosshoyt.analysis.model.music.Note;
-import com.rosshoyt.analysis.repositories.abstractions.BaseRepository;
-import org.springframework.data.repository.CrudRepository;
+import com.rosshoyt.analysis.repositories.abstractions.BaseReferencingRepository;
 
-public interface NoteRepository extends BaseRepository<Note, Long> {
+public interface NoteRepository extends BaseReferencingRepository<Note, Long> {
 }

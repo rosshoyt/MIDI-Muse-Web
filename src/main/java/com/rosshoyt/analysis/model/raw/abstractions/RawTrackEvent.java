@@ -14,9 +14,6 @@ import javax.persistence.*;
 @MappedSuperclass
 @ToString(callSuper = true)
 public abstract class RawTrackEvent extends TickOrderedEvent{
-//   @Id
-//   @GeneratedValue(strategy=GenerationType.SEQUENCE)
-//   private Long id;
 
    private int trackNumber;
    private Integer channel;

@@ -31,7 +31,7 @@ import java.util.Optional;
 @Transactional
 public class MidiFileAnalysisService {
 
-   // CRUD Repos
+   // CRUD Repositories
    private final MidiFileAnalysisRepository midiFileAnalysisRepository;
 
    // Helper services

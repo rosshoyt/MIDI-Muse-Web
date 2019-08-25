@@ -1,8 +1,7 @@
 package com.rosshoyt.analysis.repositories.raw.trackevents;
 
 import com.rosshoyt.analysis.model.raw.meta_events.RawMidiChannelPrefixAssignmentEvent;
-import com.rosshoyt.analysis.repositories.abstractions.BaseRepository;
-import org.springframework.data.repository.CrudRepository;
+import com.rosshoyt.analysis.repositories.abstractions.BaseReferencingRepository;
 
-public interface RawMidiChannelPrefixAssignmentEventRepository extends BaseRepository<RawMidiChannelPrefixAssignmentEvent, Long> {
+public interface RawMidiChannelPrefixAssignmentEventRepository extends BaseReferencingRepository<RawMidiChannelPrefixAssignmentEvent, Long> {
 }

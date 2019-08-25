@@ -3,9 +3,10 @@ package com.rosshoyt.analysis.repositories.file;
 
 
 import com.rosshoyt.analysis.model.file.MidiFileDetail;
-import com.rosshoyt.analysis.repositories.abstractions.BaseRepository;
-import org.springframework.data.repository.CrudRepository;
+import com.rosshoyt.analysis.repositories.abstractions.BaseReferencingRepository;
+import org.springframework.stereotype.Repository;
 
-public interface MidiFileDetailRepository extends BaseRepository<MidiFileDetail, Long> {
+@Repository
+public interface MidiFileDetailRepository extends BaseReferencingRepository<MidiFileDetail, Long> {
 
 }

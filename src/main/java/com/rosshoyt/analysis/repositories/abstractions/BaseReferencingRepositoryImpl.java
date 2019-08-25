@@ -19,14 +19,29 @@ import java.util.List;
  * @param <T>
  * @param <ID>
  */
-//public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseRepository {
-//   private EntityManager entityManager;
-//
-//   public ExtendedRepositoryImpl(JpaEntityInformation<T, ?>
-//                                       entityInformation, EntityManager entityManager) {
-//      super(entityInformation, entityManager);
-//      this.entityManager = entityManager;
-//   }
+
+public class BaseReferencingRepositoryImpl<T, ID extends  Serializable>
+      extends SimpleJpaRepository<T, ID> implements BaseReferencingRepository<T,ID> {
+   private EntityManager entityManager;
+
+   public BaseReferencingRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
+      super(entityInformation, entityManager);
+      this.entityManager = entityManager;
+
+   }
+   @Transactional
+   public List<T> findByFkMidiFileAnalysisId(Long fkMidiFileAnalysisId){
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+      CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(getDomainClass());
+      Root<T> root = criteriaQuery.from(getDomainClass());
+      criteriaQuery
+            .select(root)
+            .where(criteriaBuilder
+                  .equal(root.<Long>get("fkMidiFileAnalysisId"), fkMidiFileAnalysisId));
+                  //.like(root.<String>get(attributeName), "%" + text + "%"));
+      TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
+      return query.getResultList();
+   }
 //   @Transactional
 //   public List<T> findByAttributeContainsText(String attributeName, String text) {
 //      CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -39,4 +54,4 @@ import java.util.List;
 //      TypedQuery<T> query = entityManager.createQuery(cQuery);
 //      return query.getResultList();
 //   }
-//}
+}

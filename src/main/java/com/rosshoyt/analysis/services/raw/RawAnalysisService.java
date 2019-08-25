@@ -21,33 +21,38 @@ import com.rosshoyt.analysis.repositories.raw.RawAnalysisRepository;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class RawAnalysisService {
-   // CRUD Repos
+   // CRUD Repositories
    private final RawAnalysisRepository rawAnalysisRepository;
+   // Helper services
    private final RawTrackEventService rawTrackEventService;
-
-
-
 
    @Autowired
    public RawAnalysisService(RawAnalysisRepository rawAnalysisRepository, RawTrackEventService rawTrackEventService) {
       this.rawAnalysisRepository = rawAnalysisRepository;
       this.rawTrackEventService = rawTrackEventService;
    }
+
    public Optional<RawAnalysis> getRawAnalysisByFkMidiFileAnalysisId(Long fkMidiFileAnalysisId){
+      System.out.println("In RawAnalysisService.getRawAnalysisByFkMidiFileAnalysisId()");
       Optional<RawAnalysis> optionalRawAnalysis = rawAnalysisRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId);
       if(optionalRawAnalysis.isPresent()){
+         System.out.println("RawAnalysis was present, getting raw track events from RawTrackEventService");
          RawAnalysis rawAnalysis = optionalRawAnalysis.get();
          rawAnalysis.setRawNoteEvents(rawTrackEventService.getRawNoteEvents(fkMidiFileAnalysisId));
          rawAnalysis.setRawSustainPedalEvents(rawTrackEventService.getRawSustainPedalEvents(fkMidiFileAnalysisId));
          rawAnalysis.setRawTempoEvents(rawTrackEventService.getRawTempoEvents(fkMidiFileAnalysisId));
          rawAnalysis.setRawTimeSignatureEvents(rawTrackEventService.getRawTimeSignatureEvents(fkMidiFileAnalysisId));
+         System.out.println("RawAnalysis after fetching the rawTrackEvents lists" + rawAnalysis);
          return Optional.of(rawAnalysis);
       }
+      System.out.println("RawAnalysis was null");
       return optionalRawAnalysis;
    }
 
@@ -111,7 +116,7 @@ public class RawAnalysisService {
                rawTrackEvent.setFkMidiFileAnalysisId(raw.getId());
                // Persist event in corresponding collection
                if     (rawTrackEvent instanceof RawNoteOnEvent)         rawNoteEvents.add((RawNoteOnEvent)rawTrackEvent);
-               else if(rawTrackEvent instanceof RawNoteOnEvent)         rawNoteEvents.add((RawNoteOffEvent)rawTrackEvent);
+               else if(rawTrackEvent instanceof RawNoteOffEvent)         rawNoteEvents.add((RawNoteOffEvent)rawTrackEvent);
                else if(rawTrackEvent instanceof RawSustainPedalEvent)   rawSustainPedalEvents.add((RawSustainPedalEvent)rawTrackEvent);
                else if(rawTrackEvent instanceof RawTempoEvent)          rawTempoEvents.add((RawTempoEvent)rawTrackEvent);
                else if(rawTrackEvent instanceof RawTimeSignatureEvent)  rawTimeSignatureEvents.add((RawTimeSignatureEvent)rawTrackEvent);

@@ -38,13 +38,13 @@ public class RawAnalysis extends BaseReferencingEntity {
 
    //      @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 //   private List<_NoteOnEvent> noteOnEventList;
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<RawNoteEvent> rawNoteEvents;
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<RawSustainPedalEvent> rawSustainPedalEvents;
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<RawTempoEvent> rawTempoEvents;
-   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    private List<RawTimeSignatureEvent> rawTimeSignatureEvents;
 
    //@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

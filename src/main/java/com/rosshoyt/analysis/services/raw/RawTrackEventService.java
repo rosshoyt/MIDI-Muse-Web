@@ -7,11 +7,12 @@ import com.rosshoyt.analysis.model.raw.midi_events.abstractions.RawNoteEvent;
 import com.rosshoyt.analysis.model.raw.midi_events.controller_events.RawSustainPedalEvent;
 import com.rosshoyt.analysis.repositories.raw.trackevents.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class RawTrackEventService {
 
 
@@ -32,17 +33,21 @@ public class RawTrackEventService {
 //      return raw.saveAll();
 //   }
    public List<RawNoteEvent> getRawNoteEvents(Long fkMidiFileAnalysisId){
-      return Lists.newArrayList(rawNoteEventRepository.findAllByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
+      //Iterable<RawNoteEvent> noteEvents = rawNoteEventRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId);
+      System.out.println("In RawTrackEventService.getRawNoteEvents()");
+      List<RawNoteEvent> rawNoteEvents = Lists.newArrayList(rawNoteEventRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
+      System.out.println("Returning list: " + rawNoteEvents);
+      return rawNoteEvents;
    }
    public List<RawSustainPedalEvent> getRawSustainPedalEvents(Long fkMidiFileAnalysisId){
-      return Lists.newArrayList(rawSustainPedalEventRepository.findAllByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
+      return Lists.newArrayList(rawSustainPedalEventRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
    }
 
    public List<RawTempoEvent> getRawTempoEvents(Long fkMidiFileAnalysisId){
-      return Lists.newArrayList(rawTempoEventRepository.findAllByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
+      return Lists.newArrayList(rawTempoEventRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
    }
    public List<RawTimeSignatureEvent> getRawTimeSignatureEvents(Long fkMidiFileAnalysisId){
-      return Lists.newArrayList(rawTimeSignatureEventRepository.findAllByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
+      return Lists.newArrayList(rawTimeSignatureEventRepository.findByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
    }
 //   public List<> getRawEvents(Long fkMidiFileAnalysisId){
 //      return Lists.newArrayList(.findAllByFkMidiFileAnalysisId(fkMidiFileAnalysisId));
