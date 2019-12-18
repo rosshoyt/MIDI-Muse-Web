@@ -9,7 +9,7 @@ class NoteDistributionBarChart extends Component {
   constructor(props){
     super(props);
     this.state = {
-      noteList: [],
+      chartData:
     }
   }
   
@@ -27,7 +27,7 @@ class NoteDistributionBarChart extends Component {
     return(
       <div className="container">
       <div className="NoteDistributionPieChart" legendPosition="bottom">
-      <Pie
+      <Bar
           options={{
             title:{
               display:this.props.displayTitle,

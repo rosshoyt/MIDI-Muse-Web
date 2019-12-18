@@ -6,7 +6,7 @@ export class LeftContainer extends Component {
     render() {
         return (
             <div>
-                <FileUpload/>
+                <FileUpload class = "fileUpload"/>
                 <MidiFileList midiFileList={this.props.midiFileList} 
                                   idCurrentFileSelected={this.props.idCurrentFileSelected}
                                   fileListItemSelectedCallback={this.props.fileListItemSelectedCallback}
