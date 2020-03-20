@@ -1,2 +1,2 @@
-# Spring Boot/React Website
-# [MidiAnalyzer.com](https://www.midianalyzer.com)
+# Spring Boot Backend, React Frontend, Heroku Hosted Website
+## [www.MidiAnalyzer.com](https://www.midianalyzer.com)
